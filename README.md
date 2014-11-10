@@ -8,7 +8,7 @@ Here’s my vision for the user experience.  A user logs in, selects a group, se
 
 For this project, I’d like to allow photos to be uploaded and downloaded.  I want the download to be available as an all-in-one download AND by selecting desired thumbnails and clicking download.  Also, I’d like user accounts.  Initially, this would only be for a single group on a private website.
 
-Of course this would have a REST api for scripting, third-party apps, mobile apps, etc., etc., etc.
+Of course this would have a REST api for scripting, third-party apps, mobile apps, etc., etc., etc...
 
 Given enough time (i.e., probably not by the end of the semester unless we get tons of help or someone has an inordinate amount of time to devote), the following features could be added:
 	-multi-group support (your fam, your friends who went to Disneyland with you, your CS360 lab6 group mates)
