@@ -11,10 +11,15 @@ For this project, I’d like to allow photos to be uploaded and downloaded.  I w
 Of course this would have a REST api for scripting, third-party apps, mobile apps, etc., etc., etc...
 
 Given enough time (i.e., probably not by the end of the semester unless we get tons of help or someone has an inordinate amount of time to devote), the following features could be added:
+
 	-multi-group support (your fam, your friends who went to Disneyland with you, your CS360 lab6 group mates)
+	
 	-multi-event support (pictures from Christmas, the family vaca to Mexico, etc.)
+	
 	-sub-event categories
+	
 	-other file formats (video, audio, pdf, etc.)
+	
 	-preview functionality for the selected file
   
 FRAMEWORK: node.js, Angular JS
@@ -22,8 +27,11 @@ FRAMEWORK: node.js, Angular JS
 INSTALL:  Assuming you have node and npm installed and in your path, clone the repo, cd into the directory, and type: `make'.
 
 RUN:
+
 Start: npm start
+
 Stop: npm stop
+
 Restart: sudo forever restart ./bin/www
 
 
