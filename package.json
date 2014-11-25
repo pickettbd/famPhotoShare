@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "start": "sudo forever start ./bin/www",
-    "stop": "sudo forever stop ./bin/www"
+    "stop": "sudo forever stop ./bin/www",
+    "restart": "sudo forever restart ./bin/www"
   },
   "dependencies": {
     "express": "~4.9.0",
