@@ -19,4 +19,12 @@ Given enough time (i.e., probably not by the end of the semester unless we get t
   
 FRAMEWORK: node.js, Angular JS
 
+INSTALL:  Assuming you have node and npm installed and in your path, clone the repo, cd into the directory, and type: `make'.
+
+RUN:
+Start: npm start
+Stop: npm stop
+Restart: sudo forever restart ./bin/www
+
+
 
