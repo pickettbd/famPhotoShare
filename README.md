@@ -17,6 +17,6 @@ Given enough time (i.e., probably not by the end of the semester unless we get t
 	-other file formats (video, audio, pdf, etc.)
 	-preview functionality for the selected file
   
-FRAMEWORK: django, angular
+FRAMEWORK: node.js, Angular JS
 
 
