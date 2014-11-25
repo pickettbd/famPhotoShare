@@ -1,0 +1,145 @@
+extends layout
+
+block content
+  h1= title
+  p.
+    Welcome to our public API! Please see the table below. Note that
+    variables are represented using angle bracket syntax. For example: 
+    <code>/api/groups/&ltgroup-name&gt</code> means you should replace the 
+    <code>&ltgroup-name&gt</code> with the name of a group. All API endpionts
+    begin with <code>/api</code>.
+  table
+    tr
+      th Endpoint
+      th Method
+      th Description
+    tr
+      td
+        code /auth
+      td GET
+      td Check if a user is authenticated.
+    tr
+      td
+        code /groups
+      td GET
+      td List all groups.  Note that all group names are unique.
+    tr
+      td
+        code /groups/&ltgroup-name&gt
+      td GET
+      td View the details of a specified group.
+    tr
+      td
+        code /groups/&ltgroup-name&gt
+      td POST
+      td Create a new group.  If it already exists, an error will be returned.
+    tr
+      td
+        code /groups/&ltgroup-name&gt
+      td DELETE
+      td Delete a group.  If no group exists, the operation will still succeed.
+    tr
+      td
+        code /groups/&ltgroup-name&gt/users
+      td GET
+      td List all users associated with the group.
+    tr
+      td
+        code /groups/&ltgroup-name&gt/users
+      td DELETE
+      td Disassociate all users from the group.
+    tr
+      td
+        code /groups/&ltgroup-name&gt/users/&ltuser-name&gt
+      td POST
+      td Associate a user with the group.
+    tr
+      td
+        code /groups/&ltgroup-name&gt/users/&ltuser-name&gt
+      td DELETE
+      td Disassociate a user from the group.
+    tr
+      td
+        code /groups/&ltgroup-name&gt/events
+      td GET
+      td List all events for a group.
+    tr
+      td
+        code /groups/&ltgroup-name&gt/events/&ltevent-name&gt
+      td GET
+      td View details for an event.
+    tr
+      td
+        code /groups/&ltgroup-name&gt/events/&ltevent-name&gt
+      td POST
+      td Create new event for the group.
+    tr
+      td
+        code /groups/&ltgroup-name&gt/events/&ltevent-name&gt
+      td DELETE
+      td Delete the group's event.
+    tr
+      td
+        code /groups/&ltgroup-name&gt/events/&ltevent-name&gt/thumbs
+      td GET
+      td Get the thumbnails for an event.
+    tr
+      td
+        code /groups/&ltgroup-name&gt/events/&ltevent-name&gt/photos
+      td GET
+      td Download all photos from an event.
+    tr
+      td
+        code /groups/&ltgroup-name&gt/events/&ltevent-name&gt/photos
+      td DELETE
+      td Delete all photos from an event.
+    tr
+      td
+        code /groups/&ltgroup-name&gt/events/&ltevent-name&gt/photos/&ltphoto-name&gt
+      td GET
+      td Download a photo from an event.
+    tr
+      td
+        code /groups/&ltgroup-name&gt/events/&ltevent-name&gt/photos/&ltphoto-name&gt
+      td POST
+      td Upload a photo to an event.
+    tr
+      td
+        code /groups/&ltgroup-name&gt/events/&ltevent-name&gt/photos/&ltphoto-name&gt
+      td DELETE
+      td Delete a photo from an event.
+    tr
+      td
+        code /users
+      td GET
+      td List all users.
+    tr
+      td
+        code /users/&ltuser-name&gt
+      td GET
+      td See a user's details
+    tr
+      td
+        code /users/&ltuser-name&gt
+      td POST
+      td Create a new user.
+    tr
+      td
+        code /users/&ltuser-name&gt/groups
+      td GET
+      td List all groups a user belongs to.
+    tr
+      td
+        code /users/&ltuser-name&gt/groups
+      td DELETE
+      td Disassociate a user from all groups
+    tr
+      td
+        code /users/&ltuser-name&gt/groups/&ltgroup-name&gt
+      td POST
+      td Associate a user with a group
+    tr
+      td
+        code /users/&ltuser-name&gt/groups/&ltgroup-name&gt
+      td DELETE
+      td Disassociate a user from a group
