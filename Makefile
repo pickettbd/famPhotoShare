@@ -16,6 +16,8 @@ clean:
 
 main:
 	@echo "main:"
-	@if [ `which python 2> /dev/null` ];then npm install;else echo "npm isn't in your path";fi
+	@mkdir -p data/db || true
+	@mongod --logpath ./data/mongodb.log --dbpath ./data/db &
+	@if [ `which npm 2> /dev/null` ];then npm install;else echo "npm isn't in your path";fi
 	@echo " done."
 	@echo
