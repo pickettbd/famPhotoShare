@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "start": "sudo forever start ./bin/www",
-    "stop": "sudo forever stop ./bin/www"
+    "stop": "sudo forever stop ./bin/www",
+    "restart": "sudo forever restart ./bin/www"
   },
   "dependencies": {
     "express": "~4.9.0",
@@ -16,6 +17,7 @@
     "debug": "~2.0.0",
     "jade": "~1.6.0",
     "mongodb": "*",
+    "mongojs": "*",
     "forever": "*"
   }
 }

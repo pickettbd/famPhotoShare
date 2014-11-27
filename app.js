@@ -60,13 +60,43 @@ app.use(function(err, req, res, next) {
     });
 });
 
-MongoClient.connect('mongodb://104.236.25.185:27017/test', function(err, db) {
-    if(err) {
-        throw err;
-    } else {
-        console.log("successfully connected to the database");
-    }
-    db.close();
+//MongoClient.connect('mongodb://104.236.25.185:27017/test', function(err, db) {
+//    if(err) {
+//        throw err;
+//    } else {
+//        console.log("successfully connected to the database");
+//    }
+//    db.close();
+//});
+
+//Example database interaction
+//Run: "node app.js" to see it's output
+var databaseUrl = "mydb";
+var collections = ["users", "groups", "events", "photos"]
+var db = require("mongojs").connect(databaseUrl, collections);
+
+//Removes everthing in the users collection
+db.users.remove(); 
+
+//Adds "Ammon" to the users collection
+db.users.save({name:"Ammon", password:"byucougars", sex:"male"},
+		function(err, saved) {
+	if( err || !saved ) console.log("users not saved");
+	else{
+		console.log("Users saved");
+		findMale();
+	};
 });
+
+function findMale(){
+	//finds any users that are male and prints out their name attribute
+	db.users.find({sex:"male"}, function(err, users) {
+		if( err || !users) console.log("no male users found");
+		else users.forEach( function(maleUser) {
+			console.log("Male users:");
+			console.log(maleUser.name);
+		});
+	});
+}
 
 module.exports = app;
