@@ -24,7 +24,7 @@ Given enough time (i.e., probably not by the end of the semester unless we get t
   
 FRAMEWORK: node.js, Angular JS
 
-INSTALL:  Assuming you have node and npm installed and in your path, clone the repo, cd into the directory, and type: `make'.
+INSTALL:  Assuming you have node and npm installed and in your path, clone the repo, cd into the directory, and type: `make'.  You'll also need mongo and mongod in your path.
 
 RUN:
 
