@@ -1,5 +1,17 @@
 extends layout
 
 block content
-  h1= title
-  p upload page. Welcome to #{title}
+  h1 Add Photos
+  p Select Group 
+    select
+      option(value='Smith Family') Smith Family
+      option(value='Miller Family') Miller Family
+      option(value='+ create new group') + create new group
+  p Select Event 
+    select
+      option(value='Summer Vacation') Summer Vacation
+      option(value='+ create new event') + create new event
+  p Select Photos 
+    input(type='file')
+  .left-button
+    a(href='/upload-landing') add photos

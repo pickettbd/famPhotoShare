@@ -1,5 +1,13 @@
 extends layout
 
 block content
-  h1= title
-  p menu page. Welcome to #{title}
+  h1 Menu
+  p
+    .button 
+      a(href='/upload') Add Photos
+  p
+    .button 
+      a(href='/download') Get Photos
+  p
+    .button 
+      a(href='/manage-groups') Manage Groups

@@ -1,5 +1,15 @@
 extends layout
 
 block content
-  h1= title
-  p download page. Welcome to #{title}
+  h1 Get Photos
+  p Select Group 
+    select
+      option(value='Smith Family') Smith Family
+      option(value='Miller Family') Miller Family
+  p Select Event 
+    select
+      option(value='Summer Vacation') Summer Vacation
+      option(value='Christmas') Christmas
+  .left-button
+    a(href='') get photos
+  

@@ -1,0 +1,24 @@
+extends layout
+
+block content
+  h1 Manage Groups
+  p Create New Group:
+  p
+    input(placeholder='group name')
+    .large-left-button
+      a(href='') create group
+  p Add User to Group:
+  p
+    select
+      option(value='Smith Family') Smith Family
+      option(value='Miller Family') Miller Family
+      option(value='+ create new group') + create new group
+  p
+    input(placeholder='search for user')
+    .large-left-button
+      a(href='') add user to group
+  p Invite New Users:
+  p
+    input(placeholder='email address')
+    .left-button
+      a(href='') invite user

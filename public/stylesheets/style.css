@@ -1,8 +1,141 @@
+.navigation {
+	margin: 0;
+}
+
+.nav-item {
+	display: inline-block;
+	list-style: none;
+	margin: 0em 1em;
+
+	cursor: pointer;
+}
+
+.logo {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+
+	height: auto;
+	width: auto;
+	max-width: 1200px;
+
+	font: 72px 'Lucida Grande', Helvetica, Arial, sans-serif;	
+	color: #ffffff;
+    text-shadow:
+    -1px -1px 0 #000,
+    1px -1px 0 #000,
+    -1px 1px 0 #000,
+    1px 1px 0 #000;  
+	text-align: center;
+
+	padding-top: 1em;
+	padding-bottom: 1em;
+}
+
+h1 {
+    display: block;
+	margin: 0;
+    margin-left: auto;
+    margin-right: auto;
+
+	height: auto;
+	width: auto;
+	max-width: 1200px;
+
+	font: 26px 'Lucida Grande', Helvetica, Arial, sans-serif;
+	text-align: center;
+
+	border-radius: .25em;
+	background: #ffffff;
+}
+
+.content {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+	margin-top:1em;
+
+	height: auto;
+	width: auto;
+	max-width: 1200px;
+
+	font: 14px 'Lucida Grande', Helvetica, Arial, sans-serif;
+	line-height: 150%;
+
+	padding: 1em;
+	border-radius: .25em;
+	background: #ffffff;
+}
+
 body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  background: url('/images/photo_share1.jpg') no-repeat #1E1E1E;
+  background-position: top center;
+}
+
+img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+
+    height: auto;
+	width: auto;
+	max-width: 280px;
+}
+
+input {
+	margin: .25em .5em
+}
+
+.large-left-button {
+	margin-top:1em;
+
+	height: auto;
+	width: auto;
+	max-width: 125px;
+
+	text-align: center;
+
+	border-radius: .25em;
+	padding: .25em .25em;
+	background: #C5C5C4;	
+}
+
+.left-button {
+	margin-top:1em;
+
+	height: auto;
+	width: auto;
+	max-width: 75px;
+
+	text-align: center;
+
+	border-radius: .25em;
+	padding: .25em .25em;
+	background: #C5C5C4;	
+}
+
+.button {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+	margin-top:1em;
+
+	height: auto;
+	width: auto;
+	max-width: 125px;
+
+	text-align: center;
+
+	border-radius: .25em;
+	padding: .25em 1em;
+	background: #C5C5C4;
 }
 
 a {
-  color: #00B7FF;
+	text-decoration: none;	
+	color: #007dcc;
+}
+
+a:hover {
+	color: #606060;
 }

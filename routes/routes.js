@@ -6,6 +6,16 @@ router.get('/login', function(req, res) {
   res.render('login', { title: 'Login' });
 });
 
+/* GET upload-landing page. */
+router.get('/upload-landing', function(req, res) {
+  res.render('upload-landing', { title: 'Upload Landing' });
+});
+
+/* GET manage-groups page. */
+router.get('/manage-groups', function(req, res) {
+  res.render('manage-groups', { title: 'Manage Groups' });
+});
+
 /* GET sign-up page. */
 router.get('/sign-up', function(req, res) {
   res.render('sign-up', { title: 'Sign Up' });

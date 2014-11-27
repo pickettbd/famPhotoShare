@@ -1,5 +1,18 @@
-extends layout
+extends layout-no-menu
 
 block content
-  h1= title
-  p sign-up page. Welcome to #{title}
+  h1 Sign Up
+  p Welcome to Family Photo Share. Signing up is quick and easy so that you can get right into sharing your photos!
+  form(action='action')
+    p
+      input(placeholder='user name')
+    p
+      input(placeholder='email')
+    p
+      input(placeholder='password', type='password')
+    p
+      input(placeholder='confirm password', type='password')
+    p
+      .left-button
+        a(href='/menu') Log In
+ 
