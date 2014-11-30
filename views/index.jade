@@ -3,13 +3,14 @@ extends layout-no-menu
 block content
   h1 Login
   p Welcome to Family Photo Share
-  form(action='action')
+  form(method='post', action='/checkuser')
     p
-      input(placeholder='user name or email')
+      input(placeholder='User Name', name='username')
     p
-      input(placeholder='password', type='password')
+      input(placeholder='password', type='password', name='password')
     p
-      a(href='/menu').button Log In
+      button(type='submit') Log In
+//      a(href='/menu').button Log In
   p Don't have an account?
   p
     a(href='/sign-up') Sign Up
