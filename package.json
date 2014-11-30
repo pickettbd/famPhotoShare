@@ -18,6 +18,7 @@
     "jade": "~1.6.0",
     "mongodb": "*",
     "mongojs": "*",
-    "forever": "*"
+    "forever": "*",
+    "monk": "*"
   }
 }

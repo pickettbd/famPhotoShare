@@ -41,4 +41,15 @@ router.get('/', function(req, res) {
   res.render('index', { title: 'Express' });
 });
 
+/* GET photolist page. */
+router.get('/photolist', function(req, res) {
+    var db = req.db;
+    var collection = db.get('photos');
+    collection.find({},{},function(e,docs){
+        res.render('photolist', {
+            "photolist" : docs
+        });
+    });
+});
+
 module.exports = router;
