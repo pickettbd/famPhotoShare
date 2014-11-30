@@ -1,0 +1,8 @@
+extends layout-no-menu
+
+block content
+    h1.
+        Photo List
+    ul
+        each photo, i in photolist
+            li=photo.title
