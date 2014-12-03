@@ -6,10 +6,10 @@ db.once('open', function callback () {
     console.log("connected successfully");
 }); 
 var Schema = mongoose.Schema;
-var userSchema = new Schema({
-    username: String,
-    email: String,
-    password: String
+var eventSchema = new Schema({
+    name: String,    
+    photos: [String],
+	group: String
 });
 
-module.exports = mongoose.model('User', userSchema);
+module.exports = mongoose.model('Event', eventSchema);

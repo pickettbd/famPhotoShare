@@ -6,10 +6,9 @@ db.once('open', function callback () {
     console.log("connected successfully");
 }); 
 var Schema = mongoose.Schema;
-var userSchema = new Schema({
-    username: String,
-    email: String,
-    password: String
+var imageSchema = new Schema({
+    name: String,    
+	img: { data: Buffer, contentType: String }
 });
 
-module.exports = mongoose.model('User', userSchema);
+module.exports = mongoose.model('Image', imageSchema);
