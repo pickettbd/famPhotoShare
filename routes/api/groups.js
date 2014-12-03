@@ -15,6 +15,19 @@ router.get('/:group/events/:event', function(req, res)
 router.post('/:group/events/:event', function(req, res)
 {
 	res.send('this is how you create a new event.  group: ' + req.params.group + ', event: ' + req.params.event);
+
+	var db = req.db;
+    var group = req.params.group;
+	var event = req.params.event;
+	    
+    var collection = db.get('events');
+
+	collection.insert({
+        'name' : event, 
+		'group' : group // foreign key 
+    });
+
+	// close db ?? 
 });
 
 // delete event
@@ -33,6 +46,26 @@ router.get('/:group/events/:event/thumbs', function(req, res)
 router.post('/:group/events/:event/photos/:photo', function(req, res)
 {
 	res.send('this is how you add a photo to an event.  group: ' + req.params.group + ', event: ' + req.params.event);
+    var db = req.db;
+    var group = req.params.group;
+    var event = req.params.event;
+    var photo = req.params.photo;
+
+	// how to organize collections ?? Need to have foreign keys? 
+    var collection = db.get('photos');
+
+// http://stackoverflow.com/questions/11568587/store-images-in-mongodb-serve-them-with-nodejs
+	var base64Data = imagefile.replace(/^data:image\/png;base64,/,""), // ?? 
+	var dataBuffer = new Buffer(base64Data, 'base64');
+
+	collection.insert({
+		'group' : group, // foreign key
+		'event' : event, // foreign key
+		file_name : photo,
+		image : dataBuffer.toString()
+	});
+
+	// close db ?? 
 });
 
 // download photo from an event
@@ -99,6 +132,17 @@ router.get('/:group', function(req, res)
 router.post('/:group', function(req, res)
 {
 	res.send('this is how you create a new event.  group: ' + req.params.group);
+
+    var db = req.db;
+    var group = req.params.group;
+	    
+    var collection = db.get('groups');
+
+	collection.insert({
+        'name' : group
+    });
+
+	// close db ?? 
 });
 
 // delete group
