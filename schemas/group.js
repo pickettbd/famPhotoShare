@@ -8,7 +8,7 @@ db.once('open', function callback () {
 var Schema = mongoose.Schema;
 var groupSchema = new Schema({
     name: String,    
-    events: [String],
+    events: [{type: Schema.ObjectId, ref: 'Event'}],
     users: [String]
 });
 

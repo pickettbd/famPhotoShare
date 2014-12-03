@@ -8,8 +8,7 @@ db.once('open', function callback () {
 var Schema = mongoose.Schema;
 var eventSchema = new Schema({
     name: String,    
-    photos: [String],
-	group: String
+    photos: [{ data: Buffer, contentType: String }]
 });
 
 module.exports = mongoose.model('Event', eventSchema);
