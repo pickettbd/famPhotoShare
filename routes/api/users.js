@@ -1,6 +1,8 @@
 var express = require('express');
 var router = express.Router();
 
+var User = require('../../public/javascript/user');
+
 //router.param('user', /^[A-Za-z0-9]\w{4,}$/);
 //router.param('group', /^[A-Za-z0-9]\w{2,}$/);
 
@@ -13,7 +15,18 @@ router.get('/:user', function(req, res)
 // add a user
 router.post('/:user', function(req, res)
 {
-	res.send('this is how you add a user.  user: ' + req.params.user);
+    var user = new User();
+    user.username = req.body.username;
+    user.email = req.body.email;
+    user.password = req.body.password;
+
+    user.save(function(err) {
+        if (err) res.send(err);
+
+        res.json({message: 'user ' + user.username + ' added!'});
+    });
+
+//	res.send('this is how you add a user.  user: ' + req.params.user);
 });
 
 // add user's group
