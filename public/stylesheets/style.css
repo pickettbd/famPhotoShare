@@ -18,7 +18,7 @@ h1,
 
 	height: auto;
 	width: auto;
-	max-width: 800px;
+	max-width: 1000px;
 
 	text-align: center;
 }
@@ -58,12 +58,14 @@ h1 {
 	line-height: 150%;
 }
 
+/*
 @media only screen and (max-width: 800px) {
 	h1 {
 		background-color: transparent;
 		padding: 0px;
 	}
 }
+*/
 
 input {
 	margin: 5px;
@@ -94,37 +96,7 @@ a:hover {
 	color: #606060;
 }
 
-.navigation {
-	clear: both;
-	padding: 0px;
-	margin: 0px;
-}
-
-.nav-item {
-	display: inline-block;
-	list-style: none;
-	margin: 0% 3%;
-
-	cursor: pointer;
-}
-
-@media only screen and (max-width: 800px) {
-	.navigation {
-		margin: 0px;
-	}
-
-	.nav-item { 
-		margin: 1px 0px;
-		padding: 5px 0px;
-		width: auto;
-		min-width: 49%;
-		background: #C5C5C4;	
-	}
-}
-
-@media only screen and (max-width: 700px) {
-	.nav-item { 
-		min-width: 100%;	
-	}
+.fit {
+	max-width: 100%;
 }
 

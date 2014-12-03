@@ -11,4 +11,7 @@ block content
       option(value='Summer Vacation') Summer Vacation
       option(value='Christmas') Christmas
   a(href='').button Get Photos
+  div.section.group(ng-controller='ThumbController as thumbController')
+    div.col.span_1_of_4(ng-repeat='thumb in thumbController.thumbs')
+      img.fit(ng-src='{{thumb}}')
   

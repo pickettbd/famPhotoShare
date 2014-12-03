@@ -1,20 +1,23 @@
 doctype html
-html
+html(ng-app="thumbDisplayer")
   head
     meta(name='viewport',content='initial-scale=1')
     title= title
+    link(rel='stylesheet', href='/stylesheets/grid-style.css')
     link(rel='stylesheet', href='/stylesheets/style.css')
+    script(type='text/javascript' src='/javascript/angular.js')
+    script(type='text/javascript' src='/javascript/app.js')
   body
     .logo Family Photo Share
     h1
-      ul.navigation
-        li.nav-item
+      ul.section.group
+        li.nav-col.nav-span_1_of_4
           a(href='/upload') Add Photos
-        li.nav-item
+        li.nav-col.nav-span_1_of_4
           a(href='/download') Get Photos
-        li.nav-item
+        li.nav-col.nav-span_1_of_4
           a(href='/manage-groups') Manage Groups
-        li.nav-item
+        li.nav-col.nav-span_1_of_4
           a(href='/') Log Out
     .content
       block content
