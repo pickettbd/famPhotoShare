@@ -46,25 +46,25 @@ router.get('/:group/events/:event/thumbs', function(req, res)
 router.post('/:group/events/:event/photos/:photo', function(req, res)
 {
 	res.send('this is how you add a photo to an event.  group: ' + req.params.group + ', event: ' + req.params.event);
-    	var db = req.db;
-	var group = req.params.group;
-	var event = req.params.event;
-	var photo = req.params.photo;
-
-	// how to organize collections ?? Need to have foreign keys? 
-    	var collection = db.get('photos');
-
-// http://stackoverflow.com/questions/11568587/store-images-in-mongodb-serve-them-with-nodejs
-	var base64Data = imagefile.replace(/^data:image\/png;base64,/,""), // ?? 
-	var dataBuffer = new Buffer(base64Data, 'base64');
-
-	collection.insert({
-		'group' : group, // foreign key
-		'event' : event, // foreign key
-		file_name : photo,
-		image : dataBuffer.toString()
-	});
-
+//    	var db = req.db;
+//	var group = req.params.group;
+//	var event = req.params.event;
+//	var photo = req.params.photo;
+//
+//	// how to organize collections ?? Need to have foreign keys? 
+//    	var collection = db.get('photos');
+//
+//// http://stackoverflow.com/questions/11568587/store-images-in-mongodb-serve-them-with-nodejs
+//	var base64Data = imagefile.replace(/^data:image\/png;base64,/,""), // ?? 
+//	var dataBuffer = new Buffer(base64Data, 'base64');
+//
+//	collection.insert({
+//		'group' : group, // foreign key
+//		'event' : event, // foreign key
+//		file_name : photo,
+//		image : dataBuffer.toString()
+//	});
+//
 	// close db ?? 
 });
 
@@ -78,6 +78,21 @@ router.get('/:group/events/:event/photos/:photo', function(req, res)
 router.get('/:group/events/:event/photos', function(req, res)
 {
 	res.send('this is how you download all photos from an event.  group: ' + req.params.group + ', event: ' + req.params.event);
+});
+
+// upload photos to an event
+router.post('/:group/events/:event/photos', function(req, res)
+{
+    var event = null;
+    event.photos = req.body.photos;
+
+    event.save(function(err) {
+         if (err) res.send(err);
+	 res.location("menu");
+	 res.redirect("menu");
+    });
+    res.send('this is how you upload photos to an event.  group: ' + req.params.group + ', event: ' + req.params.event);
+	
 });
 
 // delete photo from an event
