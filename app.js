@@ -11,8 +11,15 @@ var api = require('./routes/api');
 var app = express();
 
 var mongo = require('mongodb');
-var monk = require('monk');
-var db = monk('localhost:27017/memshare');
+//var monk = require('monk');
+//var db = monk('localhost:27017/memshare');
+var mongoose = require('mongoose');
+mongoose.connect('localhost:27017/memshare');
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function callback () {
+  // connected successfully
+}); 
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

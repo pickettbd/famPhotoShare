@@ -19,6 +19,7 @@
     "mongodb": "*",
     "mongojs": "*",
     "forever": "*",
-    "monk": "*"
+    "monk": "*",
+    "mongoose": "*"
   }
 }
