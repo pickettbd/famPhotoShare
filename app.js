@@ -13,13 +13,6 @@ var app = express();
 var mongo = require('mongodb');
 //var monk = require('monk');
 //var db = monk('localhost:27017/memshare');
-var mongoose = require('mongoose');
-mongoose.connect('localhost:27017/memshare');
-var db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', function callback () {
-  // connected successfully
-}); 
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -36,10 +29,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 //app.use(params);
 
 // Make our db accessible to our router
-app.use(function(req,res,next){
-    req.db = db;
-    next();
-});
+//app.use(function(req,res,next){
+//    req.db = db;
+//    next();
+//});
 
 app.use('/api', api);
 app.use('/', routes);
