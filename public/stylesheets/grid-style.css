@@ -7,7 +7,7 @@
 .col {
 	display: block;
 	float: left;
-	margin: .6%;
+	margin: .4%;
 	cursor: pointer;
 }
 
@@ -26,20 +26,20 @@
 }
 
 .span_4_of_4 {
-	width: 98.8%;
+	width: 99.2%;
 }
 
 .span_2_of_4 {
-	width: 48.8%;
+	width: 49.2%;
 }
 
 .span_1_of_4 {
-	width: 23.8%;
+	width: 24.2%;
 }
 
 .active {
 	background-color: #003969;
-	padding: .5%;
+	padding: .3%;
 	margin: .1%;
 }
 
@@ -53,12 +53,16 @@
 		margin: .3%;
 	}
 
+	.span_4_of_4 {
+		width: 96.4%;
+	}
+	
 	.span_2_of_4 {
-		width: 98.8%;
+		width: 96.4%;
 	}
 
 	.span_1_of_4 {
-		width: 98.8%;
+		width: 96.4%;
 	}
 }
 
