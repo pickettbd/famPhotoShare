@@ -12,10 +12,18 @@ var app = express();
 
 var mongo = require('mongodb');
 var mongoose = require('mongoose');
-var db = mongoose.createConnection('mongodb://localhost/memshare');
+//var db = mongoose.createConnection('mongodb://localhost/memshare');
+mongoose.connect('mongodb://localhost/memshare');
+var db = mongoose.connection;
 db.on('error', console.error.bind(console, "connection error:"));
 db.once('open', function callback() {
     console.log("connected succesfully in app.js");
+});
+
+// Make our db accessible to our router
+app.use(function(req,res,next){
+    req.db = db;
+    next();
 });
 
 // view engine setup
@@ -32,11 +40,6 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 //app.use(params);
 
-// Make our db accessible to our router
-app.use(function(req,res,next){
-    req.db = db;
-    next();
-});
 app.use('/api', api);
 app.use('/', routes);
 
