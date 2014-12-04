@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var passport = require('passport');
 
 var User = require('../../schemas/user');
 
@@ -9,12 +10,13 @@ var User = require('../../schemas/user');
 // get a user's details
 router.post('/invite', function(req, res)
 {
-	res.send('this is how you invite a new user. email: ' + req.body.emailaddress);
+    res.send('this is how you invite a new user. email: ' + req.body.emailaddress);
 });
 
 // get a user's details
 router.get('/:user', function(req, res)
 {
+<<<<<<< HEAD
 	User.findOne( { username: req.params.user } ).exec( function(err, result) {
 		if (!err) {
 			res.json(result);			
@@ -22,23 +24,27 @@ router.get('/:user', function(req, res)
 			res.render("error");
 		};
 	});
+=======
+    res.send('this is how you see a user\'s details. user: ' + req.params.user);
+>>>>>>> bc5c75a3792b024cbe9c47258092e86d182c60d2
 });
 
 // add user's group
 router.post('/:user/groups/:group', function(req, res)
 {
-	res.send('this is how you associate a user with a group. user: ' + req.params.user + ', group: ' + req.params.group);
+    res.send('this is how you associate a user with a group. user: ' + req.params.user + ', group: ' + req.params.group);
 });
 
 // delete user's group
 router.delete('/:user/groups/:group', function(req, res)
 {
-	res.send('this is how you dissassociate a user from a group. user: ' + req.params.user + ', group: ' + req.params.group);
+    res.send('this is how you dissassociate a user from a group. user: ' + req.params.user + ', group: ' + req.params.group);
 });
 
 // get a list of a user's groups
 router.get('/:user/groups', function(req, res)
 {
+<<<<<<< HEAD
 	User.findOne( { username: req.params.user } ).exec( function(err, result) {
 		if (!err) {
 			res.json(result.groups);
@@ -46,12 +52,21 @@ router.get('/:user/groups', function(req, res)
 			res.render("error");
 		};
 	});
+=======
+    var db = req.db;
+    var user = db.users.find( { name: req.params.user } );
+    var groups = user.groups;
+
+    res.send(groups);
+    
+    //res.send('this is how you view a list of all groups associated with a user. user: ' + req.params.user);
+>>>>>>> bc5c75a3792b024cbe9c47258092e86d182c60d2
 });
 
 // delete user's groups
 router.delete('/:user/groups', function(req, res)
 {
-	res.send('this is how you dissassociate a user from all groups. user: ' + req.params.user);
+    res.send('this is how you dissassociate a user from all groups. user: ' + req.params.user);
 });
 
 // get a list of users
@@ -77,20 +92,26 @@ router.get('/', function(req, res)
 //	res.send('this is how you see all the users.');
 });
 
-// get to add a new user
-router.post('/', function(req, res)
-{
-    var user = new User();
-    user.username = req.body.username;
-    user.email = req.body.email;
-    user.password = req.body.password;
+// post to add a new user
+//router.post('/', function(req, res)
+//{
+//    var user = new User();
+//    user.username = req.body.username;
+//    user.email = req.body.email;
+//    user.password = req.body.password;
+//
+//    user.save(function(err) {
+//        if (err) res.send(err);
+//
+//        res.json({message: 'user ' + user.username + ' added!'});
+//    });
+//});
 
-    user.save(function(err) {
-        if (err) res.send(err);
-
-        res.json({message: 'user ' + user.username + ' added!'});
-    });
-});
-
+/* Handle User Registration POST */
+router.post('/', passport.authenticate('signup', {
+    successRedirect: '/menu',
+    failureRedirect: '/sign-up',
+    failureFlash : true 
+}));
 
 module.exports = router;
