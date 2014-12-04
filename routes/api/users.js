@@ -16,17 +16,13 @@ router.post('/invite', function(req, res)
 // get a user's details
 router.get('/:user', function(req, res)
 {
-<<<<<<< HEAD
-	User.findOne( { username: req.params.user } ).exec( function(err, result) {
-		if (!err) {
-			res.json(result);			
-		} else {
-			res.render("error");
-		};
-	});
-=======
-    res.send('this is how you see a user\'s details. user: ' + req.params.user);
->>>>>>> bc5c75a3792b024cbe9c47258092e86d182c60d2
+    User.findOne( { username: req.params.user } ).exec( function(err, result) {
+        if (!err) {
+            res.json(result);			
+        } else {
+            res.render("error");
+        };
+    });
 });
 
 // add user's group
@@ -44,23 +40,18 @@ router.delete('/:user/groups/:group', function(req, res)
 // get a list of a user's groups
 router.get('/:user/groups', function(req, res)
 {
-<<<<<<< HEAD
-	User.findOne( { username: req.params.user } ).exec( function(err, result) {
-		if (!err) {
-			res.json(result.groups);
-		} else {
-			res.render("error");
-		};
-	});
-=======
+//	User.findOne( { username: req.params.user } ).exec( function(err, result) {
+//		if (!err) {
+//			res.json(result.groups);
+//		} else {
+//			res.render("error");
+//		};
+//	});
     var db = req.db;
     var user = db.users.find( { name: req.params.user } );
     var groups = user.groups;
 
     res.send(groups);
-    
-    //res.send('this is how you view a list of all groups associated with a user. user: ' + req.params.user);
->>>>>>> bc5c75a3792b024cbe9c47258092e86d182c60d2
 });
 
 // delete user's groups
