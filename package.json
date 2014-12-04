@@ -20,6 +20,8 @@
     "mongojs": "*",
     "forever": "*",
     "monk": "*",
-    "mongoose": "*"
+    "mongoose": "*",
+    "passport": "*",
+    "passport-local": "*"
   }
 }
