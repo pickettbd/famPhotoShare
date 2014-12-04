@@ -33,7 +33,14 @@ router.delete('/:user/groups/:group', function(req, res)
 // get a list of a user's groups
 router.get('/:user/groups', function(req, res)
 {
-	res.send('this is how you view a list of all groups associated with a user. user: ' + req.params.user);
+	var db = req.db;
+	var user = db.users.find( { name: req.params.user } );
+	var groups = user.groups;
+
+	res.send(groups);
+	
+	//res.send('this is how you view a list of all groups associated with a user. user: ' + req.params.user);
+
 });
 
 // delete user's groups
