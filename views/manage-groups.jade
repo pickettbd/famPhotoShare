@@ -5,7 +5,7 @@ block content
   p Create New Group:
   p
     form(method="post" action="api/groups" enctype="multipart/form-data")
-      input(type="text" name="newgroupname" placeholder='group name' required pattern="\w[\w_]+")
+      input(type="text" name="newgroupname" placeholder='group name' required pattern="[A-Za-z0-9][A-Za-z0-9_]+")
       input(type="submit" value="Create Group")
   p Add User to Group:
   
@@ -13,7 +13,7 @@ block content
     select(name="groupname" required)
       option(value='Smith Family') Smith Family
       option(value='Miller Family') Miller Family
-    input(type="text" name="username" placeholder='search for user' required pattern="\w[\w_]+")
+    input(type="text" name="username" placeholder='search for user' required pattern="[A-Za-z0-9][A-Za-z0-9_]+")
     input(type="submit" value="Add User to Group")
   
   p Invite New Users:
