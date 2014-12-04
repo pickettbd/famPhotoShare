@@ -12,14 +12,17 @@ var app = express();
 
 var mongo = require('mongodb');
 var mongoose = require('mongoose');
-mongoose.connect('mondodb://localhost/memshare');
-var db = mongoose.connection;
+var db = mongoose.createConnection('mongodb://localhost/memshare');
 db.on('error', console.error.bind(console, "connection error:"));
 db.once('open', function callback() {
     console.log("connected succesfully");
 });
-//var monk = require('monk');
-//var db = monk('localhost:27017/memshare');
+
+// Make our db accessible to our router
+app.use(function(req,res,next){
+    req.db = db;
+    next();
+});
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -34,12 +37,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 //app.use(params);
-
-// Make our db accessible to our router
-app.use(function(req,res,next){
-    req.db = db;
-    next();
-});
 
 app.use('/api', api);
 app.use('/', routes);

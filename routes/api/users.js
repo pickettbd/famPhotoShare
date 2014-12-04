@@ -45,7 +45,17 @@ router.delete('/:user/groups', function(req, res)
 // get a list of users
 router.get('/', function(req, res)
 {
-	res.send('this is how you see all the users.');
+    return User.find(function (err, users) {
+        if (!err) {
+            return res.send(users);
+        } else {
+            res.statusCode = 500;
+            console.log('Internal error(%d): %s',res.statusCode,err.message);
+            return res.send({ error: 'Server error' });
+        }
+    });
+
+//	res.send('this is how you see all the users.');
 });
 router.post('/', function(req, res)
 {
