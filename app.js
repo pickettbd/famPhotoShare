@@ -43,15 +43,16 @@ app.use('/', routes);
 
 // catch 404 and forward to error handler
 app.use(function(req, res) {
-    var options = {
-        root: __dirname + "/public/"
-    };
+    res.render("404");
+    //var options = {
+    //    root: __dirname + "/public/"
+    //};
 
-    res.sendFile("images/404.png", options, function(err) {
-        if (err) {
-	    res.sendStatus(404);
-	}
-    });
+    //res.sendFile("images/404.png", options, function(err) {
+    //    if (err) {
+    //        res.sendStatus(404);
+    //    }
+    //});
 });
 //app.use(function(req, res, next) {
 //    var err = new Error('Not Found');
