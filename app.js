@@ -43,7 +43,11 @@ app.use('/', routes);
 
 // catch 404 and forward to error handler
 app.use(function(req, res) {
-    res.sendFile("/images/404.png", function(err) {
+    var options = {
+        root: __dirname + "/public/"
+    };
+
+    res.sendFile("images/404.png", options, function(err) {
         if (err) {
 	    res.sendStatus(404);
 	}
