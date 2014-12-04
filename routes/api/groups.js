@@ -12,10 +12,9 @@ router.get('/:group/events/:event', function(req, res)
 });
 
 // add new event
-router.post('/:group/events/:event', function(req, res)
+//router.post('/:group/events/:event', function(req, res)
+router.post('/:group/events', function(req, res)
 {
-	res.send('this is how you create a new event.  group: ' + req.params.group + ', event: ' + req.params.event);
-
 	var db = req.db;
     	var group = req.params.group;
 	var event = req.params.event;
@@ -42,10 +41,11 @@ router.get('/:group/events/:event/thumbs', function(req, res)
 	res.send('this is how you get an events thumbnails.  group: ' + req.params.group + ', event: ' + req.params.event);
 });
 
-// upload photo to an event
-router.post('/:group/events/:event/photos/:photo', function(req, res)
+// upload photo(s) to an event
+//router.post('/:group/events/:event/photos/:photo', function(req, res)
+router.post('/:group/events/:event/photos', function(req, res)
 {
-	res.send('this is how you add a photo to an event.  group: ' + req.params.group + ', event: ' + req.params.event);
+	res.send('this is how you add photo(s) to an event.  group: ' + req.params.group + ', event: ' + req.params.event);
 //    	var db = req.db;
 //	var group = req.params.group;
 //	var event = req.params.event;
@@ -143,10 +143,22 @@ router.get('/:group', function(req, res)
 	res.send('this is how you get the details of a group. group: ' + req.params.group);
 });
 
-// create new group
-router.post('/:group', function(req, res)
+// delete group
+router.delete('/:group', function(req, res)
 {
-	res.send('this is how you create a new event.  group: ' + req.params.group);
+	res.send('this is how you delete a group.  group: ' + req.params.group);
+});
+
+// see list of all groups
+router.get('/', function(req, res)
+{
+	res.send('this is how you see a list of all groups.');
+});
+
+// create new group
+router.post('/', function(req, res)
+{
+	res.send('this is how you create a new group.');
 
     	var db = req.db;
     	var group = req.params.group;
@@ -158,18 +170,6 @@ router.post('/:group', function(req, res)
     	});
 
 	// close db ?? 
-});
-
-// delete group
-router.delete('/:group', function(req, res)
-{
-	res.send('this is how you delete a group.  group: ' + req.params.group);
-});
-
-// see list of all groups
-router.get('/', function(req, res)
-{
-	res.send('this is how you see a list of all groups.');
 });
 
 module.exports = router;

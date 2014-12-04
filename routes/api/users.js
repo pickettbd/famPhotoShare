@@ -12,12 +12,6 @@ router.get('/:user', function(req, res)
 	res.send('this is how you see a user\'s details. user: ' + req.params.user);
 });
 
-// add a user
-router.post('/:user', function(req, res)
-{
-	res.send('this is how you add a user.  user: ' + req.params.user);
-});
-
 // add user's group
 router.post('/:user/groups/:group', function(req, res)
 {
@@ -45,6 +39,13 @@ router.delete('/:user/groups', function(req, res)
 // get a list of users
 router.get('/', function(req, res)
 {
+    //var db = req.db;
+    //var collection = db.get('users');
+    //collection.find({},{},function(e,docs){
+    //    res.render('userlist', {
+    //        "userlist" : docs
+    //    });
+    //});
     return User.find(function (err, users) {
         if (!err) {
             return res.send(users);
@@ -57,6 +58,8 @@ router.get('/', function(req, res)
 
 //	res.send('this is how you see all the users.');
 });
+
+// get to add a new user
 router.post('/', function(req, res)
 {
     var user = new User();
