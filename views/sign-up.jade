@@ -3,7 +3,7 @@ extends layout-no-menu
 block content
   h1 Sign Up
   p Welcome to Family Photo Share. Signing up is quick and easy so that you can get right into sharing your photos!
-  form(name='addUser', method='post', action='/api/users')
+  form(name='addUser', method='post', action='api/users')
     p
       input(placeholder='user name', id='username', name='username')
     p
@@ -14,5 +14,5 @@ block content
       input(placeholder='confirm password', type='password', name='confirmpass')
     p
       button(type='submit') Sign Up
-      //a(href='/menu').button Sign Up
+      //a(href='menu').button Sign Up
  

@@ -4,17 +4,20 @@ block content
   h1 Manage Groups
   p Create New Group:
   p
-    input(placeholder='group name')
-    a(href='').button Create Group
+    form(method="post" action="api/groups" enctype="multipart/form-data")
+      input(type="text" name="newgroupname" placeholder='group name' required pattern="\w[\w_]+")
+      input(type="submit" value="Create Group")
   p Add User to Group:
-  p
-    select
+  
+  form(method="post" action="api/groups/somegroupname/users/someusername" enctype="multipart/form-data")
+    select(name="groupname" required)
       option(value='Smith Family') Smith Family
       option(value='Miller Family') Miller Family
-  p
-    input(placeholder='search for user')
-    a(href='').button Add User to Group
+    input(type="text" name="username" placeholder='search for user' required pattern="\w[\w_]+")
+    input(type="submit" value="Add User to Group")
+  
   p Invite New Users:
-  p
-    input(placeholder='email address')
-    a(href='').button Invite User
+  
+  form(method="post" action="api/users/invite" enctype="multipart/form-data")
+    input(type="email" name="emailaddress" placeholder='email address' required)
+    input(type="submit" value"Invite")
