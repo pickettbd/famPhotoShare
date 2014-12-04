@@ -15,7 +15,13 @@ router.post('/invite', function(req, res)
 // get a user's details
 router.get('/:user', function(req, res)
 {
-	res.send('this is how you see a user\'s details. user: ' + req.params.user);
+	User.findOne( { username: req.params.user } ).exec( function(err, result) {
+		if (!err) {
+			res.json(result);			
+		} else {
+			res.render("error");
+		};
+	});
 });
 
 // add user's group
@@ -33,14 +39,13 @@ router.delete('/:user/groups/:group', function(req, res)
 // get a list of a user's groups
 router.get('/:user/groups', function(req, res)
 {
-	var db = req.db;
-	var user = db.users.find( { name: req.params.user } );
-	var groups = user.groups;
-
-	res.send(groups);
-	
-	//res.send('this is how you view a list of all groups associated with a user. user: ' + req.params.user);
-
+	User.findOne( { username: req.params.user } ).exec( function(err, result) {
+		if (!err) {
+			res.json(result.groups);
+		} else {
+			res.render("error");
+		};
+	});
 });
 
 // delete user's groups
@@ -61,7 +66,7 @@ router.get('/', function(req, res)
     //});
     return User.find(function (err, users) {
         if (!err) {
-            return res.send(users);
+            return res.json(users);
         } else {
             res.statusCode = 500;
             console.log('Internal error(%d): %s',res.statusCode,err.message);
