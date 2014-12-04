@@ -7,12 +7,8 @@
 .col {
 	display: block;
 	float: left;
-	margin: .2% .5%;
+	margin: .6%;
 	cursor: pointer;
-}
-
-.col:hover {
-	background-color: blue;
 }
 
 .group:before,
@@ -30,32 +26,39 @@
 }
 
 .span_4_of_4 {
-	width: 100%;
+	width: 98.8%;
 }
 
 .span_2_of_4 {
-	width: 49%;
+	width: 48.8%;
 }
 
 .span_1_of_4 {
-	width: 24%;
+	width: 23.8%;
+}
+
+.active {
+	background-color: #003969;
+	padding: .5%;
+	margin: .1%;
 }
 
 @media only screen and (max-width: 480px) {
 	.col { 
-		margin: 1% 0%;
+		margin: 1.8%;
 	}
-}
 
-@media only screen and (max-width: 480px) {
-	.span_4_of_4 {
-		width: 100%; 
+	.active {
+		padding: 1.5%;
+		margin: .3%;
 	}
+
 	.span_2_of_4 {
-		width: 100%; 
+		width: 98.8%;
 	}
+
 	.span_1_of_4 {
-		width: 100%;
+		width: 98.8%;
 	}
 }
 
