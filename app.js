@@ -15,13 +15,7 @@ var mongoose = require('mongoose');
 var db = mongoose.createConnection('mongodb://localhost/memshare');
 db.on('error', console.error.bind(console, "connection error:"));
 db.once('open', function callback() {
-    console.log("connected succesfully");
-});
-
-// Make our db accessible to our router
-app.use(function(req,res,next){
-    req.db = db;
-    next();
+    console.log("connected succesfully in app.js");
 });
 
 // view engine setup
@@ -38,6 +32,11 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 //app.use(params);
 
+// Make our db accessible to our router
+app.use(function(req,res,next){
+    req.db = db;
+    next();
+});
 app.use('/api', api);
 app.use('/', routes);
 

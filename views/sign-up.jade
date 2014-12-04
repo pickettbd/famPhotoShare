@@ -3,15 +3,14 @@ extends layout-title
 block content
 	h1.title Sign Up
 	p Welcome to Family Photo Share. Signing up is quick and easy so that you can get right into sharing your photos!
-	form(name='addUser', method='post', action='/api/users')
+	form(name='addUser', method='post', action='api/users')
 		p
-			input(placeholder='user name', id='username', name='username')
+			input(placeholder='user name', type='text', id='username', name='username')
 		p
-			input(placeholder='email', name='email')
+			input(placeholder='email', type='email', name='email')
 		p
 			input(placeholder='password', type='password', name='password')
 		p
 			input(placeholder='confirm password', type='password', name='confirmpass')
 		p
 			button(type='submit') Sign Up
- 

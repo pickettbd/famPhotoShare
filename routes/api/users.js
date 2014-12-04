@@ -7,6 +7,12 @@ var User = require('../../schemas/user');
 //router.param('group', /^[A-Za-z0-9]\w{2,}$/);
 
 // get a user's details
+router.post('/invite', function(req, res)
+{
+	res.send('this is how you invite a new user. email: ' + req.body.emailaddress);
+});
+
+// get a user's details
 router.get('/:user', function(req, res)
 {
 	res.send('this is how you see a user\'s details. user: ' + req.params.user);
