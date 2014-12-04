@@ -1,5 +1,5 @@
 doctype html
-html(ng-app="pageHelper")
+html(ng-app="thumbDisplayer")
 	head
 		meta(name='viewport',content='initial-scale=1')
 		title= title
@@ -9,4 +9,14 @@ html(ng-app="pageHelper")
 		script(type='text/javascript' src='/javascript/app.js')
 	body
 		div.content
+			h1
+				ul.section.group
+					li.nav-col.nav-span_1_of_4
+						a(href='/upload') Add Photos
+					li.nav-col.nav-span_1_of_4
+						a(href='/download') Get Photos
+					li.nav-col.nav-span_1_of_4
+						a(href='/manage-groups') Admin
+					li.nav-col.nav-span_1_of_4
+						a(href='/') Log Out
 			block content

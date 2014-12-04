@@ -1,30 +1,36 @@
 extends layout
 
 block content
-  h1 Manage Groups
-  p Create New Group:
-  p
-    form(method="post" action="api/groups" enctype="multipart/form-data")
-      p
-        input(type="text" name="newgroupname" placeholder='group name' required pattern="[A-Za-z0-9][A-Za-z0-9_]+")
-      p
-        input(type="submit" value="Create Group" class="button")
-  p Add User to Group:
-  
-  form(method="post" action="api/groups/somegroupname/users/someusername" enctype="multipart/form-data")
-    p
-      select(name="groupname" required)
-        option(value='Smith Family') Smith Family
-        option(value='Miller Family') Miller Family
-    p
-      input(type="text" name="username" placeholder='search for user' required pattern="[A-Za-z0-9][A-Za-z0-9_]+")
-    p
-      input(type="submit" value="Add User to Group" class="button")
-  
-  p Invite New Users:
-  
-  form(method="post" action="api/users/invite" enctype="multipart/form-data")
-    p
-      input(type="email" name="emailaddress" placeholder='email address' required)
-    p
-      input(type="submit" value="Invite" class="button")
+	h1
+		ul.section.group(ng-controller="NavController as nav")
+			li.nav-col.nav-span_1_of_4
+				a(href='/upload') Add Photos
+			li.nav-col.nav-span_1_of_4
+				a(href='/download') Get Photos
+			li.nav-col.nav-span_1_of_4.nav-col-active
+				a(href='/manage-groups') Admin
+			li.nav-col.nav-span_1_of_4
+				a(href='/') Log Out
+	h1 Manage Groups
+	p Create New Group:
+	form(method="post" action="api/groups" enctype="multipart/form-data")
+		p
+			input(type="text" name="newgroupname" placeholder='group name' required pattern="[A-Za-z0-9][A-Za-z0-9_]+")
+		p
+			button(type="submit") Create Group
+	p Add User to Group:
+	form(method="post" action="api/groups/somegroupname/users/someusername" enctype="multipart/form-data")
+		p
+			select(name="groupname" required)
+				option(value='Smith Family') Smith Family
+				option(value='Miller Family') Miller Family
+		p
+			input(type="text" name="username" placeholder='search for user' required pattern="[A-Za-z0-9][A-Za-z0-9_]+")
+		p
+			button(type="submit") Add User to Group
+	p Invite New Users:
+	form(method="post" action="api/users/invite" enctype="multipart/form-data")
+		p
+			input(type="email" name="emailaddress" placeholder='email address' required)
+		p
+			button(type="submit") Button

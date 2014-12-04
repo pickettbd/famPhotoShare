@@ -15,22 +15,20 @@ h1,
 	display: block;
 	margin-left: auto;
 	margin-right: auto;
-
 	height: auto;
 	width: auto;
 	max-width: 1000px;
-
 	text-align: center;
 }
 
 .logo {
 	font: 72px 'Lucida Grande', Helvetica, Arial, sans-serif;	
-	color: #ffffff;
+	color: #FFFFFF;
 	text-shadow:
 	-1px -1px 0 #000,
 	1px -1px 0 #000,
 	-1px 1px 0 #000,
-	1px 1px 0 #000;  
+	1px 1px 0 #000;
 
 	padding-top: 1em;
 	padding-bottom: 1em;
@@ -42,11 +40,9 @@ h1,
 	}
 }
 
-h1,
 .content {	
-	background-color: #ffffff;
-	border-radius: .25em;
-	padding: 10px;
+	background-color: #FFFFFF;
+	padding: 0 0 2em 0;
 }
 
 h1 {
@@ -58,15 +54,6 @@ h1 {
 	line-height: 150%;
 }
 
-/*
-@media only screen and (max-width: 800px) {
-	h1 {
-		background-color: transparent;
-		padding: 0px;
-	}
-}
-*/
-
 input {
 	margin: 5px;
 }
@@ -75,7 +62,7 @@ input {
 	display: block;
 	margin: 5px auto;
 
-	background-color: #C5C5C4;	
+	background-color: #FFFFFF;	
 	padding: .25em 1em;
 	border-radius: .25em;
 	width: 125px;
@@ -84,7 +71,7 @@ input {
 }
 
 .button:hover {
-	background-color: #d6d6d6; 
+	background-color: #DDDDDD; 
 }
 
 a {
@@ -92,11 +79,11 @@ a {
 	color: #007dcc;
 }
 
-a:hover {
-	color: #606060;
-}
-
 .fit {
 	max-width: 100%;
+}
+
+.title {
+	padding: 1em 0 0 0;
 }
 

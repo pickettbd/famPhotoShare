@@ -1,7 +1,7 @@
 .section {
 	clear: both;
 	padding: 0px;
-	margin: 0px;
+	display: block;
 }
 
 .col {
@@ -66,15 +66,27 @@
 	}
 }
 
+/* navigation */
+
 .nav-col {
 	display: block;
 	float: left;
-	margin: .3% 0 .3% .5%;
+	margin: 0px;
 	cursor: pointer;
+	background-color: #DDDDDD; 
+	padding: 5px 0px;
 }
 
 .nav-col:first-child {
 	margin-left: 0;
+}
+
+.nav-col:hover {
+	background-color: #FFFFFF;	
+}
+
+.nav-col-active {
+	background-color: #FFFFFF;	
 }
 
 .nav-span_4_of_4 {
@@ -82,20 +94,17 @@
 }
 
 .nav-span_2_of_4 {
-	width: 49%;
+	width: 50%;
 }
 
 .nav-span_1_of_4 {
-	width: 24.5%;
+	width: 25%;
 }
 
 @media only screen and (max-width: 480px) {
 	.nav-col { 
-		margin: .3% 0 .3% 0%;
 	}
-}
 
-@media only screen and (max-width: 480px) {
 	.nav-span_4_of_4 {
 		width: 100%; 
 	}

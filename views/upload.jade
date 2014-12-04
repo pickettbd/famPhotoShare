@@ -1,18 +1,28 @@
 extends layout
 
 block content
-  h1 Add Photos
-  p Select Group 
-    select
-      option(value='Smith Family') Smith Family
-      option(value='Miller Family') Miller Family
-      option(value='+ create new group') + create new group
-  p Select Event 
-    select
-      option(value='Summer Vacation') Summer Vacation
-      option(value='+ create new event') + create new event
-  form(method="post" action="api/groups/ajsdi/events/jkasdf/photos" enctype="multipart/form-data")
-    p
-      input(type='file' name='photos' required multiple)
-    p
-      input(type='submit' value="Add Photos")
+	h1
+		ul.section.group(ng-controller="NavController as nav")
+			li.nav-col.nav-span_1_of_4.nav-col-active
+				a(href='/upload') Add Photos
+			li.nav-col.nav-span_1_of_4
+				a(href='/download') Get Photos
+			li.nav-col.nav-span_1_of_4
+				a(href='/manage-groups') Admin
+			li.nav-col.nav-span_1_of_4
+				a(href='/') Log Out
+	h1 Add Photos
+	p Select Group 
+		select
+			option(value='Smith Family') Smith Family
+			option(value='Miller Family') Miller Family
+			option(value='+ create new group') + create new group
+	p Select Event 
+		select
+			option(value='Summer Vacation') Summer Vacation
+			option(value='+ create new event') + create new event
+	form(method="post" action="api/groups/ajsdi/events/jkasdf/photos" enctype="multipart/form-data")
+		p
+			input(type='file' name='photos' required multiple)
+		p
+			input(type='submit' value="Add Photos")
