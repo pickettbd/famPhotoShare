@@ -1,6 +1,16 @@
 extends layout
 
 block content
+	h1
+		ul.section.group
+			li.nav-col.nav-span_1_of_4
+				a(href='/upload') Add Photos
+			li.nav-col.nav-span_1_of_4.nav-col-active
+				a(href='/download') Get Photos
+			li.nav-col.nav-span_1_of_4
+				a(href='/manage-groups') Admin
+			li.nav-col.nav-span_1_of_4
+				a(href='/') Log Out
 	div(ng-controller="ThumbController as thumbController")
 		h1 Get Photos
 		p Select Group 
@@ -15,4 +25,3 @@ block content
 		div.section.group(ng-controller="PanelController as panel")
 			div.col.span_1_of_4(ng-class="{ active: panel.isSelected(thumb.id) }", ng-repeat="thumb in thumbController.thumbs")
 				img.fit(ng-src="{{thumb.url}}", ng-click="panel.selectPhoto(thumb.id)")
-		
