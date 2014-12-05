@@ -2,19 +2,29 @@ var express = require('express');
 var router = express.Router();
 var passport = require('passport');
 
+var isAuthenticated = function (req, res, next) {
+    // if user is authenticated in the session, call the next() to call the next request handler 
+    // Passport adds this method to request object. A middleware is allowed to add properties to
+    // request and response objects
+    if (req.isAuthenticated())
+        return next();
+    // if the user is not authenticated then redirect him to the login page
+    res.redirect('/');
+}
+
 var User = require('../../schemas/user');
 
 //router.param('user', /^[A-Za-z0-9]\w{4,}$/);
 //router.param('group', /^[A-Za-z0-9]\w{2,}$/);
 
 // get a user's details
-router.post('/invite', function(req, res)
+router.post('/invite', isAuthenticated, function(req, res)
 {
     res.send('this is how you invite a new user. email: ' + req.body.emailaddress);
 });
 
 // get a user's details
-router.get('/:user', function(req, res)
+router.get('/:user', isAuthenticated, function(req, res)
 {
     User.findOne( { username: req.params.user } ).exec( function(err, result) {
         if (!err) {
@@ -26,19 +36,19 @@ router.get('/:user', function(req, res)
 });
 
 // add user's group
-router.post('/:user/groups/:group', function(req, res)
+router.post('/:user/groups/:group', isAuthenticated, function(req, res)
 {
     res.send('this is how you associate a user with a group. user: ' + req.params.user + ', group: ' + req.params.group);
 });
 
 // delete user's group
-router.delete('/:user/groups/:group', function(req, res)
+router.delete('/:user/groups/:group', isAuthenticated, function(req, res)
 {
     res.send('this is how you dissassociate a user from a group. user: ' + req.params.user + ', group: ' + req.params.group);
 });
 
 // get a list of a user's groups
-router.get('/:user/groups', function(req, res)
+router.get('/:user/groups', isAuthenticated, function(req, res)
 {
 //	User.findOne( { username: req.params.user } ).exec( function(err, result) {
 //		if (!err) {
@@ -55,13 +65,13 @@ router.get('/:user/groups', function(req, res)
 });
 
 // delete user's groups
-router.delete('/:user/groups', function(req, res)
+router.delete('/:user/groups', isAuthenticated, function(req, res)
 {
     res.send('this is how you dissassociate a user from all groups. user: ' + req.params.user);
 });
 
 // get a list of users
-router.get('/', function(req, res)
+router.get('/', isAuthenticated, function(req, res)
 {
     //var db = req.db;
     //var collection = db.get('users');
