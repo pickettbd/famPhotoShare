@@ -24,6 +24,18 @@ router.post('/invite', isAuthenticated, function(req, res)
     res.send('this is how you invite a new user. email: ' + req.body.emailaddress);
 });
 
+// get a usernmae of logged in
+router.get('/whoami', isAuthenticated, function(req, res)
+{
+    User.findOne( { _id: req.session.passport.user } ).exec( function(err, result) {
+        if (!err) {
+            res.json(result.username);			
+        } else {
+            res.render("error");
+        };
+    });
+});
+
 // get a user's details
 router.get('/:user', isAuthenticated, function(req, res)
 {

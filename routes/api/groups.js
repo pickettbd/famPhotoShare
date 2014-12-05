@@ -222,12 +222,9 @@ router.post('/', isAuthenticated, function(req, res)
 
 	group.save(function(err) {
 		if (err) {
-			res.status = 500;
-			res.render("error");
-		} else {
-			res.status = 201;
-			return done(null, group);
+			res.sendStatus(500);
 		}
+		res.status(200).redirect("/manage-groups");
 	});
 });
 
