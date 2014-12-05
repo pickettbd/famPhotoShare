@@ -17,6 +17,7 @@
     "express-generator": "*",
     "express-session": "^1.9.3",
     "forever": "*",
+    "gm": "^1.4.28"
     "jade": "~1.6.0",
     "mongodb": "^1.4.22",
     "mongojs": "^0.17.0",
@@ -24,6 +25,6 @@
     "morgan": "~1.3.0",
     "passport": "^0.2.1",
     "passport-local": "^1.0.0",
-    "serve-favicon": "~2.1.3"
+    "serve-favicon": "~2.1.3",
   }
 }

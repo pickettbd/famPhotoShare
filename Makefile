@@ -19,6 +19,7 @@ clean:
 
 main:
 	@echo "main:"
+	@if [ `which gm 2> /dev/null` ];then echo "" || true;else echo "gm (graphicsmagick) isn't in your path";exit 1;fi
 	@if [ `which mongo 2> /dev/null` ];then echo "" || true;else echo "mongo isn't in your path";exit 1;fi
 	@if [ `which mongod 2> /dev/null` ];then mkdir -p ./data; ln -s $(mongodb_loc) ./data/db;else echo "mongod isn't in your path";exit 1;fi
 	@if [ `which npm 2> /dev/null` ];then npm install;else echo "npm isn't in your path";exit 1;fi
