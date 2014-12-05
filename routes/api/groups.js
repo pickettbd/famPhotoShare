@@ -36,7 +36,6 @@ router.get('/:group/events/:event', isAuthenticated, function(req, res)
 });
 
 // add new event
-//router.post('/:group/events/:event', function(req, res)
 router.post('/:group/events', isAuthenticated, function(req, res)
 {
     Group.update( { name: req.params.group }, { $push: { events: { name: req.body.eventname, photos: req.body.photos } } }, function(err, numAffected, rawResponse) {
@@ -55,41 +54,37 @@ router.delete('/:group/events/:event', isAuthenticated, function(req, res)
 // get thumbs
 router.get('/:group/events/:event/thumbs', isAuthenticated, function(req, res)
 {
-	res.send('this is how you get an events thumbnails.  group: ' + req.params.group + ', event: ' + req.params.event);
+	Group.findOne({ name: req.params.group }, function(err, result) {
+		if (!err) {
+			events = result.events
+			for (i = 0; i < events.length; i++) {
+				if (events[i].name === req.params.event) {
+					photos = events[i].photos;
+					thumbs = [];
+					for (j = 0; j < photos.length; j++) {
+						thumbs.push("data/photos/" + req.params.group + "/" + req.params.event + "/thumbs/" + photos[i]);
+					}
+					return res.json(thumbs);
+				}
+			}
+			res.render("404");
+		} else {
+			res.render("error");
+		}
+	});
 });
 
 // upload photo(s) to an event
-//router.post('/:group/events/:event/photos/:photo', function(req, res)
 router.post('/:group/events/:event/photos', isAuthenticated, function(req, res)
 {
 	res.send('this is how you add photo(s) to an event.  group: ' + req.params.group + ', event: ' + req.params.event);
-//    	var db = req.db;
-//	var group = req.params.group;
-//	var event = req.params.event;
-//	var photo = req.params.photo;
-//
-//	// how to organize collections ?? Need to have foreign keys? 
-//    	var collection = db.get('photos');
-//
-//// http://stackoverflow.com/questions/11568587/store-images-in-mongodb-serve-them-with-nodejs
-//	var base64Data = imagefile.replace(/^data:image\/png;base64,/,""), // ?? 
-//	var dataBuffer = new Buffer(base64Data, 'base64');
-//
-//	collection.insert({
-//		'group' : group, // foreign key
-//		'event' : event, // foreign key
-//		file_name : photo,
-//		image : dataBuffer.toString()
-//	});
-//
-	// close db ?? 
 });
 
 // download photo from an event
-router.get('/:group/events/:event/photos/:photo', isAuthenticated, function(req, res)
-{
-	res.send('this is how you download a photo from an event.  group: ' + req.params.group + ', event: ' + req.params.event + ', photo: ' + req.params.photo);
-});
+//router.get('/:group/events/:event/photos/:photo', isAuthenticated, function(req, res)
+//{
+//	res.send('this is how you download a photo from an event.  group: ' + req.params.group + ', event: ' + req.params.event + ', photo: ' + req.params.photo);
+//});
 
 // download all photos from an event
 router.get('/:group/events/:event/photos', isAuthenticated, function(req, res)
