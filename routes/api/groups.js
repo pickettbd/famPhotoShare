@@ -181,7 +181,11 @@ router.get('/', function(req, res)
 {
 	Group.find(function(err, result) {
 		if (!err) {
-			res.json(result);
+			names = []
+			for (group in result) {
+				names.push(group.name);
+			}
+			res.json(names);
 		} else {
 			res.render("error");
 		};
