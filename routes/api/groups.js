@@ -216,7 +216,7 @@ router.post('/', isAuthenticated, function(req, res)
 {
 	var group = new Group();
 
-	group.name = res.body.newgroupname;
+	group.name = req.body.newgroupname;
 	group.users = [ ];
 	group.events = [ ];
 
