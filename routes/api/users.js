@@ -38,6 +38,8 @@ router.post('/:user/groups/:group', function(req, res)
     Group.update( { name: req.params.group }, { $push: { users: req.params.user } }, {}, function(err, numAffected, rawResponse) {
 	if (err) {
 		res.render("error");
+	} else {
+		res.send("sucess");
 	};
     });
     
