@@ -1,6 +1,9 @@
 var express = require('express');
 var router = express.Router();
 
+var User = require('../../schemas/user');
+var Group = require('../../schemas/group');
+
 //router.param('group', /^[A-Za-z0-9]\w{2,}$/);
 //router.param('event', /^[A-Za-z0-9]\w{2,}$/);
 //router.param('user', /^[A-Za-z0-9]\w{4,}$/);
@@ -116,7 +119,19 @@ router.get('/:group/events', function(req, res)
 // add a user to the group
 router.post('/:group/users/:user', function(req, res)
 {
-	res.send('this is how you add a user to the group.  group: ' + req.params.group + ', user: ' + req.params.user);
+    User.update( { username: req.params.user }, { $push: { groups: req.params.group } }, function(err, numAffected, rawResponse) {
+        if (err) {
+        	res.render("error");
+        };
+    });
+
+    Group.update( { name: req.params.group }, { $push: { users: req.params.user } }, {}, function(err, numAffected, rawResponse) {
+        if (err) {
+        	res.render("error");
+        } else {
+        	res.send("success");
+        };
+    });
 });
 
 // delete user from the group

@@ -39,7 +39,7 @@ router.post('/:user/groups/:group', function(req, res)
         if (err) {
         	res.render("error");
         } else {
-        	res.send("sucess");
+        	res.send("success");
         };
     });
 });
