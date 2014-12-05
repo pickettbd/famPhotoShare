@@ -22,9 +22,10 @@ router.get('/:group/events/:event', isAuthenticated, function(req, res)
 {
 	Group.findOne({ name: req.params.group }, function(err, result) {
 		if (!err) {
-			for (i = 0; i < result.events.length; i++) {
-				if (result.events[i].name == req.params.event) {
-					res.json(result.events[i]);
+			events = result.events
+			for (i = 0; i < events.length; i++) {
+				if (events[i].name === req.params.event) {
+					return res.json(events[i]);
 				}
 			}
 			res.render("404");
