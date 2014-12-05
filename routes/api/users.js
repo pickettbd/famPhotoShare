@@ -29,21 +29,19 @@ router.get('/:user', function(req, res)
 // add user's group
 router.post('/:user/groups/:group', function(req, res)
 {
-    User.update( { username: req.params.user }, { $push: { groups: req.params.group } }, {}, function(err, numAffected, rawResponse) {
-	if (err) {
-		res.render("error");
-	};
+    User.update( { username: req.params.user }, { $push: { groups: req.params.group } }, function(err, numAffected, rawResponse) {
+        if (err) {
+        	res.render("error");
+        };
     });
 
     Group.update( { name: req.params.group }, { $push: { users: req.params.user } }, {}, function(err, numAffected, rawResponse) {
-	if (err) {
-		res.render("error");
-	} else {
-		res.send("sucess");
-	};
+        if (err) {
+        	res.render("error");
+        } else {
+        	res.send("sucess");
+        };
     });
-    
-    //res.send('this is how you associate a user with a group. user: ' + req.params.user + ', group: ' + req.params.group);
 });
 
 // delete user's group
