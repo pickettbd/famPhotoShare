@@ -17,28 +17,30 @@
 		};
 	});
 
-	angular.module('app').controller('ThumbController', function(){
-		this.thumbs = images;
+	angular.module('app').controller('ThumbController', function() {
+		this.thumbs = [];
 	});
 
-	angular.module('app').controller('GroupSelecterController', function($scope, $http){
-		$http.get('http://localhost/api/users/john/groups').then(function(resp) {
-			$scope.groups = resp.data;
-		}, function(err) {
-			console.error('ERR', err);
-		})
-
-		this.selectGroup = function(selectedGroup) {
-			$http.get('http://localhost/api/groups/' + selectedGroup + '/events').then(function(resp) {
-				$scope.events = resp.data;
-			}, function(err) {
-				console.error('ERR', err);
-			})
-			this.events = ["1", "2"];
+	angular.module('app').factory('apiFactory', ['$http', function($http) {
+		return {
+			getGroups: function(user) {
+				return $http.get('http://localhost/api/users/john/groups').then(function(response) {
+					return response.data;
+				});
+			},
+			getEvents: function(group) {
+				return $http.get('http://localhost/api/groups/' + group + '/events').then(function(response) {
+					return response.data;
+				});
+			}
 		};
-	});
+	}]);
 
-	angular.module('app').controller('EventSelecterController', function(){
-	});
+	angular.module('app').controller('GroupSelecterController', [ '$scope', 'apiFactory', function($scope, apiFactory) {
+		apiFactory.getGroups('john').then(functions(groups) {
+			$scope.groups = groups;
+		});
+		$scope.groups = ['hello'];
+	}]);
 
 })();

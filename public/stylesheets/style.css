@@ -67,11 +67,18 @@ input {
 	border-radius: .25em;
 	width: 125px;
 
+	font: 14px 'Lucida Grande', Helvetica, Arial, sans-serif;
+	color: #007dcc;
+
 	text-align: center;
 }
 
 .button:hover {
 	background-color: #DDDDDD; 
+}
+
+button {
+	border: 0;
 }
 
 a {

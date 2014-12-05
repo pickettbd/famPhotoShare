@@ -7,7 +7,7 @@ block content
 		p
 			input(type="text" name="newgroupname" placeholder='group name' required pattern="[A-Za-z0-9][A-Za-z0-9_]+")
 		p
-			button(type="submit") Create Group
+			button(type="submit").button Create Group
 	p Add User to Group:
 	form(method="post" action="api/groups/somegroupname/users/someusername" enctype="multipart/form-data")
 		p
@@ -17,10 +17,10 @@ block content
 		p
 			input(type="text" name="username" placeholder='search for user' required pattern="[A-Za-z0-9][A-Za-z0-9_]+")
 		p
-			button(type="submit") Add User to Group
+			button(type="submit").button Add User to Group
 	p Invite New Users:
 	form(method="post" action="api/users/invite" enctype="multipart/form-data")
 		p
 			input(type="email" name="emailaddress" placeholder='email address' required)
 		p
-			button(type="submit") Button
+			button(type="submit").button Button
