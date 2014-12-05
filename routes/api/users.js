@@ -71,17 +71,17 @@ router.delete('/:user/groups', function(req, res)
 // get a list of users
 router.get('/', function(req, res)
 {
-    User.find(function (err, users) {
+    User.find(function (err, result) {
         if (!err) {
             names = []
-	    for (user in users) {
-		names.push(user.username);
+	    for (i = 0; i < result.length; i++) {
+		names.push(result[i].username);
 	    }
-	    return res.json(names);
+	    res.json(names);
         } else {
             res.statusCode = 500;
             console.log('Internal error(%d): %s',res.statusCode,err.message);
-            return res.send({ error: 'Server error' });
+            res.send({ error: 'Server error' });
         }
     });
 });
