@@ -1,8 +1,6 @@
 (function() {
 
-	var app = angular.module('pageHelper', [])
-
-	app.controller('PanelController', function(){
+	angular.module('app').controller('PanelController', function(){
 		this.selectedPhotos = [];
 
 		this.selectPhoto = function(selectPhoto) {
@@ -19,11 +17,11 @@
 		};
 	});
 
-	app.controller('ThumbController', function(){
+	angular.module('app').controller('ThumbController', function(){
 		this.thumbs = images;
 	});
 
-	app.controller('GroupSelecterController', function($scope, $http){
+	angular.module('app').controller('GroupSelecterController', function($scope, $http){
 		$http.get('http://localhost/api/users/john/groups').then(function(resp) {
 			$scope.groups = resp.data;
 		}, function(err) {
@@ -40,7 +38,7 @@
 		};
 	});
 
-	app.controller('EventSelecterController', function(){
+	angular.module('app').controller('EventSelecterController', function(){
 	});
 
 	var groups = [
