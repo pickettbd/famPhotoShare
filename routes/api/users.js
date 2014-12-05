@@ -40,18 +40,18 @@ router.delete('/:user/groups/:group', function(req, res)
 // get a list of a user's groups
 router.get('/:user/groups', function(req, res)
 {
-//	User.findOne( { username: req.params.user } ).exec( function(err, result) {
-//		if (!err) {
-//			res.json(result.groups);
-//		} else {
-//			res.render("error");
-//		};
-//	});
-    var db = req.db;
-    var user = db.users.find( { name: req.params.user } );
-    var groups = user.groups;
+	User.findOne( { username: req.params.user } ).exec( function(err, result) {
+		if (!err) {
+			res.json(result.groups);
+		} else {
+			res.render("error");
+		};
+	});
+    //var db = req.db;
+    //var user = db.users.find( { name: req.params.user } );
+    //var groups = user.groups;
 
-    res.send(groups);
+    //res.send(groups);
 });
 
 // delete user's groups
