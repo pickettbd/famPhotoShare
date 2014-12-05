@@ -21,7 +21,6 @@
 		this.thumbs = images;
 	});
 
-	angular.module('app').factory('')
 	angular.module('app').controller('GroupSelecterController', function($scope, $http){
 		$http.get('http://localhost/api/users/john/groups').then(function(resp) {
 			$scope.groups = resp.data;
