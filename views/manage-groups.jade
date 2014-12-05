@@ -3,13 +3,13 @@ extends layout
 block content
 	h1 Manage Groups
 	p Create New Group:
-	form(method="post" action="api/groups" enctype="multipart/form-data")
+	form(method="post" action="api/groups" enctype="multipart/form-data" id="creategroupform" name="creategroupform")
 		p
 			input(type="text" name="newgroupname" placeholder='group name' required pattern="[A-Za-z0-9][A-Za-z0-9_]+")
 		p
-			button(type="submit").button Create Group
+			input(type="submit" placeholder="Create Group")
 	p Add User to Group:
-	form(method="post" action="api/groups/somegroupname/users/someusername" enctype="multipart/form-data")
+	form(method="post" action="api/groups/somegroupname/users/someusername" enctype="multipart/form-data" id="addusertogroupform")
 		p
 			select(name="groupname" required)
 				option(value='Smith Family') Smith Family
@@ -19,7 +19,7 @@ block content
 		p
 			button(type="submit").button Add User to Group
 	p Invite New Users:
-	form(method="post" action="api/users/invite" enctype="multipart/form-data")
+	form(method="post" action="api/users/invite" enctype="multipart/form-data" id="invitenewusersform")
 		p
 			input(type="email" name="emailaddress" placeholder='email address' required)
 		p
