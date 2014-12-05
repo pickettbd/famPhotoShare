@@ -25,12 +25,12 @@ router.get('/:group/events/:event', isAuthenticated, function(req, res)
 			for (i = 0; i < result.events.length; i++) {
 				if (result.events[i].name == req.params.event) {
 					res.json(e);
-				};
+				}
 			}
 			res.render("404");
 		} else {
 			res.render("error");
-		};
+		}
 	});
 });
 
