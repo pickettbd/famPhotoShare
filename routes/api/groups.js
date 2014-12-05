@@ -115,11 +115,7 @@ router.get('/:group/events', function(req, res)
 {
 	Group.findOne( { name: req.params.group } ).exec( function(err, result) {
 		if (!err) {
-			names = [];
-			for (e in result.events) {
-				names.push(e.name);
-			}
-			res.json(names);
+			res.json(result.events);
 		} else {
 			res.render("error");
 		};
