@@ -216,16 +216,6 @@ router.post('/', isAuthenticated, function(req, res)
 {
 	res.send('this is how you create a new group.');
 
-//    	var db = req.db;
-//    	var group = req.params.group;
-//	    
-//    	var collection = db.get('groups');
-//
-//	collection.insert({
-//        'name' : group
-//    	});
-
-	// close db ?? 
 });
 
 module.exports = router;
