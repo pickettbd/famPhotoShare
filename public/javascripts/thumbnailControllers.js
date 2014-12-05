@@ -22,7 +22,7 @@
 	});
 
 	angular.module('app').controller('GroupSelecterController', function($scope, $http) {
-		$http.get('http://localhost/api/users/john/groups').then(function(resp) {
+		$http.get('http://104.236.25.185/api/users/john/groups').then(function(resp) {
 			$scope.groups = resp.data;
 		}, function(err) {
 				console.error('ERR', err);
