@@ -22,14 +22,14 @@
 	});
 
 	angular.module('app').controller('GroupSelecterController', function($scope, $http){
-		$http.get('http://104.236.25.185/api/users/john/groups').then(function(resp) {
+		$http.get('http://localhost/api/users/john/groups').then(function(resp) {
 			$scope.groups = resp.data;
 		}, function(err) {
 			console.error('ERR', err);
 		})
 
 		this.selectGroup = function(selectedGroup) {
-			$http.get('http://104.236.25.185/api/groups/' + selectedGroup + '/events').then(function(resp) {
+			$http.get('http://localhost/api/groups/' + selectedGroup + '/events').then(function(resp) {
 				$scope.events = resp.data;
 			}, function(err) {
 				console.error('ERR', err);
