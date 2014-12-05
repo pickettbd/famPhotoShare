@@ -113,7 +113,7 @@ router.get('/', isAuthenticated, function(req, res)
 
 /* Handle User Registration POST */
 router.post('/', passport.authenticate('signup', {
-    successRedirect: '/menu',
+    successRedirect: '/welcome',
     failureRedirect: '/sign-up',
     failureFlash : true 
 }));

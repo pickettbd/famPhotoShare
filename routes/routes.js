@@ -57,7 +57,6 @@ module.exports = function(passport){
     });
 
     /* GET download page. */
-<<<<<<< HEAD
     router.get('/download', isAuthenticated, function(req, res) {
         res.render('download', {
 			title: 'Get Photos',
@@ -80,7 +79,7 @@ module.exports = function(passport){
     });
 
     /* GET welcome page. */
-    router.get('/menu', isAuthenticated, function(req, res) {
+    router.get('/welcome', isAuthenticated, function(req, res) {
         res.render('welcome', {
 			title: 'Welcome',
 			navbar: 'true',
