@@ -223,6 +223,8 @@ router.post('/', isAuthenticated, function(req, res)
 	group.save(function(err) {
 		if (err) {
 			res.render("error");
+		} else {
+			res.sendStatus(201);
 		}
 	});
 });
