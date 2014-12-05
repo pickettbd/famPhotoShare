@@ -214,8 +214,17 @@ router.get('/', isAuthenticated, function(req, res)
 // create new group
 router.post('/', isAuthenticated, function(req, res)
 {
-	res.send('this is how you create a new group.');
+	var group = new Group();
 
+	group.name = res.body.newgroupname;
+	group.users = [ ];
+	group.events = [ ];
+
+	group.save(function(err) {
+		if (err) {
+			res.render("error");
+		}
+	});
 });
 
 module.exports = router;
