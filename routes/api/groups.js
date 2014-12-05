@@ -11,25 +11,29 @@ var Group = require('../../schemas/group');
 // view event's details
 router.get('/:group/events/:event', function(req, res)
 {
-	res.send('this is how you get the details of an event. group: ' + req.params.group + ', event: ' + req.params.event);
+	Group.findOne({ name: req.params.group }, function(err, result) {
+		if (!err) {
+			for (e in result.events) {
+				if (e.name === req.params.event) {
+					res.json(e);
+				};
+			}
+			res.render("404");
+		} else {
+			res.render("error");
+		};
+	});
 });
 
 // add new event
 //router.post('/:group/events/:event', function(req, res)
 router.post('/:group/events', function(req, res)
 {
-//	var db = req.db;
-//    	var group = req.params.group;
-//	var event = req.params.event;
-//	    
-//    	var collection = db.get('events');
-//
-//	collection.insert({
-//        'name' : event, 
-//	'group' : group // foreign key 
-//    });
-
-	// close db ?? 
+    Group.update( { name: req.params.group }, { $push: { events: { name: req.body.eventname, photos: req.body.photos } } }, function(err, numAffected, rawResponse) {
+        if (err) {
+        	res.render("error");
+        };
+    });
 });
 
 // delete event
