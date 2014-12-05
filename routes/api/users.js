@@ -3,6 +3,7 @@ var router = express.Router();
 var passport = require('passport');
 
 var User = require('../../schemas/user');
+var Group = require('../../schemas/group');
 
 //router.param('user', /^[A-Za-z0-9]\w{4,}$/);
 //router.param('group', /^[A-Za-z0-9]\w{2,}$/);
@@ -28,7 +29,19 @@ router.get('/:user', function(req, res)
 // add user's group
 router.post('/:user/groups/:group', function(req, res)
 {
-    res.send('this is how you associate a user with a group. user: ' + req.params.user + ', group: ' + req.params.group);
+    User.update( { username: req.params.user }, { $push: { groups: req.params.group } }, {}, function(err, numAffected, rawResponse) {
+	if (err) {
+		res.render("error");
+	};
+    });
+
+    Group.update( { name: req.params.group }, { $push: { users: req.params.user } }, {}, function(err, numAffected, rawResponse) {
+	if (err) {
+		res.render("error");
+	};
+    });
+    
+    //res.send('this is how you associate a user with a group. user: ' + req.params.user + ', group: ' + req.params.group);
 });
 
 // delete user's group
