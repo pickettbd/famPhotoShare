@@ -222,9 +222,11 @@ router.post('/', isAuthenticated, function(req, res)
 
 	group.save(function(err) {
 		if (err) {
+			res.status = 500;
 			res.render("error");
 		} else {
-			res.sendStatus(201);
+			res.status = 201;
+			return done(null, group);
 		}
 	});
 });
