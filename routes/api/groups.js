@@ -113,7 +113,13 @@ router.delete('/:group/events/:event/photos', function(req, res)
 // view list of all group's events
 router.get('/:group/events', function(req, res)
 {
-	res.send('this is how you see a list of all a group\'s events.  group: ' + req.params.group);
+	Group.findOne( { name: req.params.group } ).exec( function(err, result) {
+		if (!err) {
+			res.json(result.events);
+		} else {
+			res.render("error");
+		};
+	});
 });
 
 // add a user to the group

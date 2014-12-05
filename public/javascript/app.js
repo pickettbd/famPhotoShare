@@ -23,16 +23,24 @@
 		this.thumbs = images;
 	});
 
-	app.controller('GroupSelecterController', function(){
-		this.groups = groups;
+	app.controller('GroupSelecterController', function($scope, $http){
+		$http.get('http://localhost/api/users/john/groups').then(function(resp) {
+			$scope.groups = resp.data;
+		}, function(err) {
+			console.error('ERR', err);
+		})
 
 		this.selectGroup = function(selectedGroup) {
-			
+			$http.get('http://localhost/api/groups/' + selectedGroup + '/events').then(function(resp) {
+				$scope.events = resp.data;
+			}, function(err) {
+				console.error('ERR', err);
+			})
+			this.events = ["1", "2"];
 		};
 	});
 
 	app.controller('EventSelecterController', function(){
-		this.events = events;
 	});
 
 	var groups = [
