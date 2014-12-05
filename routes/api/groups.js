@@ -24,7 +24,7 @@ router.get('/:group/events/:event', isAuthenticated, function(req, res)
 		if (!err) {
 			for (i = 0; i < result.events.length; i++) {
 				if (result.events[i].name == req.params.event) {
-					res.json(e);
+					res.json(result.events[i]);
 				}
 			}
 			res.render("404");
