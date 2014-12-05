@@ -1,12 +1,31 @@
 doctype html
-html(ng-app="pageHelper")
+html
 	head
 		meta(name='viewport',content='initial-scale=1')
 		title= title
-		link(rel='stylesheet', href='/stylesheets/grid-style.css')
-		link(rel='stylesheet', href='/stylesheets/style.css')
-		script(type='text/javascript' src='/javascript/angular.js')
-		script(type='text/javascript' src='/javascript/app.js')
-	body
+		link(rel='stylesheet', href='stylesheets/grid-style.css')
+		link(rel='stylesheet', href='stylesheets/style.css')
+		script(type='text/javascript', src='https://ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular.min.js')
+		script(type='text/javascript', src='javascripts/app.js')
+		script(type='text/javascript', src='javascripts/navBarController.js')
+		script(type='text/javascript', src='javascripts/thumbnailControllers.js')
+	body(ng-app="app")
+		.logo(ng-hide=navbar) Family Photo Share
 		div.content
+			h1(ng-show=navbar)
+				ul.section.group()
+					li.nav-col.nav-span_1_of_4.nav-col-active(ng-show=navtab1)
+						a(href='/upload') Add Photos
+					li.nav-col.nav-span_1_of_4(ng-hide=navtab1)
+						a(href='/upload') Add Photos
+					li.nav-col.nav-span_1_of_4.nav-col-active(ng-show=navtab2)
+						a(href='/download') Get Photos
+					li.nav-col.nav-span_1_of_4(ng-hide=navtab2)
+						a(href='/download') Get Photos
+					li.nav-col.nav-span_1_of_4.nav-col-active(ng-show=navtab3)
+						a(href='/manage-groups') Admin
+					li.nav-col.nav-span_1_of_4(ng-hide=navtab3)
+						a(href='/manage-groups') Admin
+					li.nav-col.nav-span_1_of_4
+						a(href='/') Log Out
 			block content

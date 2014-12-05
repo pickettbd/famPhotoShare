@@ -1,16 +1,6 @@
 extends layout
 
 block content
-	h1
-		ul.section.group(ng-controller="NavController as nav")
-			li.nav-col.nav-span_1_of_4
-				a(href='/upload') Add Photos
-			li.nav-col.nav-span_1_of_4
-				a(href='/download') Get Photos
-			li.nav-col.nav-span_1_of_4.nav-col-active
-				a(href='/manage-groups') Admin
-			li.nav-col.nav-span_1_of_4
-				a(href='/') Log Out
 	h1 Manage Groups
 	p Create New Group:
 	form(method="post" action="api/groups" enctype="multipart/form-data")
