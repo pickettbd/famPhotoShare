@@ -1,6 +1,15 @@
 var express = require('express');
 var router = express.Router();
 
+var isAuthenticated = function (req, res, next) {
+    // if user is authenticated in the session, call the next() to call the next request handler 
+    // Passport adds this method to request object. A middleware is allowed to add properties to
+    // request and response objects
+    if (req.isAuthenticated())
+        return next();
+    // if the user is not authenticated then redirect him to the login page
+    res.redirect('/');
+}
 var User = require('../../schemas/user');
 var Group = require('../../schemas/group');
 
@@ -9,82 +18,82 @@ var Group = require('../../schemas/group');
 //router.param('user', /^[A-Za-z0-9]\w{4,}$/);
 
 // view event's details
-router.get('/:group/events/:event', function(req, res)
+router.get('/:group/events/:event', isAuthenticated, function(req, res)
 {
-	res.send('this is how you get the details of an event. group: ' + req.params.group + ', event: ' + req.params.event);
+	Group.findOne({ name: req.params.group }, function(err, result) {
+		if (!err) {
+			events = result.events
+			for (i = 0; i < events.length; i++) {
+				if (events[i].name === req.params.event) {
+					return res.json(events[i]);
+				}
+			}
+			res.render("404");
+		} else {
+			res.render("error");
+		}
+	});
 });
 
 // add new event
-//router.post('/:group/events/:event', function(req, res)
-router.post('/:group/events', function(req, res)
+router.post('/:group/events', isAuthenticated, function(req, res)
 {
-//	var db = req.db;
-//    	var group = req.params.group;
-//	var event = req.params.event;
-//	    
-//    	var collection = db.get('events');
-//
-//	collection.insert({
-//        'name' : event, 
-//	'group' : group // foreign key 
-//    });
-
-	// close db ?? 
+    Group.update( { name: req.params.group }, { $push: { events: { name: req.body.eventname, photos: req.body.photos } } }, function(err, numAffected, rawResponse) {
+        if (err) {
+        	res.render("error");
+        };
+    });
 });
 
 // delete event
-router.delete('/:group/events/:event', function(req, res)
+router.delete('/:group/events/:event', isAuthenticated, function(req, res)
 {
 	res.send('this is how you delete an event.  group: ' + req.params.group + ', event: ' + req.params.event);
 });
 
 // get thumbs
-router.get('/:group/events/:event/thumbs', function(req, res)
+router.get('/:group/events/:event/thumbs', isAuthenticated, function(req, res)
 {
-	res.send('this is how you get an events thumbnails.  group: ' + req.params.group + ', event: ' + req.params.event);
+	Group.findOne({ name: req.params.group }, function(err, result) {
+		if (!err) {
+			events = result.events
+			for (i = 0; i < events.length; i++) {
+				if (events[i].name === req.params.event) {
+					photos = events[i].photos;
+					thumbs = [];
+					for (j = 0; j < photos.length; j++) {
+						thumbs.push("data/photos/" + req.params.group + "/" + req.params.event + "/thumbs/" + photos[i]);
+					}
+					return res.json(thumbs);
+				}
+			}
+			res.render("404");
+		} else {
+			res.render("error");
+		}
+	});
 });
 
 // upload photo(s) to an event
-//router.post('/:group/events/:event/photos/:photo', function(req, res)
-router.post('/:group/events/:event/photos', function(req, res)
+router.post('/:group/events/:event/photos', isAuthenticated, function(req, res)
 {
 	res.send('this is how you add photo(s) to an event.  group: ' + req.params.group + ', event: ' + req.params.event);
-//    	var db = req.db;
-//	var group = req.params.group;
-//	var event = req.params.event;
-//	var photo = req.params.photo;
-//
-//	// how to organize collections ?? Need to have foreign keys? 
-//    	var collection = db.get('photos');
-//
-//// http://stackoverflow.com/questions/11568587/store-images-in-mongodb-serve-them-with-nodejs
-//	var base64Data = imagefile.replace(/^data:image\/png;base64,/,""), // ?? 
-//	var dataBuffer = new Buffer(base64Data, 'base64');
-//
-//	collection.insert({
-//		'group' : group, // foreign key
-//		'event' : event, // foreign key
-//		file_name : photo,
-//		image : dataBuffer.toString()
-//	});
-//
-	// close db ?? 
 });
 
 // download photo from an event
-router.get('/:group/events/:event/photos/:photo', function(req, res)
-{
-	res.send('this is how you download a photo from an event.  group: ' + req.params.group + ', event: ' + req.params.event + ', photo: ' + req.params.photo);
-});
+//router.get('/:group/events/:event/photos/:photo', isAuthenticated, function(req, res)
+//{
+//	res.send('this is how you download a photo from an event.  group: ' + req.params.group + ', event: ' + req.params.event + ', photo: ' + req.params.photo);
+//});
 
 // download all photos from an event
-router.get('/:group/events/:event/photos', function(req, res)
+router.get('/:group/events/:event/photos', isAuthenticated, function(req, res)
 {
 	res.send('this is how you download all photos from an event.  group: ' + req.params.group + ', event: ' + req.params.event);
 });
 
 // upload photos to an event
-router.post('/:group/events/:event/photos', function(req, res)
+router.post('/:group/events/:event/photos', isAuthenticated, function(req, res)
 {
     var event = null;
     event.photos = req.body.photos;
@@ -99,23 +108,27 @@ router.post('/:group/events/:event/photos', function(req, res)
 });
 
 // delete photo from an event
-router.delete('/:group/events/:event/photos/:photo', function(req, res)
+router.delete('/:group/events/:event/photos/:photo', isAuthenticated, function(req, res)
 {
 	res.send('this is how you delete a photo from an event.  group: ' + req.params.group + ', event: ' + req.params.event + ', photo: ' + req.params.photo);
 });
 
 // delete all photos from an event
-router.delete('/:group/events/:event/photos', function(req, res)
+router.delete('/:group/events/:event/photos', isAuthenticated, function(req, res)
 {
 	res.send('this is how you delete all photos from an event.  group: ' + req.params.group + ', event: ' + req.params.event);
 });
 
 // view list of all group's events
-router.get('/:group/events', function(req, res)
+router.get('/:group/events', isAuthenticated, function(req, res)
 {
 	Group.findOne( { name: req.params.group } ).exec( function(err, result) {
 		if (!err) {
-			res.json(result.events);
+			names = []
+			for (i = 0; i < result.events.length; i++) {
+				names.push(result.events[i].name);
+			}
+			res.json(names);
 		} else {
 			res.render("error");
 		};
@@ -123,7 +136,7 @@ router.get('/:group/events', function(req, res)
 });
 
 // add a user to the group
-router.post('/:group/users/:user', function(req, res)
+router.post('/:group/users/:user', isAuthenticated, function(req, res)
 {
     User.update( { username: req.params.user }, { $push: { groups: req.params.group } }, function(err, numAffected, rawResponse) {
         if (err) {
@@ -141,19 +154,19 @@ router.post('/:group/users/:user', function(req, res)
 });
 
 // delete user from the group
-router.delete('/:group/users/:user', function(req, res)
+router.delete('/:group/users/:user', isAuthenticated, function(req, res)
 {
 	res.send('this is how you remove a user from a group. group: ' + req.params.group + ', user: ' + req.params.user);
 });
 
 // delete all users from the group
-router.delete('/:group/users', function(req, res)
+router.delete('/:group/users', isAuthenticated, function(req, res)
 {
 	res.send('this is how you remove all users from a group. group: ' + req.params.group);
 });
 
 // see a list of all the group's users 
-router.get('/:group/users', function(req, res)
+router.get('/:group/users', isAuthenticated, function(req, res)
 {
 	Group.findOne( { name: req.params.group } ).exec( function(err, result) {
 		if (!err) {
@@ -165,7 +178,7 @@ router.get('/:group/users', function(req, res)
 });
 
 // view group's details
-router.get('/:group', function(req, res)
+router.get('/:group', isAuthenticated, function(req, res)
 {
 	Group.findOne( { name: req.params.group } ).exec( function(err, result) {
 		if (!err) {
@@ -177,13 +190,13 @@ router.get('/:group', function(req, res)
 });
 
 // delete group
-router.delete('/:group', function(req, res)
+router.delete('/:group', isAuthenticated, function(req, res)
 {
 	res.send('this is how you delete a group.  group: ' + req.params.group);
 });
 
 // see list of all groups
-router.get('/', function(req, res)
+router.get('/', isAuthenticated, function(req, res)
 {
 	Group.find(function(err, result) {
 		if (!err) {
@@ -199,20 +212,10 @@ router.get('/', function(req, res)
 });
 
 // create new group
-router.post('/', function(req, res)
+router.post('/', isAuthenticated, function(req, res)
 {
 	res.send('this is how you create a new group.');
 
-//    	var db = req.db;
-//    	var group = req.params.group;
-//	    
-//    	var collection = db.get('groups');
-//
-//	collection.insert({
-//        'name' : group
-//    	});
-
-	// close db ?? 
 });
 
 module.exports = router;

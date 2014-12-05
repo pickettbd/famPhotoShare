@@ -20,8 +20,14 @@ module.exports = function(passport){
         failureFlash : true 
     }));
 
+    /* GET logout*/
+    router.get('/logout', function(req, res) {
+        res.logout();
+        res.redirect('/');
+    });
+
     /* GET upload-landing page. */
-    router.get('/upload-landing', function(req, res) {
+    router.get('/upload-landing', isAuthenticated, function(req, res) {
         res.render('upload-landing', {
 			title: 'Upload Landing',
 			navbar: 'true',
@@ -32,7 +38,7 @@ module.exports = function(passport){
     });
 
     /* GET manage-groups page. */
-    router.get('/manage-groups', function(req, res) {
+    router.get('/manage-groups', isAuthenticated, function(req, res) {
         res.render('manage-groups', {
 			title: 'Manage Groups',
 			navbar: 'true',
@@ -51,7 +57,8 @@ module.exports = function(passport){
     });
 
     /* GET download page. */
-    router.get('/download', function(req, res) {
+<<<<<<< HEAD
+    router.get('/download', isAuthenticated, function(req, res) {
         res.render('download', {
 			title: 'Get Photos',
 			navbar: 'true',
@@ -62,7 +69,7 @@ module.exports = function(passport){
     });
 
     /* GET upload page. */
-    router.get('/upload', function(req, res) {
+    router.get('/upload', isAuthenticated, function(req, res) {
         res.render('upload', {
 			title: 'Add Photos',
 			navbar: 'true',
@@ -73,7 +80,7 @@ module.exports = function(passport){
     });
 
     /* GET welcome page. */
-    router.get('/welcome', function(req, res) {
+    router.get('/menu', isAuthenticated, function(req, res) {
         res.render('welcome', {
 			title: 'Welcome',
 			navbar: 'true',
