@@ -18,16 +18,16 @@ router.get('/:group/events/:event', function(req, res)
 //router.post('/:group/events/:event', function(req, res)
 router.post('/:group/events', function(req, res)
 {
-	var db = req.db;
-    	var group = req.params.group;
-	var event = req.params.event;
-	    
-    	var collection = db.get('events');
-
-	collection.insert({
-        'name' : event, 
-	'group' : group // foreign key 
-    });
+//	var db = req.db;
+//    	var group = req.params.group;
+//	var event = req.params.event;
+//	    
+//    	var collection = db.get('events');
+//
+//	collection.insert({
+//        'name' : event, 
+//	'group' : group // foreign key 
+//    });
 
 	// close db ?? 
 });
@@ -149,13 +149,25 @@ router.delete('/:group/users', function(req, res)
 // see a list of all the group's users 
 router.get('/:group/users', function(req, res)
 {
-	res.send('this is how you see a list of all the group\'s users.  group: ' + req.params.group);
+	Group.findOne( { name: req.params.group } ).exec( function(err, result) {
+		if (!err) {
+			res.json(result.users);
+		} else {
+			res.render("error");
+		};
+	});
 });
 
 // view group's details
 router.get('/:group', function(req, res)
 {
-	res.send('this is how you get the details of a group. group: ' + req.params.group);
+	Group.findOne( { name: req.params.group } ).exec( function(err, result) {
+		if (!err) {
+			res.json(result);
+		} else {
+			res.render("error");
+		};
+	});
 });
 
 // delete group
@@ -167,7 +179,13 @@ router.delete('/:group', function(req, res)
 // see list of all groups
 router.get('/', function(req, res)
 {
-	res.send('this is how you see a list of all groups.');
+	Group.find(function(err, result) {
+		if (!err) {
+			res.json(result);
+		} else {
+			res.render("error");
+		};
+	});
 });
 
 // create new group
@@ -175,14 +193,14 @@ router.post('/', function(req, res)
 {
 	res.send('this is how you create a new group.');
 
-    	var db = req.db;
-    	var group = req.params.group;
-	    
-    	var collection = db.get('groups');
-
-	collection.insert({
-        'name' : group
-    	});
+//    	var db = req.db;
+//    	var group = req.params.group;
+//	    
+//    	var collection = db.get('groups');
+//
+//	collection.insert({
+//        'name' : group
+//    	});
 
 	// close db ?? 
 });

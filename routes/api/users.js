@@ -60,11 +60,6 @@ router.get('/:user/groups', function(req, res)
 			res.render("error");
 		};
 	});
-    //var db = req.db;
-    //var user = db.users.find( { name: req.params.user } );
-    //var groups = user.groups;
-
-    //res.send(groups);
 });
 
 // delete user's groups
@@ -76,13 +71,6 @@ router.delete('/:user/groups', function(req, res)
 // get a list of users
 router.get('/', function(req, res)
 {
-    //var db = req.db;
-    //var collection = db.get('users');
-    //collection.find({},{},function(e,docs){
-    //    res.render('userlist', {
-    //        "userlist" : docs
-    //    });
-    //});
     return User.find(function (err, users) {
         if (!err) {
             return res.json(users);
