@@ -23,7 +23,7 @@ router.get('/:group/events/:event', isAuthenticated, function(req, res)
 	Group.findOne({ name: req.params.group }, function(err, result) {
 		if (!err) {
 			for (e in result.events) {
-				if (e.name === req.params.event) {
+				if (e.name == req.params.event) {
 					res.json(e);
 				};
 			}
@@ -128,7 +128,11 @@ router.get('/:group/events', isAuthenticated, function(req, res)
 {
 	Group.findOne( { name: req.params.group } ).exec( function(err, result) {
 		if (!err) {
-			res.json(result.events);
+			names = []
+			for (e in result.events) {
+				names.push(e.name);
+			}
+			res.json(names);
 		} else {
 			res.render("error");
 		};
