@@ -10,6 +10,8 @@ var isAuthenticated = function (req, res, next) {
     // if the user is not authenticated then redirect him to the login page
     res.redirect('/');
 }
+var User = require('../../schemas/user');
+var Group = require('../../schemas/group');
 
 //router.param('group', /^[A-Za-z0-9]\w{2,}$/);
 //router.param('event', /^[A-Za-z0-9]\w{2,}$/);
@@ -25,16 +27,16 @@ router.get('/:group/events/:event', isAuthenticated, function(req, res)
 //router.post('/:group/events/:event', function(req, res)
 router.post('/:group/events', isAuthenticated, function(req, res)
 {
-	var db = req.db;
-    	var group = req.params.group;
-	var event = req.params.event;
-	    
-    	var collection = db.get('events');
-
-	collection.insert({
-        'name' : event, 
-	'group' : group // foreign key 
-    });
+//	var db = req.db;
+//    	var group = req.params.group;
+//	var event = req.params.event;
+//	    
+//    	var collection = db.get('events');
+//
+//	collection.insert({
+//        'name' : event, 
+//	'group' : group // foreign key 
+//    });
 
 	// close db ?? 
 });
@@ -120,13 +122,31 @@ router.delete('/:group/events/:event/photos', isAuthenticated, function(req, res
 // view list of all group's events
 router.get('/:group/events', isAuthenticated, function(req, res)
 {
-	res.send('this is how you see a list of all a group\'s events.  group: ' + req.params.group);
+	Group.findOne( { name: req.params.group } ).exec( function(err, result) {
+		if (!err) {
+			res.json(result.events);
+		} else {
+			res.render("error");
+		};
+	});
 });
 
 // add a user to the group
 router.post('/:group/users/:user', isAuthenticated, function(req, res)
 {
-	res.send('this is how you add a user to the group.  group: ' + req.params.group + ', user: ' + req.params.user);
+    User.update( { username: req.params.user }, { $push: { groups: req.params.group } }, function(err, numAffected, rawResponse) {
+        if (err) {
+        	res.render("error");
+        };
+    });
+
+    Group.update( { name: req.params.group }, { $push: { users: req.params.user } }, {}, function(err, numAffected, rawResponse) {
+        if (err) {
+        	res.render("error");
+        } else {
+        	res.send("success");
+        };
+    });
 });
 
 // delete user from the group
@@ -144,13 +164,25 @@ router.delete('/:group/users', isAuthenticated, function(req, res)
 // see a list of all the group's users 
 router.get('/:group/users', isAuthenticated, function(req, res)
 {
-	res.send('this is how you see a list of all the group\'s users.  group: ' + req.params.group);
+	Group.findOne( { name: req.params.group } ).exec( function(err, result) {
+		if (!err) {
+			res.json(result.users);
+		} else {
+			res.render("error");
+		};
+	});
 });
 
 // view group's details
 router.get('/:group', isAuthenticated, function(req, res)
 {
-	res.send('this is how you get the details of a group. group: ' + req.params.group);
+	Group.findOne( { name: req.params.group } ).exec( function(err, result) {
+		if (!err) {
+			res.json(result);
+		} else {
+			res.render("error");
+		};
+	});
 });
 
 // delete group
@@ -162,7 +194,17 @@ router.delete('/:group', isAuthenticated, function(req, res)
 // see list of all groups
 router.get('/', isAuthenticated, function(req, res)
 {
-	res.send('this is how you see a list of all groups.');
+	Group.find(function(err, result) {
+		if (!err) {
+			names = []
+			for (i = 0; i < result.length; i++) {
+				names.push(result[i].name);
+			}
+			res.json(names);
+		} else {
+			res.render("error");
+		};
+	});
 });
 
 // create new group
@@ -170,14 +212,14 @@ router.post('/', isAuthenticated, function(req, res)
 {
 	res.send('this is how you create a new group.');
 
-    	var db = req.db;
-    	var group = req.params.group;
-	    
-    	var collection = db.get('groups');
-
-	collection.insert({
-        'name' : group
-    	});
+//    	var db = req.db;
+//    	var group = req.params.group;
+//	    
+//    	var collection = db.get('groups');
+//
+//	collection.insert({
+//        'name' : group
+//    	});
 
 	// close db ?? 
 });

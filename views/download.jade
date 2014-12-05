@@ -15,10 +15,10 @@ block content
 		h1 Get Photos
 		p Select Group 
 			select(ng-controller="GroupSelecterController as groupSelecter")
-				option(ng-repeat="group in groupSelecter.groups", value="{{group.name}}") {{group.name}}
+				option(ng-click="groupSelecter.selectGroup({{group}})", ng-repeat="group in groups", value="{{group}}") {{group}}
 		p Select Event 
 			select(ng-controller="EventSelecterController as eventSelecter")
-				option(ng-click="", ng-repeat="event in eventSelecter.events", value="{{event.name}}") {{event.name}}
+				option(ng-click="", ng-repeat="event in events", value="{{event.name}}") {{event.name}}
 		a(href="").button Get Photos
 		div.section.group(ng-controller="PanelController as panel")
 			div.col.span_1_of_4(ng-class="{ active: panel.isSelected(thumb.id) }", ng-repeat="thumb in thumbController.thumbs")
