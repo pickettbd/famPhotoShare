@@ -64,7 +64,7 @@ router.get('/:group/events/:event/thumbs', isAuthenticated, function(req, res)
 					photos = events[i].photos;
 					thumbs = [];
 					for (j = 0; j < photos.length; j++) {
-						thumbs.push("data/photos/" + req.params.group + "/" + req.params.event + "/thumbs/" + photos[i]);
+						thumbs.push("api/groups/" + req.params.group + "/events/" + req.params.event + "/thumbs/" + photos[i]);
 					}
 					return res.json(thumbs);
 				}
@@ -76,22 +76,37 @@ router.get('/:group/events/:event/thumbs', isAuthenticated, function(req, res)
 	});
 });
 
+// get one thumb
+router.get('/:group/events/:event/thumbs/:thumb', isAuthenticated, function(req, res)
+{
+	var fileName = "data/photos/" + req.params.group + "/" + req.params.event + "/thumbs/" + req.params.thumb;
+
+	res.sendFile(fileName, { dotfiles: "deny" }, function(err) {
+		if (err) {
+			res.status(err.status).end();
+		}
+	});
+});
+
 // upload photo(s) to an event
 router.post('/:group/events/:event/photos', isAuthenticated, function(req, res)
 {
+	console.log("made it into the upload photos route function");
 	newPhotoNames = [ ];
 
-	for (i = 0; i < req.files.length; i++) {
+	for (i = 0; i < req.files.uploadphotos.length; i++) {
 		
-		newPhotoNames.push(req.files[i].name);
+		console.log("loop through the files (at the top)");
+		newPhotoNames.push(req.files.uploadphotos[i].name);
 		
-		var oldPhotoPath = __dirname + "/data/photos/" + req.files[i].name;
-		var newPhotoPath = __dirname + "/data/photos/" + req.params.group + "/" + req.params.event + "/" + req.files[i].name;
-		var newThumbPath = __dirname + "/data/photos/" + req.params.group + "/" + req.params.event + "/thumbs/" + req.files[i].name;
+		var oldPhotoPath = __dirname + "/data/photos/" + req.files.uploadphotos[i].name;
+		var newPhotoPath = __dirname + "/data/photos/" + req.params.group + "/" + req.params.event + "/" + req.files.uploadphotos[i].name;
+		var newThumbPath = __dirname + "/data/photos/" + req.params.group + "/" + req.params.event + "/thumbs/" + req.files.uploadphotos[i].name;
 
 		// move the file to the correct place
-		fs.rename(oldPhotoPath, newPhotoPath, function(err) {
+		return fs.rename(oldPhotoPath, newPhotoPath, function(err) {
 			if (!err) {
+				console.log("just renamed the photo sucessfully, about to create the thumbnail");
 				// create the thumbnail
 				gm(newPhotoPath).geometry(250,">").write(newThumbPath, function(err, stdout, stderr, command) {
 					if (err) {
@@ -102,33 +117,47 @@ router.post('/:group/events/:event/photos', isAuthenticated, function(req, res)
 					}
 				});
 			} else {
+				console.log("just renamed the photo UNsucessfully");
 				return res.render("error");
 			}
 		});
 	}
 
+	console.log(newPhotoNames);
+	console.log("exited loop through the files");
 	if (newPhotoNames.length > 0) {
+		console.log("more than one file was uploaded, about to find group");
 		// add photos to database
-		Group.findOne({ name: req.params.group }, function(err, result) {
+		return Group.findOne({ name: req.params.group }, function(err, result) {
 			if (!err) {
+				console.log("found group successfully");
 				for (i = 0; i < result.events.length; i++) {
+					console.log("looping through events");
 					if (result.events[i].name === req.params.event) {
+						console.log("found event!");
 						for (j = 0; j < newPhotoNames.length; j++) {
+							console.log("adding photo to event!");
 							result.events[i].photos.push(newPhotoNames[j]);
 						}
-						Group.update( { name: req.params.group }, result, function(err, numAffected, rawResponse) {
-							if (err) {
+						console.log("updating group with the new photos as part of the appropriate event");
+						return Group.update( { name: req.params.group }, result, function(err, numAffected, rawResponse) {
+							if (!err) {
+								console.log("succesfully updated group with the new photos as part of the appropriate event");
+							} else {
+								console.log("UNsuccesfully updated group with the new photos as part of the appropriate event");
 								return res.render("error");
-							};
-							
+							}
 						});
 					}
 				}
 				return res.render("404");
 			} else {
+				console.log("found group UNsuccessfully");
 				return res.render("error");
 			}
 		});
+	} else {
+		return res.render("error");
 	}
 });
 
