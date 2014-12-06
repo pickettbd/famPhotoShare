@@ -32,12 +32,16 @@ app.locals.pretty = true;
 // json setup
 app.set("json spaces", 4);
 
-// uncomment after placing your favicon in /public
 app.use(favicon(__dirname + '/public/favicon.ico'));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(multer());
+app.use(multer(), {
+	dest: __dirname + "/data/photos",
+	rename: function(fieldName, fileName) {
+		return fieldName.replace(/\W+/g, "") + Date.now() + fileName.replace(/\W+/g, "") + Math.floor((Math.random() * 1000) + 1);
+	}
+});
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 //app.use(params);
