@@ -1,3 +1,5 @@
+var gm = require('gm'); // graphicsmagick
+var fs = require('fs'); // file system
 var express = require('express');
 var router = express.Router();
 
@@ -77,7 +79,57 @@ router.get('/:group/events/:event/thumbs', isAuthenticated, function(req, res)
 // upload photo(s) to an event
 router.post('/:group/events/:event/photos', isAuthenticated, function(req, res)
 {
-	res.send('this is how you add photo(s) to an event.  group: ' + req.params.group + ', event: ' + req.params.event);
+	newPhotoNames = [ ];
+
+	for (i = 0; i < req.files.length; i++) {
+		
+		newPhotoNames.push(req.files[i].name);
+		
+		var oldPhotoPath = __dirname + "/data/photos/" + req.files[i].name;
+		var newPhotoPath = __dirname + "/data/photos/" + req.params.group + "/" + req.params.event + "/" + req.files[i].name;
+		var newThumbPath = __dirname + "/data/photos/" + req.params.group + "/" + req.params.event + "/thumbs/" + req.files[i].name;
+
+		// move the file to the correct place
+		fs.rename(oldPhotoPath, newPhotoPath, function(err) {
+			if (!err) {
+				// create the thumbnail
+				gm(newPhotoPath).geometry(250,">").write(newThumbPath, function(err, stdout, stderr, command) {
+					if (err) {
+						console.error("error uploading photo");
+						console.error("stdout: " + stdout);
+						console.error("stderr: " + stderr);
+						return res.render("error");
+					}
+				});
+			} else {
+				return res.render("error");
+			}
+		});
+	}
+
+	if (newPhotoNames.length > 0) {
+		// add photos to database
+		Group.findOne({ name: req.params.group }, function(err, result) {
+			if (!err) {
+				for (i = 0; i < result.events.length; i++) {
+					if (result.events[i].name === req.params.event) {
+						for (j = 0; j < newPhotoNames.length; j++) {
+							result.events[i].photos.push(newPhotoNames[j]);
+						}
+						Group.update( { name: req.params.group }, result, function(err, numAffected, rawResponse) {
+							if (err) {
+								return res.render("error");
+							};
+							
+						});
+					}
+				}
+				return res.render("404");
+			} else {
+				return res.render("error");
+			}
+		});
+	}
 });
 
 // download photo from an event

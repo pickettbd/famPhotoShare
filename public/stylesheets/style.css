@@ -54,6 +54,10 @@ h1 {
 	line-height: 150%;
 }
 
+h2 {
+	font: 22px 'Lucida Grande', Helvetica, Arial, sans-serif;
+}
+
 input {
 	margin: 5px;
 }
@@ -67,11 +71,18 @@ input {
 	border-radius: .25em;
 	width: 125px;
 
+	font: 14px 'Lucida Grande', Helvetica, Arial, sans-serif;
+	color: #007dcc;
+
 	text-align: center;
 }
 
 .button:hover {
 	background-color: #DDDDDD; 
+}
+
+button {
+	border: 0;
 }
 
 a {

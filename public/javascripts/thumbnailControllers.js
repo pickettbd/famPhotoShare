@@ -17,28 +17,27 @@
 		};
 	});
 
-	angular.module('app').controller('ThumbController', function(){
-		this.thumbs = images;
+	angular.module('app').controller('ThumbController', function() {
+		this.thumbs = [];
 	});
 
-	angular.module('app').controller('GroupSelecterController', function($scope, $http){
-		$http.get('http://localhost/api/users/john/groups').then(function(resp) {
-			$scope.groups = resp.data;
-		}, function(err) {
-			console.error('ERR', err);
-		})
+	angular.module('app').controller('GroupSelecterController', function($scope, $http) {
+		var username = "john";
 
-		this.selectGroup = function(selectedGroup) {
-			$http.get('http://localhost/api/groups/' + selectedGroup + '/events').then(function(resp) {
-				$scope.events = resp.data;
+		$http.get('http://localhost/api/users/whoami').then(function(usernameRes) {
+
+ 			username = usernameRes.data;
+
+			$http.get('http://localhost/api/users/' + username + '/groups').then(function(groupsRes) {
+
+				$scope.groups = groupsRes.data;
+
 			}, function(err) {
+					console.error('ERR', err);
+			});
+ 		}, function(err) {
 				console.error('ERR', err);
-			})
-			this.events = ["1", "2"];
-		};
-	});
-
-	angular.module('app').controller('EventSelecterController', function(){
+		});
 	});
 
 })();

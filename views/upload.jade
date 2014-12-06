@@ -1,18 +1,23 @@
-extends layout
+extends layout	
+
+block head
+	
 
 block content
 	h1 Add Photos
 	p Select Group 
-		select
-			option(value='Smith Family') Smith Family
-			option(value='Miller Family') Miller Family
+		select(name="grp")
+			option(value='Hogwarts') Miller Family
+			option(value='Duce-family') Smith Family
 			option(value='+ create new group') + create new group
 	p Select Event 
-		select
-			option(value='Summer Vacation') Summer Vacation
+		select(name="evt")
+			option(value='TriWizardTournament') Summer Vacation
 			option(value='+ create new event') + create new event
-	form(method="post" action="api/groups/ajsdi/events/jkasdf/photos" enctype="multipart/form-data")
+	form(method="post" name="form1" action="/" enctype="multipart/form-data")
 		p
 			input(type='file' name='photos' required multiple)
 		p
-			input(type='submit' value="Add Photos")
+			button(type='button' onclick='javascript:upload_form()').button Add Photos
+	
+

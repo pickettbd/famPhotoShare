@@ -12,7 +12,10 @@ router.use('/auth', auth);
 // api instructions
 router.get('/', function(req, res)
 {
-	res.render('api', {"title": "famPhotoShare API"});
+	res.render('api', {
+		title: "famPhotoShare API",
+		navbar: 'false'
+	});
 });
 
 module.exports = router;
