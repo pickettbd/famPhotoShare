@@ -14,7 +14,7 @@ router.get('/', function(req, res)
 {
 	res.render('api', {
 		title: "famPhotoShare API",
-		navbar: 'true'
+		navbar: 'false'
 	});
 });
 
