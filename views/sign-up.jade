@@ -3,7 +3,7 @@ extends layout
 block content
 	h1.title Sign Up
 	p Welcome to Family Photo Share. Signing up is quick and easy so that you can get right into sharing your photos!
-	form(name='addUser', method='post', action='api/users')
+	form(name='addUser', method='post', action='api/users' ng-controller='SignInController as signCtrl)
 		p
 			input(placeholder='user name', type='text', id='username', name='username')
 		p
@@ -12,5 +12,7 @@ block content
 			input(placeholder='password', type='password', name='password')
 		p
 			input(placeholder='confirm password', type='password', name='confirmpass')
+        div
+            password invalid
 		p
 			button(type='submit') Sign Up
