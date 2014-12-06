@@ -1,4 +1,7 @@
-extends layout
+extends layout	
+
+block head
+	
 
 block content
 	h1 Add Photos
@@ -15,9 +18,6 @@ block content
 		p
 			input(type='file' name='photos' required multiple)
 		p
-			button(type='button' onclick='upload_form()').button Add Photos
-	script(type="text/javascript").
-		function upload_form() {
-			document.form1.action = "/api/groups/" + document.grp.value + "/event/" + document.evt.value + "/photos";
-			document.form1.submit();
-		}
+			button(type='button' onclick='javascript:upload_form()').button Add Photos
+	
+
