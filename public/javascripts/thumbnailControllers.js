@@ -24,19 +24,19 @@
 	angular.module('app').controller('GroupSelecterController', function($scope, $http) {
 		this.username = "";
 
-		this.url = 'http://104.236.25.185/api/users/whoami'
+		this.url = 'http://104.236.25.185/api/users/whoami';
 		$http.get(url).then(function(resp) {
 			this.username = resp.data;
 		}, function(err) {
 				console.error('ERR', err);
-		})
+		});
 
-		this.url = 'http://104.236.25.185/api/users/' + this.username + '/groups'
+		this.url = 'http://104.236.25.185/api/users/' + this.username + '/groups';
 		$http.get(url).then(function(resp) {
 			$scope.groups = resp.data;
 		}, function(err) {
 				console.error('ERR', err);
-		})
+		});
 	});
 
 })();
