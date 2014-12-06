@@ -29,7 +29,7 @@ router.get('/whoami', isAuthenticated, function(req, res)
 {
     User.findOne( { _id: req.session.passport.user } ).exec( function(err, result) {
         if (!err) {
-            res.json(result.username);			
+            res.send(result.username);			
         } else {
             res.render("error");
         };

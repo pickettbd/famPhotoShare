@@ -22,19 +22,20 @@
 	});
 
 	angular.module('app').controller('GroupSelecterController', function($scope, $http) {
-		this.username = "";
+		var username = "john";
 
-		this.url = 'http://104.236.25.185/api/users/whoami';
-		$http.get(url).then(function(resp) {
-			this.username = resp.data;
-		}, function(err) {
-				console.error('ERR', err);
-		});
+		$http.get('http://localhost/api/users/whoami').then(function(usernameRes) {
 
-		this.url = 'http://104.236.25.185/api/users/' + this.username + '/groups';
-		$http.get(url).then(function(resp) {
-			$scope.groups = resp.data;
-		}, function(err) {
+ 			username = usernameRes.data;
+
+			$http.get('http://localhost/api/users/' + username + '/groups').then(function(groupsRes) {
+
+				$scope.groups = groupsRes.data;
+
+			}, function(err) {
+					console.error('ERR', err);
+			});
+ 		}, function(err) {
 				console.error('ERR', err);
 		});
 	});
