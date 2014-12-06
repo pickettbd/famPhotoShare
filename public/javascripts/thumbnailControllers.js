@@ -24,13 +24,15 @@
 	angular.module('app').controller('GroupSelecterController', function($scope, $http) {
 		this.username = "";
 
-		$http.get('http://104.236.25.185/api/users/whoami').then(function(resp) {
+		this.url = 'http://104.236.25.185/api/users/whoami'
+		$http.get(url).then(function(resp) {
 			this.username = resp.data;
 		}, function(err) {
 				console.error('ERR', err);
 		})
 
-		$http.get('http://104.236.25.185/api/users/' + this.username + '/groups').then(function(resp) {
+		this.url = 'http://104.236.25.185/api/users/' + this.username + '/groups'
+		$http.get(url).then(function(resp) {
 			$scope.groups = resp.data;
 		}, function(err) {
 				console.error('ERR', err);
