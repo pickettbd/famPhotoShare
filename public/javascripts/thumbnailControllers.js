@@ -1,6 +1,6 @@
 (function() {
 
-	angular.module('app').controller('PanelController', function(){
+	angular.module('app').controller('ThumbController', function(){
 		this.selectedPhotos = [];
 
 		this.selectPhoto = function(selectPhoto) {
@@ -17,18 +17,14 @@
 		};
 	});
 
-	angular.module('app').controller('ThumbController', function() {
-		this.thumbs = [];
-	});
+	angular.module('app').controller('ListController', function($scope, $http) {
+		var group = "";
 
-	angular.module('app').controller('GroupSelecterController', function($scope, $http) {
-		var username = "john";
+		$http.get('http://104.236.25.185/api/users/whoami').then(function(usernameRes) {
 
-		$http.get('http://localhost/api/users/whoami').then(function(usernameRes) {
+ 			var username = usernameRes.data;
 
- 			username = usernameRes.data;
-
-			$http.get('http://localhost/api/users/' + username + '/groups').then(function(groupsRes) {
+			$http.get('http://104.236.25.185/api/users/' + username + '/groups').then(function(groupsRes) {
 
 				$scope.groups = groupsRes.data;
 
@@ -38,6 +34,27 @@
  		}, function(err) {
 				console.error('ERR', err);
 		});
+
+		this.getEvents = function() {
+			var ddl = document.getElementById("groupsddl");
+			group = ddl.options[ddl.selectedIndex].value;
+			$http.get('http://104.236.25.185/api/groups/' + group + '/events').then(function(eventsRes) {
+				$scope.events = eventsRes.data;
+			}, function(err) {
+					console.error('ERR', err);
+			});
+		};
+
+		this.getThumbs = function() {
+			var ddl = document.getElementById("eventsddl");
+			eventname = ddl.options[ddl.selectedIndex].value;
+			$http.get('http://104.236.25.185/api/groups/' + group + '/events/' + eventname + '/thumbs').then(function(thumbsRes) {
+				$scope.thumbAddresses = thumbsRes.data;
+			}, function(err) {
+					console.error('ERR', err);
+			});
+		};
+
 	});
 
 })();
