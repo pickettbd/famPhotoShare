@@ -1,5 +1,5 @@
 var gm = require('gm'); // graphicsmagick
-var fs = require('fs'): // file system
+var fs = require('fs'); // file system
 var express = require('express');
 var router = express.Router();
 
