@@ -22,4 +22,4 @@ block content
 		div.section.group(ng-controller="ThumbController as thumbController")
 			p.note(ng-hide="listController.hasThumbs()") (The {{eventname}} event does not have any photos)
 			div.col.span_1_of_4(ng-repeat="thumb in thumbs", ng-class="{ active: thumbController.isSelected(thumb) }")
-				img.fit(ng-src="http://localhost/{{thumb}}", ng-click="thumbController.selectPhoto(thumb)")
+				img.fit(ng-src="http://104.236.25.185/{{thumb}}", ng-click="thumbController.selectPhoto(thumb)")
