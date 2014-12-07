@@ -98,3 +98,6 @@ a {
 	padding: 1em 0 0 0;
 }
 
+.warning {
+	color: #ff0000;
+}

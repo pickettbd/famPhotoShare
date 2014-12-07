@@ -5,14 +5,18 @@ block content
 	p Welcome to Family Photo Share. Signing up is quick and easy so that you can get right into sharing your photos!
 	form(name='addUser', method='post', action='api/users', ng-controller='SignInController as signCtrl')
 		p
-			input(placeholder='user name', type='text', id='username', name='username')
+			input(autofocus, ng-model="user.username", placeholder='user name', type='text', id='username', name='username', pattern=".{3,20}", required)
 		p
-			input(placeholder='email', type='email', name='email')
+			input(placeholder='email', type='email', name='email', required)
 		p
-			input(placeholder='password', type='password', name='password')
+			input(ng-model="user.password", placeholder='password', type='password', name='password', required)
 		p
-			input(placeholder='confirm password', type='password', name='confirmpass')
-		div
-			password invalid
+			input(ng-model="user.confpassword", placeholder='confirm password', type='password', name='confirmpass', required)
 		p
-			button(type='submit').button Sign Up
+		div(ng-show='user.username.length == 1 || user.username.length === 2')
+			p(class='warning')
+				Your username must be at least 3 characters!
+		div(ng-hide='user.password === user.confpassword')
+			p(class='warning')
+				Your passwords do not match!
+		button(type='submit', ng-disabled="user.password != user.confpassword || user.username.length == 1 || user.username.length == 2").button Sign Up
