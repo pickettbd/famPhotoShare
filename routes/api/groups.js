@@ -33,7 +33,7 @@ router.get('/:group/events/:event', isAuthenticated, function(req, res)
 			}
 			res.render("404");
 		} else {
-			res.render("error");
+			res.render("error", { message: "error in routes/api/groups.js", error: err } );
 		}
 	});
 });
@@ -43,7 +43,7 @@ router.post('/:group/events', isAuthenticated, function(req, res)
 {
     Group.update( { name: req.params.group }, { $push: { events: { name: req.body.eventname, photos: req.body.photos } } }, function(err, numAffected, rawResponse) {
         if (err) {
-        	res.render("error");
+        	res.render("error", { message: "error in routes/api/groups.js", error: err } );
         };
     });
 });
@@ -72,7 +72,7 @@ router.get('/:group/events/:event/thumbs', isAuthenticated, function(req, res)
 			}
 			res.render("404");
 		} else {
-			res.render("error");
+			res.render("error", { message: "error in routes/api/groups.js", error: err } );
 		}
 	});
 });
@@ -89,7 +89,7 @@ router.get('/:group/events/:event/thumbs/:thumb', isAuthenticated, function(req,
 
 	res.sendFile(fileName, options, function(err) {
 		if (err) {
-			res.status(err.status).end();
+			return res.status(err.status).end();
 		}
 	});
 });
@@ -98,77 +98,156 @@ router.get('/:group/events/:event/thumbs/:thumb', isAuthenticated, function(req,
 router.post('/:group/events/:event/photos', isAuthenticated, function(req, res)
 {
 	console.log("made it into the upload photos route function");
-	newPhotoNames = [ ];
 
-	for (i = 0; i < req.files.uploadphotos.length; i++) {
-		
-		console.log("loop through the files (at the top)");
-		newPhotoNames.push(req.files.uploadphotos[i].name);
-		
-		var oldPhotoPath = path.resolve(__dirname + "../../data/photos/" + req.files.uploadphotos[i].name);
-		var newPhotoPath = path.resolve(__dirname + "../../data/photos/" + req.params.group + "/" + req.params.event + "/" + req.files.uploadphotos[i].name);
-		var newThumbPath = path.resolve(__dirname + "../../data/photos/" + req.params.group + "/" + req.params.event + "/thumbs/" + req.files.uploadphotos[i].name);
-
-		console.log(oldPhotoPath);
-		console.log(newPhotoPath);
-		console.log(newThumbPath);
-
-		// move the file to the correct place
-		fs.rename(oldPhotoPath, newPhotoPath, function(err) {
-			if (!err) {
-				console.log("just renamed the photo sucessfully, about to create the thumbnail");
-				// create the thumbnail
-				gm(newPhotoPath).geometry(250,">").write(newThumbPath, function(err, stdout, stderr, command) {
-					if (err) {
-						console.error("error making thumb");
-						console.error("stdout: " + stdout);
-						console.error("stderr: " + stderr);
-						return res.render("error");
-					}
-				});
-			} else {
-				console.log("just renamed the photo UNsucessfully");
-				return res.render("error");
+	return fs.mkdir(path.resolve(__dirname, "../../data/photos/" + req.params.group), function(err) {
+		if (err && err.code != "EEXIST") {
+			console.log("error making group dir");
+			console.log(err);
+			return res.status(err.status).end();
+		}
+		console.log("made group dir");
+		return fs.mkdir(path.resolve(__dirname, "../../data/photos/" + req.params.group + "/" + req.params.event), function(err) {
+			if (err && err.code != "EEXIST") {
+				console.log("error making event dir");
+				console.log(err);
+				return res.status(err.status).end();
 			}
-		});
-	}
-
-	console.log(newPhotoNames);
-	console.log("exited loop through the files");
-	if (newPhotoNames.length > 0) {
-		console.log("more than one file was uploaded, about to find group");
-		// add photos to database
-		return Group.findOne({ name: req.params.group }, function(err, result) {
-			if (!err) {
-				console.log("found group successfully");
-				for (i = 0; i < result.events.length; i++) {
-					console.log("looping through events");
-					if (result.events[i].name === req.params.event) {
-						console.log("found event!");
-						for (j = 0; j < newPhotoNames.length; j++) {
-							console.log("adding photo to event!");
-							result.events[i].photos.push(newPhotoNames[j]);
-						}
-						console.log("updating group with the new photos as part of the appropriate event");
-						return Group.update( { name: req.params.group }, result, function(err, numAffected, rawResponse) {
-							if (!err) {
-								console.log("succesfully updated group with the new photos as part of the appropriate event");
-							} else {
-								console.log("UNsuccesfully updated group with the new photos as part of the appropriate event");
-								return res.render("error");
-							}
-						});
-					}
+			console.log("made event dir");
+			return fs.mkdir(path.resolve(__dirname, "../../data/photos/" + req.params.group + "/" + req.params.event) + "/thumbs", function(err) {
+				if (err && err.code != "EEXIST") {
+					console.log("error making thumbs dir");
+					console.log(err);
+					return res.status(err.status).end();
 				}
-				return res.render("404");
-			} else {
-				console.log("found group UNsuccessfully");
-				return res.render("error");
-			}
+				console.log("made thumbs dir");
+
+				var newPhotoNames = [ ];
+
+				req.files.uploadphotos.forEach(function(uploadphoto) {
+					
+					console.log("loop through the files (at the top)");
+					newPhotoNames.push(uploadphoto.name);
+					
+					var oldPhotoPath = path.resolve(__dirname, "../../data/photos/" + uploadphoto.name);
+					var newPhotoPath = path.resolve(__dirname, "../../data/photos/" + req.params.group + "/" + req.params.event + "/" + uploadphoto.name);
+					var newThumbPath = path.resolve(__dirname, "../../data/photos/" + req.params.group + "/" + req.params.event + "/thumbs/" + uploadphoto.name);
+
+					//console.log(oldPhotoPath);
+					//console.log(newPhotoPath);
+					//console.log(newThumbPath);
+
+					// move the file to the correct place
+					fs.rename(oldPhotoPath, newPhotoPath, function(err) {
+						if (!err) {
+							//console.log("just renamed the photo sucessfully, about to create the thumbnail");
+							//console.log(oldPhotoPath);
+							//console.log(newPhotoPath);
+							//console.log(newThumbPath);
+							// create the thumbnail
+							return gm(newPhotoPath).geometry(480,">").write(newThumbPath, function(err, stdout, stderr, command) {
+								if (err) {
+									console.error("error making thumb");
+									console.error("stdout: " + stdout);
+									console.error("stderr: " + stderr);
+									return res.render("error", { message: "error in routes/api/groups.js", error: err } );
+								} else {
+									console.error("successfully made thumb");
+								}
+								//console.log(oldPhotoPath);
+								//console.log(newPhotoPath);
+								//console.log(newThumbPath);
+							});
+						} else {
+							console.log("just renamed the photo UNsucessfully");
+							return res.render("error", { message: "error in routes/api/groups.js", error: err } );
+						}
+					});
+				//}
+				});
+
+				console.log("exited loop through the files");
+				console.log(newPhotoNames);
+				if (newPhotoNames.length > 0) {
+					console.log("more than one file was uploaded, about to find group");
+					// add photos to database
+					return Group.findOne({ name: req.params.group }, function(err, result) {
+						if (!err) {
+							console.log("found group successfully");
+							console.log(result);
+
+							//var replGroup = new Group();
+
+							//replGroup.name = result.name;
+							//replGroup.users = result.users;
+							//replGroup.events = result.events;
+
+							//for (i = 0; i < replGroup.events.length; i++) {
+							for (i = 0; i < result.events.length; i++) {
+								console.log("looping through events");
+								//console.log(replGroup.events[i]);
+								console.log(result.events[i]);
+								//if (replGroup.events[i].name === req.params.event) {
+								if (result.events[i].name === req.params.event) {
+									console.log("found event!");
+									//console.log(replGroup.events[i].photos);
+									console.log(result.events[i].photos);
+									for (j = 0; j < newPhotoNames.length; j++) {
+										console.log("adding photo to event!");
+										//replGroup.events[i].photos.push(newPhotoNames[j]);
+										result.events[i].photos.push(newPhotoNames[j]);
+										//console.log(replGroup.events[i].photos);
+										console.log(result.events[i].photos);
+									}
+									console.log("updating group with the new photos as part of the appropriate event");
+									//console.log(replGroup);
+									console.log(result);
+									//console.log(replGroup.events[i].photos);
+									console.log(result.events[i].photos);
+									return result.save(function(err) {
+										if (!err) {
+											console.log("succesfully updated group with the new photos as part of the appropriate event");
+											console.log("responding w/ status code 202");
+											res.status(202).redirect("back");
+										} else {
+											console.log("UNsuccesfully updated group with the new photos as part of the appropriate event");
+											console.log(err);
+											return res.render("error", { message: "error in routes/api/groups.js", error: err } );
+										}
+									});
+									//return Group.update( { _id: result._id}, replGroup, function(err, numAffected, rawResponse) {
+									//	if (!err) {
+									//		console.log("succesfully updated group with the new photos as part of the appropriate event");
+									//	} else {
+									//		console.log("UNsuccesfully updated group with the new photos as part of the appropriate event");
+									//		console.log(err);
+									//		return res.render("error", { message: "error in routes/api/groups.js", error: err } );
+									//	}
+									//});
+								}
+							}
+							return res.render("404");
+						} else {
+							console.log("found group UNsuccessfully");
+							return res.render("error", { message: "error in routes/api/groups.js", error: err } );
+						}
+					});
+				} else {
+					console.log("zero files were uploaded");
+					return res.render("error", { message: "error in routes/api/groups.js", error: err } );
+				}
+				
+				console.log("we shouldn't get here, we should have responded inside the nested madness 4");
+				return res.render("error", { message: "error in routes/api/groups.js", error: err } );
+
+			});
+			console.log("we shouldn't get here, we should have responded inside the nested madness 3");
+			return res.render("error", { message: "error in routes/api/groups.js", error: err } );
 		});
-	} else {
-		return res.render("error");
-	}
+		console.log("we shouldn't get here, we should have responded inside the nested madness 2");
+		return res.render("error", { message: "error in routes/api/groups.js", error: err } );
+	});
+	console.log("we shouldn't get here, we should have responded inside the nested madness 1");
+	return res.render("error", { message: "error in routes/api/groups.js", error: err } );
 });
 
 // download photo from an event
@@ -221,7 +300,7 @@ router.get('/:group/events', isAuthenticated, function(req, res)
 			}
 			res.json(names);
 		} else {
-			res.render("error");
+			res.render("error", { message: "error in routes/api/groups.js", error: err } );
 		};
 	});
 });
@@ -231,13 +310,13 @@ router.post('/:group/users/:user', isAuthenticated, function(req, res)
 {
     User.update( { username: req.params.user }, { $push: { groups: req.params.group } }, function(err, numAffected, rawResponse) {
         if (err) {
-        	res.render("error");
+        	res.render("error", { message: "error in routes/api/groups.js", error: err } );
         };
     });
 
     Group.update( { name: req.params.group }, { $push: { users: req.params.user } }, {}, function(err, numAffected, rawResponse) {
         if (err) {
-        	res.render("error");
+        	res.render("error", { message: "error in routes/api/groups.js", error: err } );
         } else {
         	res.send("success");
         };
@@ -263,7 +342,7 @@ router.get('/:group/users', isAuthenticated, function(req, res)
 		if (!err) {
 			res.json(result.users);
 		} else {
-			res.render("error");
+			res.render("error", { message: "error in routes/api/groups.js", error: err } );
 		};
 	});
 });
@@ -275,7 +354,7 @@ router.get('/:group', isAuthenticated, function(req, res)
 		if (!err) {
 			res.json(result);
 		} else {
-			res.render("error");
+			res.render("error", { message: "error in routes/api/groups.js", error: err } );
 		};
 	});
 });
@@ -297,7 +376,7 @@ router.get('/', isAuthenticated, function(req, res)
 			}
 			res.json(names);
 		} else {
-			res.render("error");
+			res.render("error", { message: "error in routes/api/groups.js", error: err } );
 		};
 	});
 });
