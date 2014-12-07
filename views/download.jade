@@ -15,6 +15,6 @@ block content
 				option(ng-repeat="event in events", value="{{event}}") {{event}}
 		button(ng-click="listController.getThumbs()").button Show Photos
 		div.section.group(ng-controller="ThumbController as thumbController")
-			div.col.span_1_of_4(ng-class="{ active: panel.isSelected(thumb.id) }", ng-repeat="thumb in thumbController.thumbs")
-				img.fit(ng-src="{{thumb.url}}", ng-click="panel.selectPhoto(thumb.id)")
-		{{thumbAddresses}}
+			p.note(ng-hide="listController.hasThumbs()") (There are no photos to display for the specified event)
+			div.col.span_1_of_4(ng-repeat="thumb in thumbs", ng-class="{ active: thumbController.isSelected(thumb) }")
+				img.fit(ng-src="http://localhost/{{thumb}}", ng-click="thumbController.selectPhoto(thumb)")
