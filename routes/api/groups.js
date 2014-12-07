@@ -65,7 +65,7 @@ router.get('/:group/events/:event/thumbs', isAuthenticated, function(req, res)
 					photos = events[i].photos;
 					thumbs = [];
 					for (j = 0; j < photos.length; j++) {
-						thumbs.push("api/groups/" + req.params.group + "/events/" + req.params.event + "/thumbs/" + photos[i]);
+						thumbs.push("api/groups/" + req.params.group + "/events/" + req.params.event + "/thumbs/" + photos[j]);
 					}
 					return res.json(thumbs);
 				}
@@ -114,13 +114,13 @@ router.post('/:group/events/:event/photos', isAuthenticated, function(req, res)
 		console.log(newThumbPath);
 
 		// move the file to the correct place
-		return fs.rename(oldPhotoPath, newPhotoPath, function(err) {
+		fs.rename(oldPhotoPath, newPhotoPath, function(err) {
 			if (!err) {
 				console.log("just renamed the photo sucessfully, about to create the thumbnail");
 				// create the thumbnail
 				gm(newPhotoPath).geometry(250,">").write(newThumbPath, function(err, stdout, stderr, command) {
 					if (err) {
-						console.error("error uploading photo");
+						console.error("error making thumb");
 						console.error("stdout: " + stdout);
 						console.error("stderr: " + stderr);
 						return res.render("error");
