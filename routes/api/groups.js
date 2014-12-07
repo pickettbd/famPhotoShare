@@ -1,5 +1,6 @@
 var gm = require('gm'); // graphicsmagick
 var fs = require('fs'); // file system
+var path = require('path'); // resolve paths
 var express = require('express');
 var router = express.Router();
 
@@ -79,9 +80,14 @@ router.get('/:group/events/:event/thumbs', isAuthenticated, function(req, res)
 // get one thumb
 router.get('/:group/events/:event/thumbs/:thumb', isAuthenticated, function(req, res)
 {
-	var fileName = "data/photos/" + req.params.group + "/" + req.params.event + "/thumbs/" + req.params.thumb;
+	var fileName = "/data/photos/" + req.params.group + "/" + req.params.event + "/thumbs/" + req.params.thumb;
 
-	res.sendFile(fileName, { dotfiles: "deny" }, function(err) {
+	var options = {
+		dotfiles: "deny",
+		root : path.resolve(__dirname, "../..")
+	}
+
+	res.sendFile(fileName, options, function(err) {
 		if (err) {
 			res.status(err.status).end();
 		}
@@ -99,9 +105,13 @@ router.post('/:group/events/:event/photos', isAuthenticated, function(req, res)
 		console.log("loop through the files (at the top)");
 		newPhotoNames.push(req.files.uploadphotos[i].name);
 		
-		var oldPhotoPath = __dirname + "/data/photos/" + req.files.uploadphotos[i].name;
-		var newPhotoPath = __dirname + "/data/photos/" + req.params.group + "/" + req.params.event + "/" + req.files.uploadphotos[i].name;
-		var newThumbPath = __dirname + "/data/photos/" + req.params.group + "/" + req.params.event + "/thumbs/" + req.files.uploadphotos[i].name;
+		var oldPhotoPath = path.resolve(__dirname + "../../data/photos/" + req.files.uploadphotos[i].name);
+		var newPhotoPath = path.resolve(__dirname + "../../data/photos/" + req.params.group + "/" + req.params.event + "/" + req.files.uploadphotos[i].name);
+		var newThumbPath = path.resolve(__dirname + "../../data/photos/" + req.params.group + "/" + req.params.event + "/thumbs/" + req.files.uploadphotos[i].name);
+
+		console.log(oldPhotoPath);
+		console.log(newPhotoPath);
+		console.log(newThumbPath);
 
 		// move the file to the correct place
 		return fs.rename(oldPhotoPath, newPhotoPath, function(err) {
@@ -173,20 +183,20 @@ router.get('/:group/events/:event/photos', isAuthenticated, function(req, res)
 	res.send('this is how you download all photos from an event.  group: ' + req.params.group + ', event: ' + req.params.event);
 });
 
-// upload photos to an event
-router.post('/:group/events/:event/photos', isAuthenticated, function(req, res)
-{
-    var event = null;
-    event.photos = req.body.photos;
-
-    event.save(function(err) {
-         if (err) res.send(err);
-	 res.location("menu");
-	 res.redirect("menu");
-    });
-    res.send('this is how you upload photos to an event.  group: ' + req.params.group + ', event: ' + req.params.event);
-	
-});
+//// upload photos to an event
+//router.post('/:group/events/:event/photos', isAuthenticated, function(req, res)
+//{
+//    var event = null;
+//    event.photos = req.body.photos;
+//
+//    event.save(function(err) {
+//         if (err) res.send(err);
+//	 res.location("menu");
+//	 res.redirect("menu");
+//    });
+//    res.send('this is how you upload photos to an event.  group: ' + req.params.group + ', event: ' + req.params.event);
+//	
+//});
 
 // delete photo from an event
 router.delete('/:group/events/:event/photos/:photo', isAuthenticated, function(req, res)
