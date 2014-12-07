@@ -7,6 +7,7 @@
 		$scope.groupname = '';
 		$scope.eventname = '';
 		$scope.events = [];
+		$scope.thumbs = [];
 
 		$http.get('http://104.236.25.185/api/users/whoami').then(function(usernameRes) {
  			var username = usernameRes.data;
@@ -37,12 +38,17 @@
 			$scope.groupname = groupIn;
 			$http.get('http://104.236.25.185/api/groups/' + $scope.groupname + '/events').then(function(eventsRes) {
 				$scope.events = eventsRes.data;
-				$scope.eventname = eventsRes.data[0];
-				$http.get('http://104.236.25.185/api/groups/' + $scope.groupname + '/events/' + $scope.eventname + '/thumbs').then(function(thumbsRes) {
-					$scope.thumbs = thumbsRes.data;
-				}, function(err) {
-						console.error('ERR', err);
-				});
+				if(eventsRes.data.length > 0) {
+					$scope.eventname = eventsRes.data[0];
+					$http.get('http://104.236.25.185/api/groups/' + $scope.groupname + '/events/' + $scope.eventname + '/thumbs').then(function(thumbsRes) {
+						$scope.thumbs = thumbsRes.data;
+					}, function(err) {
+							console.error('ERR', err);
+					});
+				}
+				else {
+					$scope.thumbs = [];
+				}
 			}, function(err) {
 					console.error('ERR', err);
 			});
