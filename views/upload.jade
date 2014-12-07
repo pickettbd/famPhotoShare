@@ -6,18 +6,16 @@ block head
 block content
 	h1 Add Photos
 	p Select Group 
-		select(name="grp")
+		select(id="grp", name="grp")
 			option(value='Hogwarts') Miller Family
 			option(value='Duce-family') Smith Family
 			option(value='+ create new group') + create new group
 	p Select Event 
-		select(name="evt")
+		select(id="evt", name="evt")
 			option(value='TriWizardTournament') Summer Vacation
 			option(value='+ create new event') + create new event
 	form(method="post" name="form1" action="/" enctype="multipart/form-data")
 		p
-			input(type='file' name='photos' required multiple)
+			input(type='file' name='uploadphotos' required multiple)
 		p
-			button(type='button' onclick='javascript:upload_form()').button Add Photos
-	
-
+			button(type='button' onclick='upload_form()').button Add Photos

@@ -39,7 +39,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(multer( {
 	dest: __dirname + "/data/photos",
 	rename: function(fieldName, fileName) {
-		return fieldName.replace(/\W+/g, "") + Date.now() + fileName.replace(/\W+/g, "") + Math.floor((Math.random() * 1000) + 1);
+		return Date.now() + fileName.replace(/\W+/g, "") + Math.floor((Math.random() * 1000) + 1);
 	}
 }));
 app.use(cookieParser());

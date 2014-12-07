@@ -1,15 +1,20 @@
 extends layout
 
+block head
+	script(type='text/javascript', src='javascripts/thumbnailControllers.js')
+
 block content
-	div(ng-controller="ThumbController as thumbController")
+	div(ng-controller="ListController as listController")
 		h1 Get Photos
 		p Select Group 
-			select(ng-controller="GroupSelecterController as groupSelecter")
+			select(id="groupsddl")
 				option(ng-repeat="group in groups", value="{{group}}") {{group}}
+		button(ng-click="listController.getEvents()").button Show Events
 		p Select Event 
-			select
-				option(value="temp") temp
-		a(href="").button Get Photos
-		div.section.group(ng-controller="PanelController as panel")
+			select(id="eventsddl")
+				option(ng-repeat="event in events", value="{{event}}") {{event}}
+		button(ng-click="listController.getThumbs()").button Show Photos
+		div.section.group(ng-controller="ThumbController as thumbController")
 			div.col.span_1_of_4(ng-class="{ active: panel.isSelected(thumb.id) }", ng-repeat="thumb in thumbController.thumbs")
 				img.fit(ng-src="{{thumb.url}}", ng-click="panel.selectPhoto(thumb.id)")
+		{{thumbAddresses}}
