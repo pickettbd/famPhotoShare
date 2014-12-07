@@ -1,17 +1,19 @@
 (function() {
 
 	angular.module('app').controller('ListController', function($scope, $http) {
+
 		var initial = true;
-		var group = "";
+		var group = '';
 
-		$http.get('http://104.236.25.185/api/users/whoami').then(function(usernameRes) {
+		$scope.eventname = '';
+		$scope.events = [];
 
+		var url = 'http://localhost/api/users/whoami';
+		$http.get(url).then(function(usernameRes) {
  			var username = usernameRes.data;
-
-			$http.get('http://104.236.25.185/api/users/' + username + '/groups').then(function(groupsRes) {
-
+			url = 'http://localhost/api/users/' + username + '/groups';
+			$http.get(url).then(function(groupsRes) {
 				$scope.groups = groupsRes.data;
-
 			}, function(err) {
 					console.error('ERR', err);
 			});
@@ -19,24 +21,35 @@
 				console.error('ERR', err);
 		});
 
-		this.getEvents = function() {
-			var ddl = document.getElementById("groupsddl");
-			group = ddl.options[ddl.selectedIndex].value;
-			$http.get('http://104.236.25.185/api/groups/' + group + '/events').then(function(eventsRes) {
+		this.getEvents = function(groupIn) {
+			group = groupIn;
+			url = 'http://localhost/api/groups/' + group + '/events';
+			$http.get(url).then(function(eventsRes) {
 				$scope.events = eventsRes.data;
+				$scope.eventname = eventsRes.data[0];
+				url = 'http://localhost/api/groups/' + group + '/events/' + $scope.eventname + '/thumbs';
+				$http.get(url).then(function(thumbsRes) {
+					$scope.thumbs = thumbsRes.data;
+				}, function(err) {
+						console.error('ERR', err);
+				});
 			}, function(err) {
 					console.error('ERR', err);
 			});
 		};
 
-		this.getThumbs = function() {
-			var ddl = document.getElementById("eventsddl");
-			eventname = ddl.options[ddl.selectedIndex].value;
-			$http.get('http://104.236.25.185/api/groups/' + group + '/events/' + eventname + '/thumbs').then(function(thumbsRes) {
+		this.getThumbs = function(eventnameIn) {
+			$scope.eventname = eventnameIn;
+			url = 'http://localhost/api/groups/' + group + '/events/' + $scope.eventname + '/thumbs';
+			$http.get(url).then(function(thumbsRes) {
 				$scope.thumbs = thumbsRes.data;
 			}, function(err) {
 					console.error('ERR', err);
 			});
+		};
+
+		this.hasEvents = function() {
+			return $scope.events.length > 0;
 		};
 
 		this.hasThumbs = function() {
