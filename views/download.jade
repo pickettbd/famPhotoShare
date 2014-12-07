@@ -5,16 +5,28 @@ block head
 
 block content
 	div(ng-controller="ListController as listController")
-		h1 Get Photos
-		p Select Group 
-			select(id="groupsddl")
-				option(ng-repeat="group in groups", value="{{group}}") {{group}}
-		button(ng-click="listController.getEvents()").button Show Events
-		p Select Event 
-			select(id="eventsddl")
-				option(ng-repeat="event in events", value="{{event}}") {{event}}
-		button(ng-click="listController.getThumbs()").button Show Photos
-		div.section.group(ng-controller="ThumbController as thumbController")
-			div.col.span_1_of_4(ng-class="{ active: panel.isSelected(thumb.id) }", ng-repeat="thumb in thumbController.thumbs")
-				img.fit(ng-src="{{thumb.url}}", ng-click="panel.selectPhoto(thumb.id)")
-		{{thumbAddresses}}
+		p.note(ng-show="hasGroups === 0") (You are not a member of any groups. Start sharing photos by joining other groups or by creating your own group using the <a href="/manage-groups"/>Admin page</a>)
+		div.left(ng-show="hasGroups === 1")
+			h1 Get Photos
+			h2 Select Group 
+			hr
+			div.section.group
+				div.item-col.span_1_of_8(ng-repeat="group in groups")
+					.item(ng-click="listController.getEvents(group)")  {{group}}
+			p.note(ng-show="hasEvents === 0") (The {{groupname}} group does not have any events)
+			div(ng-show="hasEvents === 1")
+				h2 Select Event 
+				hr
+				div.section.group
+					div.item-col.span_1_of_8(ng-repeat="event in events")
+						.item(ng-click="listController.getThumbs(event)")  {{event}}
+				h1.title(ng-hide="hasThumbs === 2") {{eventname}}
+				p.note(ng-show="hasThumbs === 0") (The {{eventname}} event does not have any photos)
+		div(ng-show="hasThumbs === 1", ng-controller="ThumbController as thumbController")
+			ul.list
+				li.list-button(ng-click="thumbController.selectAll()") Select All
+				li.list-button(ng-click="thumbController.deselectAll()") Deselect All
+			div.section.group
+				div.col.span_1_of_4(ng-repeat="thumb in thumbs", ng-class="{ active: thumbController.isSelected(thumb) }")
+					img.fit(ng-src="http://104.236.25.185/{{thumb}}", ng-click="thumbController.selectPhoto(thumb)")
+			button.button.topspace Download

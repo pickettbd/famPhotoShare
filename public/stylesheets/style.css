@@ -1,3 +1,7 @@
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+	display: none !important;
+}
+
 body {
 	background: url('/images/photo_share1.jpg') no-repeat #2b0a03;
 	background-position: top center;
@@ -65,6 +69,7 @@ input {
 .button {
 	display: block;
 	margin: 5px auto;
+	cursor: pointer;
 
 	background-color: #FFFFFF;	
 	padding: .25em 1em;
@@ -77,6 +82,27 @@ input {
 	text-align: center;
 }
 
+.list {
+	display: inline-block;
+}
+
+.list-button {
+	float: left;
+	display: block;
+	cursor: pointer;
+
+	background-color: #FFFFFF;	
+	padding: .25em 1em;
+	border-radius: .25em;
+	width: 125px;
+
+	font: 14px 'Lucida Grande', Helvetica, Arial, sans-serif;
+	color: #007dcc;
+
+	text-align: center;
+}
+
+.list-button:hover,
 .button:hover {
 	background-color: #DDDDDD; 
 }
@@ -88,14 +114,29 @@ button {
 a {
 	text-decoration: none;	
 	color: #007dcc;
+	cursor: pointer;
 }
 
 .fit {
 	max-width: 100%;
 }
 
+.note {
+	color: #AAAAAA;
+}
+
+.left {
+	margin-left: 2em;
+	margin-right: 2em;
+	text-align: left;
+}
+
 .title {
-	padding: 1em 0 0 0;
+	padding-top: 1em;
+}
+
+.topspace {
+	margin-top: 2em;
 }
 
 .warning {
