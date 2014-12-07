@@ -2,30 +2,24 @@
 
 	angular.module('app').controller('ListController', function($scope, $http) {
 
-		var initial = true;
+		$scope.hasGroups = 2;
+		$scope.hasEvents = 2;
+		$scope.hasThumbs = 2;
 
 		$scope.groupname = '';
 		$scope.eventname = '';
-		$scope.events = [];
-		$scope.thumbs = [];
 
 		$http.get('http://104.236.25.185/api/users/whoami').then(function(usernameRes) {
  			var username = usernameRes.data;
 			$http.get('http://104.236.25.185/api/users/' + username + '/groups').then(function(groupsRes) {
 				$scope.groups = groupsRes.data;
-				if(groupsRes.data.length > 0) {
-					$scope.groupname = groupsRes.data[0];
-					$http.get('http://104.236.25.185/api/groups/' + $scope.groupname + '/events').then(function(eventsRes) {
-						$scope.events = eventsRes.data;
-						$scope.eventname = eventsRes.data[0];
-						$http.get('http://104.236.25.185/api/groups/' + $scope.groupname + '/events/' + $scope.eventname + '/thumbs').then(function(thumbsRes) {
-							$scope.thumbs = thumbsRes.data;
-						}, function(err) {
-								console.error('ERR', err);
-						});
-				}, function(err) {
-						console.error('ERR', err);
-				});
+				$scope.events = [];
+				$scope.thumbs = [];
+				if($scope.groups.length > 0) {
+					$scope.hasGroups = 1;
+				}
+				else {
+					$scope.hasGroups = 0;
 				}
 			}, function(err) {
 					console.error('ERR', err);
@@ -38,16 +32,14 @@
 			$scope.groupname = groupIn;
 			$http.get('http://104.236.25.185/api/groups/' + $scope.groupname + '/events').then(function(eventsRes) {
 				$scope.events = eventsRes.data;
-				if(eventsRes.data.length > 0) {
-					$scope.eventname = eventsRes.data[0];
-					$http.get('http://104.236.25.185/api/groups/' + $scope.groupname + '/events/' + $scope.eventname + '/thumbs').then(function(thumbsRes) {
-						$scope.thumbs = thumbsRes.data;
-					}, function(err) {
-							console.error('ERR', err);
-					});
+				$scope.thumbs = [];
+				if($scope.events.length > 0) {
+					$scope.hasEvents = 1;
+					$scope.hasThumbs = 2;
 				}
 				else {
-					$scope.thumbs = [];
+					$scope.hasEvents = 0;
+					$scope.hasThumbs = 2;
 				}
 			}, function(err) {
 					console.error('ERR', err);
@@ -58,25 +50,16 @@
 			$scope.eventname = eventnameIn;
 			$http.get('http://104.236.25.185/api/groups/' + $scope.groupname + '/events/' + $scope.eventname + '/thumbs').then(function(thumbsRes) {
 				$scope.thumbs = thumbsRes.data;
+				if($scope.thumbs.length > 0) {
+					$scope.hasThumbs = 1;
+				}
+				else {
+					$scope.hasThumbs = 0;
+				}
+
 			}, function(err) {
 					console.error('ERR', err);
 			});
-		};
-
-		this.hasGroups = function() {
-			return $scope.groups.length > 0;
-		};
-
-		this.hasEvents = function() {
-			return $scope.events.length > 0;
-		};
-
-		this.hasThumbs = function() {
-			if(initial === true) {
-				initial = false;
-				return true;
-			}
-			return $scope.thumbs.length > 0;
 		};
 
 	});
