@@ -4,11 +4,11 @@
 		var initial = true;
 		var group = "";
 
-		$http.get('http://localhost/api/users/whoami').then(function(usernameRes) {
+		$http.get('http://104.236.25.185/api/users/whoami').then(function(usernameRes) {
 
  			var username = usernameRes.data;
 
-			$http.get('http://localhost/api/users/' + username + '/groups').then(function(groupsRes) {
+			$http.get('http://104.236.25.185/api/users/' + username + '/groups').then(function(groupsRes) {
 
 				$scope.groups = groupsRes.data;
 
@@ -22,7 +22,7 @@
 		this.getEvents = function() {
 			var ddl = document.getElementById("groupsddl");
 			group = ddl.options[ddl.selectedIndex].value;
-			$http.get('http://localhost/api/groups/' + group + '/events').then(function(eventsRes) {
+			$http.get('http://104.236.25.185/api/groups/' + group + '/events').then(function(eventsRes) {
 				$scope.events = eventsRes.data;
 			}, function(err) {
 					console.error('ERR', err);
@@ -32,7 +32,7 @@
 		this.getThumbs = function() {
 			var ddl = document.getElementById("eventsddl");
 			eventname = ddl.options[ddl.selectedIndex].value;
-			$http.get('http://localhost/api/groups/' + group + '/events/' + eventname + '/thumbs').then(function(thumbsRes) {
+			$http.get('http://104.236.25.185/api/groups/' + group + '/events/' + eventname + '/thumbs').then(function(thumbsRes) {
 				$scope.thumbs = thumbsRes.data;
 			}, function(err) {
 					console.error('ERR', err);
