@@ -22,7 +22,7 @@
 					$scope.hasGroups = 0;
 				}
 			}, function(err) {
-					console.error('ERR', err);
+				console.error('ERR', err);
 			});
  		}, function(err) {
 				console.error('ERR', err);
@@ -42,7 +42,7 @@
 					$scope.hasThumbs = 2;
 				}
 			}, function(err) {
-					console.error('ERR', err);
+				console.error('ERR', err);
 			});
 		};
 
@@ -58,7 +58,7 @@
 				}
 
 			}, function(err) {
-					console.error('ERR', err);
+				console.error('ERR', err);
 			});
 		};
 
@@ -92,29 +92,38 @@
 
 	});
 
-	angular.module('app').controller('ThumbController', function($scope){
+	angular.module('app').controller('ThumbController', function($http, $scope){
 
-		this.selectedPhotos = [];
+		$scope.selectedPhotos = [];
+
+		this.download = function() {
+			var photolist = encodeURIComponent(JSON.stringify($scope.selectedPhotos));
+			$http.get("http://localhost/api/groups/" + $scope.groupname + "/events/" + $scope.eventname + "/photos?photolist=" + photolist).then(function(photos) {
+				alert("http://localhost/api/groups/" + $scope.groupname + "/events/" + $scope.eventname + "/photos?photolist=" + photolist);
+			}, function(err) {
+				console.error('ERR', err);
+			});
+		};
 
 		this.selectPhoto = function(selectPhoto) {
-			var index = this.selectedPhotos.indexOf(selectPhoto)
+			var index = $scope.selectedPhotos.indexOf(selectPhoto)
 			if(index === -1) {
-				this.selectedPhotos.push(selectPhoto);
+				$scope.selectedPhotos.push(selectPhoto);
 				return;
 			}
-			this.selectedPhotos.splice(index, 1);
+			$scope.selectedPhotos.splice(index, 1);
 		};
 
 		this.isSelected = function(checkPhoto) {
-			return -1 != this.selectedPhotos.indexOf(checkPhoto);
+			return -1 != $scope.selectedPhotos.indexOf(checkPhoto);
 		};
 
 		this.deselectAll = function() {
-			this.selectedPhotos = [];
+			$scope.selectedPhotos = [];
 		};
 
 		this.selectAll = function() {
-			this.selectedPhotos = angular.copy($scope.thumbs);
+			$scope.selectedPhotos = angular.copy($scope.thumbs);
 		};
 
 	});

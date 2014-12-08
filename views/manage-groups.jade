@@ -1,39 +1,46 @@
 extends layout
 
+block head
+	script(type='text/javascript', src='javascripts/adminController.js')
+
 block content
-	h1 Group Administration
-	h2 Create New Group:
-	form(method="post" action="api/groups" enctype="multipart/form-data" id="creategroupform" name="creategroupform")
+	div(ng-controller="AdminController as adminController")
+		h1 Group Administration
+		h2 Create New Group:
 		p
-			input(type="text" name="newgroupname" placeholder='group name' required pattern="[A-Za-z0-9][A-Za-z0-9_]+")
+			input(type="text" id="newgroupname" placeholder='group name' required pattern="[A-Za-z0-9][A-Za-z0-9_]+")
 		p
-			button(type="submit").button Create Group
-	hr
-	h2 Add Event to Group:
-	form(method="post" action="api/groups/somegroupname/events" enctype="multipart/form-data" id="addeventtogroupform")
-		p
-			select(name="groupname" required)
-				option(value='Smith Family') Smith Family
-				option(value='Miller Family') Miller Family
-		p
-			input(type="text" name="neweeventname" placeholder='event name' required pattern="[A-Za-z0-9][A-Za-z0-9_]+")
-		p
-			button(type="submit").button Add Event
-	hr
-	h2 Add User to Group:
-	form(method="post" action="api/groups/somegroupname/users/someusername" enctype="multipart/form-data" id="addusertogroupform")
+			button(ng-click="adminController.createGroup()").button Create Group
+		hr
+		h2 Add Event to Group:
 		p
 			select(name="groupname" required)
-				option(value='Smith Family') Smith Family
-				option(value='Miller Family') Miller Family
-		p
-			input(type="text" name="username" placeholder='search for user' required pattern="[A-Za-z0-9][A-Za-z0-9_]+")
-		p
-			button(type="submit").button Add User
-	hr
-	h2 Invite New Users:
-	form(method="post" action="api/users/invite" enctype="multipart/form-data" id="invitenewusersform")
-		p
-			input(type="email" name="emailaddress" placeholder='email address' required)
-		p
-			button(type="submit").button Invite User
+				option(ng-repeat="group in groups" value="{{group}}") {{group}}
+
+		form(method="post" action="api/groups/somegroupname/events" enctype="multipart/form-data" id="addeventtogroupform")
+			p
+				select(name="groupname" required)
+					option(value='Smith Family') Smith Family
+					option(value='Miller Family') Miller Family
+			p
+				input(type="text" name="neweeventname" placeholder='event name' required pattern="[A-Za-z0-9][A-Za-z0-9_]+")
+			p
+				button(type="submit").button Add Event
+		hr
+		h2 Add User to Group:
+		form(method="post" action="api/groups/somegroupname/users/someusername" enctype="multipart/form-data" id="addusertogroupform")
+			p
+				select(name="groupname" required)
+					option(value='Smith Family') Smith Family
+					option(value='Miller Family') Miller Family
+			p
+				input(type="text" name="username" placeholder='search for user' required pattern="[A-Za-z0-9][A-Za-z0-9_]+")
+			p
+				button(type="submit").button Add User
+		hr
+		h2 Invite New Users:
+		form(method="post" action="api/users/invite" enctype="multipart/form-data" id="invitenewusersform")
+			p
+				input(type="email" name="emailaddress" placeholder='email address' required)
+			p
+				button(type="submit").button Invite User

@@ -62,12 +62,15 @@ router.get('/:group/events/:event/thumbs', isAuthenticated, function(req, res)
 			events = result.events
 			for (i = 0; i < events.length; i++) {
 				if (events[i].name === req.params.event) {
+					return res.json(events[i].photos);
+					/*
 					photos = events[i].photos;
 					thumbs = [];
 					for (j = 0; j < photos.length; j++) {
 						thumbs.push("api/groups/" + req.params.group + "/events/" + req.params.event + "/thumbs/" + photos[j]);
 					}
 					return res.json(thumbs);
+					*/
 				}
 			}
 			res.render("404");
@@ -372,7 +375,7 @@ router.post('/', isAuthenticated, function(req, res)
 				if (!err) {
 					Group.update( { name: req.body.newgroupname }, { $push: { users: u.username } }, {}, function(err, numAffected, rawResponse) {
 						if (!err) {
-							res.status(200).redirect("/manage-groups");
+							res.sendStatus(200);
 						} else {
 							res.render("error", { message: "error in creating new group (updating group)", error: err } );
 						};
