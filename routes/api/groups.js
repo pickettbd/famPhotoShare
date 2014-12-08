@@ -218,6 +218,9 @@ router.get('/:group/events/:event/photos', isAuthenticated, function(req, res)
 			events = result.events
 			for (i = 0; i < events.length; i++) {
 				if (events[i].name === req.params.event) {
+					if (!req.query) {
+						return res.json(events[i].photos);
+					}
 					var photos = events[i].photos;
 					var photoPaths = [];
 					var pathToPhotos = path.resolve(__dirname, "../../data/photos/" + req.params.group + "/" + req.params.event);
