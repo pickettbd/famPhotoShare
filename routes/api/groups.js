@@ -370,6 +370,22 @@ router.post('/', isAuthenticated, function(req, res)
 		}
 		res.status(200).redirect("/manage-groups");
 	});
+
+    User.findByIdAndUpdate(req.session.passport.user, { $push: { groups: req.body.newgroupname} }, { select: "username" }, function(err, u) {
+        if (!err) {
+	   	Group.update( { name: req.body.newgroupname }, { $push: { users: u.username } }, {}, function(err, numAffected, rawResponse) {
+			if (err) {
+				res.render("error", { message: "error in routes/api/groups.js", error: err } );
+			} else {
+				res.send("success");
+			};
+	    	});
+        } else {
+        	res.render("error", { message: "error in routes/api/groups.js", error: err } );
+	}
+    });
+
+
 });
 
 module.exports = router;
