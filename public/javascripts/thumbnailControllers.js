@@ -9,9 +9,9 @@
 		$scope.groupname = '';
 		$scope.eventname = '';
 
-		$http.get('http://104.236.25.185/api/users/whoami').then(function(usernameRes) {
+		$http.get('http://localhost/api/users/whoami').then(function(usernameRes) {
  			var username = usernameRes.data;
-			$http.get('http://104.236.25.185/api/users/' + username + '/groups').then(function(groupsRes) {
+			$http.get('http://localhost/api/users/' + username + '/groups').then(function(groupsRes) {
 				$scope.groups = groupsRes.data;
 				$scope.events = [];
 				$scope.thumbs = [];
@@ -30,7 +30,7 @@
 
 		this.getEvents = function(groupIn) {
 			$scope.groupname = groupIn;
-			$http.get('http://104.236.25.185/api/groups/' + $scope.groupname + '/events').then(function(eventsRes) {
+			$http.get('http://localhost/api/groups/' + $scope.groupname + '/events').then(function(eventsRes) {
 				$scope.events = eventsRes.data;
 				$scope.thumbs = [];
 				if($scope.events.length > 0) {
@@ -48,7 +48,7 @@
 
 		this.getThumbs = function(eventnameIn) {
 			$scope.eventname = eventnameIn;
-			$http.get('http://104.236.25.185/api/groups/' + $scope.groupname + '/events/' + $scope.eventname + '/thumbs').then(function(thumbsRes) {
+			$http.get('http://localhost/api/groups/' + $scope.groupname + '/events/' + $scope.eventname + '/thumbs').then(function(thumbsRes) {
 				$scope.thumbs = thumbsRes.data;
 				if($scope.thumbs.length > 0) {
 					$scope.hasThumbs = 1;
@@ -60,6 +60,34 @@
 			}, function(err) {
 					console.error('ERR', err);
 			});
+		};
+
+		this.hasNoGroups = function() {
+			return $scope.hasGroups === 0;
+		};
+
+		this.hasGroups = function() {
+			return $scope.hasGroups === 1;
+		};
+
+		this.hasNoEvents = function() {
+			return $scope.hasEvents === 0;
+		};
+
+		this.hasEvents = function() {
+			return $scope.hasEvents === 1;
+		};
+
+		this.hasNoThumbs = function() {
+			return $scope.hasThumbs === 0;
+		};
+
+		this.hasThumbs = function() {
+			return $scope.hasThumbs === 1;
+		};
+
+		this.dontKnowIfThereAreThumbs = function() {
+			return $scope.hasThumbs === 2;
 		};
 
 	});
@@ -86,7 +114,6 @@
 		};
 
 		this.selectAll = function() {
-			alert('selecting all');
 			this.selectedPhotos = angular.copy($scope.thumbs);
 		};
 
