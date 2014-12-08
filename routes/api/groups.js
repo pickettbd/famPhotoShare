@@ -366,24 +366,23 @@ router.post('/', isAuthenticated, function(req, res)
 
 	group.save(function(err) {
 		if (err) {
-			res.sendStatus(500);
+			res.render("error", { message: "error in creating new group (creating group)", error: err } );
+		} else {
+			User.findByIdAndUpdate(req.session.passport.user, { $push: { groups: req.body.newgroupname} }, { select: "username" }, function(err, u) {
+				if (!err) {
+					Group.update( { name: req.body.newgroupname }, { $push: { users: u.username } }, {}, function(err, numAffected, rawResponse) {
+						if (!err) {
+							res.status(200).redirect("/manage-groups");
+						} else {
+							res.render("error", { message: "error in creating new group (updating group)", error: err } );
+						};
+					});
+				} else {
+					res.render("error", { message: "error in creating new group (updating user)", error: err } );
+				}
+			});
 		}
-		res.status(200).redirect("/manage-groups");
 	});
-
-    User.findByIdAndUpdate(req.session.passport.user, { $push: { groups: req.body.newgroupname} }, { select: "username" }, function(err, u) {
-        if (!err) {
-	   	Group.update( { name: req.body.newgroupname }, { $push: { users: u.username } }, {}, function(err, numAffected, rawResponse) {
-			if (err) {
-				res.render("error", { message: "error in routes/api/groups.js", error: err } );
-			} else {
-				res.send("success");
-			};
-	    	});
-        } else {
-        	res.render("error", { message: "error in routes/api/groups.js", error: err } );
-	}
-    });
 
 
 });
