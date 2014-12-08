@@ -224,20 +224,21 @@ router.get('/:group/events/:event/photos', isAuthenticated, function(req, res)
 					if (!req.query) {
 						return res.json(events[i].photos);
 					}
-					var photos = events[i].photos;
 					var photoPaths = [];
 					var pathToPhotos = path.resolve(__dirname, "../../data/photos/" + req.params.group + "/" + req.params.event);
-					for (j = 0; j < photos.length; j++) {
+					for (j = 0; j < req.query.photoList.length; j++) {
 						// TODO -- limit what get's added based on a query (uncomment below)
 						//if (photos[j] is a photo we should include) {
-							photoPaths.push(path.resolve(pathToPhotos, photos[j]));
+							photoPaths.push(path.resolve(pathToPhotos, req.query.photoList[j]));
 						//}
 					}
-					
+
 					// TODO -- ZIP each photo located at in the photoPaths array into a ".zip" file
 					// For this function to work as is, make sure the .zip file is called "photos.zip"
 					// and resides at "/path/to/famPhotoShare/repository/data/photos/groupname/eventname"
 					// like this: "/path/to/famPhotoShare/repository/data/photos/groupname/eventname/photos.zip"
+
+					return res.json(photoPaths); // TODO -- DELETE THIS LINE!!!
 					
 					var zippedPayload = path.resolve(pathToPhotos, "photos.zip");
 
