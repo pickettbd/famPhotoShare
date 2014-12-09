@@ -35,7 +35,7 @@ router.get('/:group/events/:event', isAuthenticated, function(req, res)
 		} else {
 			res.render("error", { message: "error in routes/api/groups.js", error: err } );
 		}
-	});
+	});
 });
 
 // add new event
@@ -72,7 +72,7 @@ router.get('/:group/events/:event/thumbs', isAuthenticated, function(req, res)
 					return res.json(thumbs);
 					*/
 				}
-			}
+			}
 			res.render("404");
 		} else {
 			res.render("error", { message: "error in routes/api/groups.js", error: err } );
@@ -167,7 +167,7 @@ router.post('/:group/events/:event/photos', isAuthenticated, function(req, res)
 							return res.render("404");
 						} else {
 							return res.render("error", { message: "found group UNsuccessfully", error: err } );
-						}
+						}
 					});
 				} else {
 					return res.render("error", { message: "zero files were uploaded", error: err } );
