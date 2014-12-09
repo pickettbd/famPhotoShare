@@ -216,7 +216,7 @@ router.get('/:group/events/:event/photos/:photo', isAuthenticated, function(req,
 // download all photos from an event
 router.get('/:group/events/:event/photos', isAuthenticated, function(req, res)
 {
-	/*return Group.findOne({ name: req.params.group }, function(err, result) {
+	return Group.findOne({ name: req.params.group }, function(err, result) {
 		if (!err) {
 			events = result.events
 			for (i = 0; i < events.length; i++) {
@@ -227,9 +227,9 @@ router.get('/:group/events/:event/photos', isAuthenticated, function(req, res)
 						var pathToPhotos = path.resolve(__dirname, "../../data/photos/" + req.params.group + "/" + req.params.event);
 						for (j = 0; j < photosToDownload.length; j++) {
 								photoPaths.push(path.resolve(pathToPhotos, photosToDownload[j]));
-						}*/
-	photosToDownload = ['HarryQuiditch.jpg', 'ron.jpg'];
-	photoPaths = ['data/photos/Hogwarts/TriWizardTournament/HarryQuiditch.jpg', 'data/photos/Hogwarts/TriWizardTournament/ron.jpg'];
+						}
+	// photosToDownload = ['HarryQuiditch.jpg', 'ron.jpg'];
+	// photoPaths = ['data/photos/Hogwarts/TriWizardTournament/HarryQuiditch.jpg', 'data/photos/Hogwarts/TriWizardTournament/ron.jpg'];
 	
 	// TODO -- ZIP each photo located at in the photoPaths array into a ".zip" file
 	// For this function to work as is, make sure the .zip file is called "photos.zip"
@@ -254,9 +254,7 @@ router.get('/:group/events/:event/photos', isAuthenticated, function(req, res)
 	for (i = 0; i < photoPaths.length; i++) {
 		// {name: filename} needed to grab individual files (without folder structure)
 		archive.file(photoPaths[i], { name: photosToDownload[i]}); 
-		console.log('added photo!');
 	}
-	// res.send(photoPaths[0]+photoPaths[1]+photosToDownload[0]+photosToDownload[1]);
 	archive.finalize();
 	
 	// move zip file to proper folder
@@ -265,7 +263,7 @@ router.get('/:group/events/:event/photos', isAuthenticated, function(req, res)
 	fs.rename(oldPhotoPath, zippedPayload, function (err) {
 	  if (err) {throw err;}
   	});
-	res.send('downloaded zip file into event folder');
+	res.send('downloaded zip file into event folder; res.download not working yet');
 
 						// return res.json(photoPaths); // TODO -- DELETE THIS LINE!!!
 						
@@ -276,7 +274,7 @@ router.get('/:group/events/:event/photos', isAuthenticated, function(req, res)
 				return res.render("error", { message: "error sending the photos.zip in download photos", error: err } );
 			}
 		}); */
-					/*} else {
+					} else {
 						return res.json(events[i].photos);
 					}
 				}
@@ -285,7 +283,7 @@ router.get('/:group/events/:event/photos', isAuthenticated, function(req, res)
 		} else {
 			return res.render("error", { message: "error finding group in download photos", error: err } );
 		} 
-	}); */
+	}); 
 });
 
 // delete photo from an event
