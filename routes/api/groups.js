@@ -174,7 +174,7 @@ router.post('/:group/events/:event/photos', isAuthenticated, function(req, res)
 				}
 				
 				return res.render("error", { message: "we shouldn't get here, we should have responded inside the nested madness 4", error: err } );
-
+
 			});
 			return res.render("error", { message: "we shouldn't get here, we should have responded inside the nested madness 3", error: err } );
 		});
@@ -228,52 +228,47 @@ router.get('/:group/events/:event/photos', isAuthenticated, function(req, res)
 						for (j = 0; j < photosToDownload.length; j++) {
 								photoPaths.push(path.resolve(pathToPhotos, photosToDownload[j]));
 						}
-	// photosToDownload = ['HarryQuiditch.jpg', 'ron.jpg'];
-	// photoPaths = ['data/photos/Hogwarts/TriWizardTournament/HarryQuiditch.jpg', 'data/photos/Hogwarts/TriWizardTournament/ron.jpg'];
-	
-	// TODO -- ZIP each photo located at in the photoPaths array into a ".zip" file
-	// For this function to work as is, make sure the .zip file is called "photos.zip"
-	// and resides at "/path/to/famPhotoShare/repository/data/photos/groupname/eventname"
-	// like this: "/path/to/famPhotoShare/repository/data/photos/groupname/eventname/photos.zip"
+					// photosToDownload = ['HarryQuiditch.jpg', 'ron.jpg'];
+					// photoPaths = ['data/photos/Hogwarts/TriWizardTournament/HarryQuiditch.jpg', 'data/photos/Hogwarts/TriWizardTournament/ron.jpg'];
+				
+					// create zip file (npm install archiver)
+					var archiver = require('archiver');
+					
+					// TODO -- generate random number for unique zip file
+					var zipFileName = req.params.event+'.zip';
+					var output = fs.createWriteStream(zipFileName); 
+					var archive = archiver('zip');
+					output.on('close', function () {
+						console.log(archive.pointer() + ' total bytes');
+						console.log('archiver has been finalized and the output file descriptor has closed.');
+					});
+					archive.on('error', function(err){
+						throw err;
+					});
+					archive.pipe(output);
+					for (i = 0; i < photoPaths.length; i++) {
+						// {name: filename} needed to grab individual files (without folder structure)
+						archive.file(photoPaths[i], { name: photosToDownload[i]}); 
+					}
+					archive.finalize();
+					
+					// move zip file to proper folder
+					var oldPhotoPath = path.resolve(__dirname, "../../" + req.params.event+'.zip');
+					var zippedPayload = path.resolve(__dirname, "../../data/photos/"+req.params.group+"/"+req.params.event+'/'+zipFileName);
+					fs.rename(oldPhotoPath, zippedPayload, function (err) {
+					  if (err) {throw err;}
+				  	});
+					res.send('downloaded zip file into event folder; res.download not working yet');
 
-	// create zip file (npm install archiver)
-	var archiver = require('archiver');
-	
-	// TODO -- generate random number for unique zip file
-	var zipFileName = req.params.event+'.zip';
-	var output = fs.createWriteStream(zipFileName); 
-	var archive = archiver('zip');
-	output.on('close', function () {
-		console.log(archive.pointer() + ' total bytes');
-		console.log('archiver has been finalized and the output file descriptor has closed.');
-	});
-	archive.on('error', function(err){
-		throw err;
-	});
-	archive.pipe(output);
-	for (i = 0; i < photoPaths.length; i++) {
-		// {name: filename} needed to grab individual files (without folder structure)
-		archive.file(photoPaths[i], { name: photosToDownload[i]}); 
-	}
-	archive.finalize();
-	
-	// move zip file to proper folder
-	var oldPhotoPath = path.resolve(__dirname, "../../" + req.params.event+'.zip');
-	var zippedPayload = path.resolve(__dirname, "../../data/photos/"+req.params.group+"/"+req.params.event+'/'+zipFileName);
-	fs.rename(oldPhotoPath, zippedPayload, function (err) {
-	  if (err) {throw err;}
-  	});
-	res.send('downloaded zip file into event folder; res.download not working yet');
-
-						// return res.json(photoPaths); // TODO -- DELETE THIS LINE!!!
+					// return res.json(photoPaths); // TODO -- DELETE THIS LINE!!!
 						
-		/*return res.download(zippedPayload, function(err) {
-			if (!err) {
-				return res.redirect(302, "back");
-			} else {
-				return res.render("error", { message: "error sending the photos.zip in download photos", error: err } );
-			}
-		}); */
+					/*return res.download(zippedPayload, function(err) {
+						if (!err) {
+							return res.redirect(302, "back");
+						} else {
+							return res.render("error", { message: "error sending the photos.zip in download photos", error: err } );
+						}
+					}); */
 					} else {
 						return res.json(events[i].photos);
 					}
