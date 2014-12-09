@@ -97,9 +97,9 @@
 		$scope.selectedPhotos = [];
 
 		this.download = function() {
-			var photolist = encodeURIComponent(JSON.stringify($scope.selectedPhotos));
-			$http.get("http://localhost/api/groups/" + $scope.groupname + "/events/" + $scope.eventname + "/photos?photolist=" + photolist).then(function(photos) {
-				alert("http://localhost/api/groups/" + $scope.groupname + "/events/" + $scope.eventname + "/photos?photolist=" + photolist);
+			var photoList = encodeURIComponent(JSON.stringify($scope.selectedPhotos));
+			$http.get("http://localhost/api/groups/" + $scope.groupname + "/events/" + $scope.eventname + "/photos?photoList=" + photoList).then(function(photos) {
+				alert("http://localhost/api/groups/" + $scope.groupname + "/events/" + $scope.eventname + "/photos?photoList=" + photoList);
 			}, function(err) {
 				console.error('ERR', err);
 			});
