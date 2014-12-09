@@ -222,13 +222,11 @@ router.get('/:group/events/:event/photos', isAuthenticated, function(req, res)
 			for (i = 0; i < events.length; i++) {
 				if (events[i].name === req.params.event) {
 					if (req.query.photoList) {
+						var photosToDownload = JSON.parse(req.query.photoList);
 						var photoPaths = [];
 						var pathToPhotos = path.resolve(__dirname, "../../data/photos/" + req.params.group + "/" + req.params.event);
-						for (j = 0; j < req.query.photoList.length; j++) {
-							// TODO -- limit what get's added based on a query (uncomment below)
-							//if (photos[j] is a photo we should include) {
-								photoPaths.push(path.resolve(pathToPhotos, req.query.photoList[j]));
-							//}
+						for (j = 0; j < photosToDownload.length; j++) {
+								photoPaths.push(path.resolve(pathToPhotos, photosToDownload[j]));
 						}
 
 						// TODO -- ZIP each photo located at in the photoPaths array into a ".zip" file
