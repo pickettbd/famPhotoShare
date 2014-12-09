@@ -34,7 +34,7 @@ router.get('/:group/events/:event', isAuthenticated, function(req, res)
 			res.render("404");
 		} else {
 			res.render("error", { message: "error in routes/api/groups.js", error: err } );
-		}
+		}
 	});
 });
 
@@ -123,7 +123,7 @@ router.post('/:group/events/:event/photos', isAuthenticated, function(req, res)
 				req.files.uploadphotos.forEach(function(uploadphoto) {
 					
 					newPhotoNames.push(uploadphoto.name);
-					
+					
 					var oldPhotoPath = path.resolve(__dirname, "../../data/photos/" + uploadphoto.name);
 					var newPhotoPath = path.resolve(__dirname, "../../data/photos/" + req.params.group + "/" + req.params.event + "/" + uploadphoto.name);
 					var newThumbPath = path.resolve(__dirname, "../../data/photos/" + req.params.group + "/" + req.params.event + "/thumbs/" + uploadphoto.name);
@@ -136,11 +136,11 @@ router.post('/:group/events/:event/photos', isAuthenticated, function(req, res)
 								if (err) {
 									console.error("error making thumb");
 									console.error("stdout: " + stdout);
-									console.error("stderr: " + stderr);
+									console.error("stderr: " + stderr);
 									return res.render("error", { message: "error in routes/api/groups.js", error: err } );
 								}
 							});
-						} else {
+						} else {
 							return res.render("error", { message: "just renamed the photo UNsucessfully", error: err } );
 						}
 					});
@@ -155,7 +155,7 @@ router.post('/:group/events/:event/photos', isAuthenticated, function(req, res)
 									for (j = 0; j < newPhotoNames.length; j++) {
 										result.events[i].photos.push(newPhotoNames[j]);
 									}
-									return result.save(function(err) {
+									return result.save(function(err) {
 										if (!err) {
 											res.status(202).redirect("back");
 										} else {
@@ -188,7 +188,7 @@ router.get('/:group/events/:event/photos/:photo', isAuthenticated, function(req,
 {
 	return Group.findOne({ name: req.params.group }, function(err, result) {
 		if (!err) {
-			events = result.events
+			events = result.events
 			for (var i = 0; i < events.length; i++) {
 				if (events[i].name === req.params.event) {
 					for (var j = 0; j < events[i].photos.length; j++) {
