@@ -28,5 +28,5 @@ block content
 				li.list-button(ng-click="thumbController.deselectAll()") Deselect All
 			div.section.group
 				div.col.span_1_of_4(ng-repeat="thumb in thumbs", ng-class="{ active: thumbController.isSelected(thumb) }")
-					img.fit(ng-src="http://localhost/api/groups/{{groupname}}/events/{{eventname}}/thumbs/{{thumb}}", ng-click="thumbController.selectPhoto(thumb)")
+					img.fit(ng-src="http://104.236.25.185/api/groups/{{groupname}}/events/{{eventname}}/thumbs/{{thumb}}", ng-click="thumbController.selectPhoto(thumb)")
 			button.button.topspace(ng-click="thumbController.download()") Download

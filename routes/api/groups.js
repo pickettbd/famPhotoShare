@@ -41,10 +41,12 @@ router.get('/:group/events/:event', isAuthenticated, function(req, res)
 // add new event
 router.post('/:group/events', isAuthenticated, function(req, res)
 {
-    Group.update( { name: req.params.group }, { $push: { events: { name: req.body.eventname, photos: req.body.photos } } }, function(err, numAffected, rawResponse) {
+    return Group.update( { name: req.params.group }, { $push: { events: { name: req.body.eventname, photos: req.body.photos } } }, function(err, numAffected, rawResponse) {
         if (err) {
-        	res.render("error", { message: "error in routes/api/groups.js", error: err } );
-        };
+        	return res.render("error", { message: "error in routes/api/groups.js", error: err } );
+        } else {
+					return res.sendStatus(200);
+				}
     });
 });
 
@@ -316,19 +318,45 @@ router.get('/:group/events', isAuthenticated, function(req, res)
 // add a user to the group
 router.post('/:group/users/:user', isAuthenticated, function(req, res)
 {
-    User.update( { username: req.params.user }, { $push: { groups: req.params.group } }, function(err, numAffected, rawResponse) {
-        if (err) {
-        	res.render("error", { message: "error in routes/api/groups.js", error: err } );
-        };
-    });
-
-    Group.update( { name: req.params.group }, { $push: { users: req.params.user } }, {}, function(err, numAffected, rawResponse) {
-        if (err) {
-        	res.render("error", { message: "error in routes/api/groups.js", error: err } );
-        } else {
-        	res.send("success");
-        };
-    });
+  return User.findOne( { username: req.params.user }, function(err, u) {
+		if (err) {
+			return res.sendStatus(500);
+		} else if ( u.groups.indexOf(req.params.group) != -1) {
+			return res.sendStatus(200);
+		} else {
+			u.groups.push(req.params.group);
+			u.save(function(err) {
+				if (!err) {
+					return Group.update( { name: req.params.group }, { $push: { users: req.params.user } }, {}, function(err, numAffected, rawResponse) {
+							if (err) {
+								//res.render("error", { message: "error in routes/api/groups.js", error: err } );
+								return res.sendStatus(500);
+							} else {
+								return res.sendStatus(200);
+							}
+					});
+				} else {
+					return res.sendStatus(500);
+				}
+			});
+		}
+	});
+	
+	//User.update( { username: req.params.user }, { $push: { groups: req.params.group } }, function(err, numAffected, rawResponse) {
+  //      if (!err) {
+	//					Group.update( { name: req.params.group }, { $push: { users: req.params.user } }, {}, function(err, numAffected, rawResponse) {
+	//							if (err) {
+	//								//res.render("error", { message: "error in routes/api/groups.js", error: err } );
+	//								res.sendStatus(500);
+	//							} else {
+	//								res.sendStatus(200);
+	//							}
+	//					});
+  //      } else {
+  //      	//res.render("error", { message: "error in routes/api/groups.js", error: err } );
+	//				res.sendStatus(500);
+	//			}
+  //  });
 });
 
 // delete user from the group

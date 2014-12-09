@@ -1,44 +1,37 @@
 extends layout
 
 block head
-	script(type='text/javascript', src='javascripts/adminController.js')
+	script(type="text/javascript", src="javascripts/adminController.js")
 
 block content
 	div(ng-controller="AdminController as adminController")
 		h1 Group Administration
 
 		h2 Create New Group:
-		input(type="text" ng-model="newGroupName" id="newgroupname" placeholder='group name' required pattern="[A-Za-z0-9][A-Za-z0-9_]+")
-		p(ng-hide="true").warning Group names can only have letters, numbers and underscores.
-		button(ng-click="adminController.createGroup()").button Create Group
-
+		input(type="text" ng-model="input.newGroupName" id="newGroupName" placeholder="group name")
+		p(ng-hide="adminController.checkGroupName()").warning Group names can only have letters, numbers and underscores. (no spaces or symbols of any kind)
+		button(ng-click="adminController.createGroup()").button Create Group 
+		
 		hr
 
 		h2 Add Event to Group:
-		p
-			select(name="groupname" required)
-				option(ng-repeat="group in groups" value="{{group}}") {{group}}
+		select(id="addEventGroupName")
+			option(ng-repeat="group in groups" value="{{group}}") {{group}}
+		input(type="text" ng-model="input.newEventName" id="newEventName" placeholder="event name")
+		p(ng-hide="adminController.checkEventName()").warning Group names can only have letters, numbers and underscores. (no spaces or symbols of any kind)
+		button(ng-click="adminController.addEventToGroup()").button Add Event
 
-		form(method="post" action="api/groups/somegroupname/events" enctype="multipart/form-data" id="addeventtogroupform")
-			p
-				input(type="text" name="neweeventname" placeholder='event name' required pattern="[A-Za-z0-9][A-Za-z0-9_]+")
-			p
-				button(type="submit").button Add Event
 		hr
+
 		h2 Add User to Group:
-		form(method="post" action="api/groups/somegroupname/users/someusername" enctype="multipart/form-data" id="addusertogroupform")
-			p
-				select(name="groupname" required)
-					option(value='Smith Family') Smith Family
-					option(value='Miller Family') Miller Family
-			p
-				input(type="text" name="username" placeholder='search for user' required pattern="[A-Za-z0-9][A-Za-z0-9_]+")
-			p
-				button(type="submit").button Add User
+		select(id="addUserGroupName")
+			option(ng-repeat="group in groups" value="{{group}}") {{group}}
+		input(type="text" ng-model="input.newUserName" id="newUserName" placeholder="user name")
+		p(ng-hide="adminController.checkUserName()").warning Group names can only have letters, numbers and underscores. (no spaces or symbols of any kind)
+		button(ng-click="adminController.addUserToGroup()").button Add User
+
 		hr
+
 		h2 Invite New Users:
-		form(method="post" action="api/users/invite" enctype="multipart/form-data" id="invitenewusersform")
-			p
-				input(type="email" name="emailaddress" placeholder='email address' required)
-			p
-				button(type="submit").button Invite User
+			input(type="email" id="emailAddress" placeholder="email address" required)
+			button(ng-click="adminController.inviteUser()").button Invite User
