@@ -123,7 +123,7 @@ router.post('/:group/events/:event/photos', isAuthenticated, function(req, res)
 				req.files.uploadphotos.forEach(function(uploadphoto) {
 					
 					newPhotoNames.push(uploadphoto.name);
-					
+					
 					var oldPhotoPath = path.resolve(__dirname, "../../data/photos/" + uploadphoto.name);
 					var newPhotoPath = path.resolve(__dirname, "../../data/photos/" + req.params.group + "/" + req.params.event + "/" + uploadphoto.name);
 					var newThumbPath = path.resolve(__dirname, "../../data/photos/" + req.params.group + "/" + req.params.event + "/thumbs/" + uploadphoto.name);
@@ -140,7 +140,7 @@ router.post('/:group/events/:event/photos', isAuthenticated, function(req, res)
 									return res.render("error", { message: "error in routes/api/groups.js", error: err } );
 								}
 							});
-						} else {
+						} else {
 							return res.render("error", { message: "just renamed the photo UNsucessfully", error: err } );
 						}
 					});
@@ -233,10 +233,37 @@ router.get('/:group/events/:event/photos', isAuthenticated, function(req, res)
 						// For this function to work as is, make sure the .zip file is called "photos.zip"
 						// and resides at "/path/to/famPhotoShare/repository/data/photos/groupname/eventname"
 						// like this: "/path/to/famPhotoShare/repository/data/photos/groupname/eventname/photos.zip"
-
-						return res.json(photoPaths); // TODO -- DELETE THIS LINE!!!
 						
-						var zippedPayload = path.resolve(pathToPhotos, "photos.zip");
+						// create zip file (npm install archiver)
+						var archiver = require('archiver');
+						
+						// TODO -- generate random number for unique zip file
+						var zipFileName = req.params.event+'.zip';
+						var output = fs.createWriteStream(zipFileName); 
+						var archive = archiver('zip');
+						output.on('close', function () {
+							console.log(archive.pointer() + ' total bytes');
+							console.log('archiver has been finalized and the output file descriptor has closed.');
+						});
+						archive.on('error', function(err){
+							throw err;
+						});
+						archive.pipe(output);
+						for (i = 0; i < photoPaths.length; i++) {
+							// {name: filename} needed to grab individual files (without folder structure)
+							archive.file(photoPaths[i], { name: photosToDownload[i]}); 
+						}
+					
+						archive.finalize();
+						
+						// move zip file to proper folder
+						var oldPhotoPath = path.resolve(__dirname, "../../" + req.params.event+'.zip');
+						var zippedPayload = path.resolve(__dirname, "../../data/photos/"+req.params.group+"/"+req.params.event+'/'+zipFileName);
+						fs.rename(oldPhotoPath, zippedPayload, function (err) {
+						  if (err) {throw err;}
+					  	});
+
+						// return res.json(photoPaths); // TODO -- DELETE THIS LINE!!!
 
 						return res.download(zippedPayload, function(err) {
 							if (!err) {
