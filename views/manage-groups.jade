@@ -6,22 +6,20 @@ block head
 block content
 	div(ng-controller="AdminController as adminController")
 		h1 Group Administration
+
 		h2 Create New Group:
-		p
-			input(type="text" id="newgroupname" placeholder='group name' required pattern="[A-Za-z0-9][A-Za-z0-9_]+")
-		p
-			button(ng-click="adminController.createGroup()").button Create Group
+		input(type="text" ng-model="newGroupName" id="newgroupname" placeholder='group name' required pattern="[A-Za-z0-9][A-Za-z0-9_]+")
+		p(ng-hide="true").warning Group names can only have letters, numbers and underscores.
+		button(ng-click="adminController.createGroup()").button Create Group
+
 		hr
+
 		h2 Add Event to Group:
 		p
 			select(name="groupname" required)
 				option(ng-repeat="group in groups" value="{{group}}") {{group}}
 
 		form(method="post" action="api/groups/somegroupname/events" enctype="multipart/form-data" id="addeventtogroupform")
-			p
-				select(name="groupname" required)
-					option(value='Smith Family') Smith Family
-					option(value='Miller Family') Miller Family
 			p
 				input(type="text" name="neweeventname" placeholder='event name' required pattern="[A-Za-z0-9][A-Za-z0-9_]+")
 			p

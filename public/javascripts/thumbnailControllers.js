@@ -98,8 +98,8 @@
 
 		this.download = function() {
 			var photolist = encodeURIComponent(JSON.stringify($scope.selectedPhotos));
-			$http.get("http://localhost/api/groups/" + $scope.groupname + "/events/" + $scope.eventname + "/photos?photolist=" + photolist).then(function(photos) {
-				alert("http://localhost/api/groups/" + $scope.groupname + "/events/" + $scope.eventname + "/photos?photolist=" + photolist);
+			$http.get("http://localhost/api/groups/" + $scope.groupname + "/events/" + $scope.eventname + "/photos?photoList=" + photolist).then(function(photos) {
+				alert("http://localhost/api/groups/" + $scope.groupname + "/events/" + $scope.eventname + "/photos?photoList=" + photolist);
 			}, function(err) {
 				console.error('ERR', err);
 			});
