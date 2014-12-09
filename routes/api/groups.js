@@ -222,42 +222,67 @@ router.get('/:group/events/:event/photos', isAuthenticated, function(req, res)
 			for (i = 0; i < events.length; i++) {
 				if (events[i].name === req.params.event) {
 					if (req.query.photoList) {
+						var photosToDownload = JSON.parse(req.query.photoList);
 						var photoPaths = [];
 						var pathToPhotos = path.resolve(__dirname, "../../data/photos/" + req.params.group + "/" + req.params.event);
-						for (j = 0; j < req.query.photoList.length; j++) {
-							// TODO -- limit what get's added based on a query (uncomment below)
-							//if (photos[j] is a photo we should include) {
-								photoPaths.push(path.resolve(pathToPhotos, req.query.photoList[j]));
-							//}
+						for (j = 0; j < photosToDownload.length; j++) {
+								photoPaths.push(path.resolve(pathToPhotos, photosToDownload[j]));
+						}
+				
+						// create zip file (npm install archiver)
+						var archiver = require('archiver');
+						
+						var zipFileName = path.resolve(pathToPhotos, req.params.event + Date.now() + Math.floor((Math.random() * 1000) + 1) + ".zip");
+						var output = fs.createWriteStream(zipFileName); 
+						var archive = archiver('zip');
+						archive.on('error', function(err) {
+							console.log("error archiving file");
+							throw err;
+						});
+						output.on('close', function () {
+							console.log(archive.pointer() + ' total bytes');
+							console.log('archiver has been finalized and the output file descriptor has closed.');
+
+							// actually send the user the file
+							return res.download(zipFileName, req.params.event + ".zip", function(err) {
+								if (!err) {
+									console.log("successful download!");
+
+									// delete the file from the server
+									return fs.unlink(zipFileName, function(err) {
+										if (!err) {
+											console.log("successfully deleted zip file!");
+											return res.end();
+										} else {
+											return res.render("error", { message: "error sending the photos.zip in download photos", error: err } );
+										}
+									});
+								} else {
+									return res.render("error", { message: "error sending the photos.zip in download photos", error: err } );
+								}
+							});
+						});
+
+						archive.pipe(output);
+
+						for (k = 0; k < photoPaths.length; k++) {
+							// {name: filename} needed to grab individual files (without folder structure)
+							archive.file(photoPaths[k], { name: photosToDownload[k] } ); 
 						}
 
-						// TODO -- ZIP each photo located at in the photoPaths array into a ".zip" file
-						// For this function to work as is, make sure the .zip file is called "photos.zip"
-						// and resides at "/path/to/famPhotoShare/repository/data/photos/groupname/eventname"
-						// like this: "/path/to/famPhotoShare/repository/data/photos/groupname/eventname/photos.zip"
-
-						return res.json(photoPaths); // TODO -- DELETE THIS LINE!!!
-						
-						var zippedPayload = path.resolve(pathToPhotos, "photos.zip");
-
-						return res.download(zippedPayload, function(err) {
-							if (!err) {
-								return res.redirect(302, "back");
-							} else {
-								return res.render("error", { message: "error sending the photos.zip in download photos", error: err } );
-							}
-						});
+						return archive.finalize();
 					} else {
+						console.log("returning the list of photos as json");
 						return res.json(events[i].photos);
-
 					}
 				}
 			}
+			console.log("finished for loop through groups events without ever returning (till now)");
 			return res.render("404");
 		} else {
 			return res.render("error", { message: "error finding group in download photos", error: err } );
-		}
-	});
+		} 
+	}); 
 });
 
 // delete photo from an event

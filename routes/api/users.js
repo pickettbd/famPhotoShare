@@ -1,6 +1,9 @@
 var express = require('express');
 var router = express.Router();
 var passport = require('passport');
+var path = require('path');
+var emailTemplates = require('email-templates');
+var emailTemplatesDir = path.resolve(__dirname, "../..", "email_templates");
 
 var isAuthenticated = function (req, res, next) {
     // if user is authenticated in the session, call the next() to call the next request handler 
@@ -18,10 +21,57 @@ var Group = require('../../schemas/group');
 //router.param('user', /^[A-Za-z0-9]\w{4,}$/);
 //router.param('group', /^[A-Za-z0-9]\w{2,}$/);
 
-// get a user's details
+// invite a new user
 router.post('/invite', isAuthenticated, function(req, res)
 {
-    res.send('this is how you invite a new user. email: ' + req.body.emailaddress);
+	return emailTemplates(emailTemplatesDir, function(err, template) {
+		if (!err) {
+			return User.findOne( { _id: req.session.passport.user } ).exec( function(err, result) {
+				if (!err) {
+					var mailTransporter = req.mailTransporter;
+					
+					var locals = {
+						referrername: result.name,
+						email: req.body.emailaddress,
+						title: "Invitation email"
+					};
+
+					return template("inviteNewUser", locals, function(err, html, text) {
+						if (!err) {
+							return mailTransporter.sendMail(
+								{
+									from: "welcome@104.236.25.185",
+									to: locals.email,
+									subject: "You're invited!",
+									html: html,
+									generateTextFromHTML: true
+									//text: text
+								}, function(err, responseStatus) {
+									if (!err) {
+										console.log(html);
+										return res.sendStatus(200);
+									} else {
+										console.log(err);
+										console.log(html);
+										return res.sendStatus(500);
+									}
+								}
+							);
+						} else {
+							console.log(err);
+							return res.sendStatus(500);
+						}
+					});
+				} else {
+					console.log(err);
+					return res.sendStatus(500);
+				}
+			});
+		} else {
+			console.log(err);
+			return res.sendStatus(500);
+		}
+	});
 });
 
 // get a usernmae of logged in
@@ -32,7 +82,7 @@ router.get('/whoami', isAuthenticated, function(req, res)
             res.send(result.username);			
         } else {
             res.render("error");
-        };
+        }
     });
 });
 

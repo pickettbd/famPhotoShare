@@ -8,7 +8,11 @@ block content
 	p Welcome to Family Photo Share. Signing up is quick and easy so that you can get right into sharing your photos!
 	form(name='addUser', method='post', action='api/users', ng-controller='SignInController as signCtrl')
 		p
-			input(autofocus, ng-model="user.username", placeholder='user name', type='text', id='username', name='username', pattern=".{3,20}", required)
+			input(autofocus, ng-model="user.name.first", placeholder='first name', type='text', id='firstName', name='firstName', pattern=".{3,20}", required)
+		p
+			input(ng-model="user.name.last", placeholder='last name', type='text', id='lastName', name='lastName', pattern=".{3,20}", required)
+		p
+			input(ng-model="user.username", placeholder='user name', type='text', id='username', name='username', pattern=".{3,20}", required)
 		p
 			input(placeholder='email', type='email', name='email', required)
 		p

@@ -8,6 +8,26 @@ var multer = require('multer');
 
 var app = express();
 
+// set up nodemailer
+var nodemailer = require('nodemailer');
+var mailTransporter = nodemailer.createTransport(); // DELETE this *AFTER* implementing portion below
+/* UN-COMMENT and finish implementing for full-scale
+ * production.  consider mailgun or implementing our
+ * own smtp server.
+var mailTransporter = nodemailer.createTransport( {
+	service: "servicename",
+	auth: {
+		user: "username@domain.tld",
+		auth: "passphrase"
+	}
+});
+ */
+// ensure routers have access to the mailer
+app.use(function(req,res,next) {
+	req.mailTransporter = mailTransporter;
+	next();
+});
+
 var mongo = require('mongodb');
 var mongoose = require('mongoose');
 //var db = mongoose.createConnection('mongodb://localhost/memshare');
