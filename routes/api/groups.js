@@ -174,7 +174,7 @@ router.post('/:group/events/:event/photos', isAuthenticated, function(req, res)
 				}
 				
 				return res.render("error", { message: "we shouldn't get here, we should have responded inside the nested madness 4", error: err } );
-
+
 			});
 			return res.render("error", { message: "we shouldn't get here, we should have responded inside the nested madness 3", error: err } );
 		});

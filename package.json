@@ -3,9 +3,9 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "sudo -u `whoami` forever start ./bin/www",
-    "stop": "sudo -u `whoami` forever stop ./bin/www",
-    "restart": "sudo -u `whoami` forever restart ./bin/www"
+    "start": "sudo forever start ./bin/www",
+    "stop": "sudo forever stop ./bin/www",
+    "restart": "sudo forever restart ./bin/www"
   },
   "dependencies": {
     "archiver": "~0.13.0",
