@@ -228,8 +228,8 @@ router.get('/:group/events/:event/photos', isAuthenticated, function(req, res)
 						for (j = 0; j < photosToDownload.length; j++) {
 								photoPaths.push(path.resolve(pathToPhotos, photosToDownload[j]));
 						}*/
-	photosToDownload = ['test1.jpg', 'test2.jpg'];
-	photoPaths = ['data/photos/testgroup/testevent/test1.jpg', 'data/photos/testgroup/testevent/test2.jpg'];
+	photosToDownload = ['HarryQuiditch.jpg', 'ron.jpg'];
+	photoPaths = ['data/photos/Hogwarts/TriWizardTournament/HarryQuiditch.jpg', 'data/photos/Hogwarts/TriWizardTournament/ron.jpg'];
 	
 	// TODO -- ZIP each photo located at in the photoPaths array into a ".zip" file
 	// For this function to work as is, make sure the .zip file is called "photos.zip"
