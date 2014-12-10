@@ -1,6 +1,6 @@
 (function() {
 
-	angular.module('app').controller('NavBarController', function() {
+	angular.module('app').controller('NavBarController', function($http, $window, $scope) {
 		this.isOne = function(selectedTab) {
 			return selectedTab === 1;
 		};
@@ -10,6 +10,7 @@
 		this.isThree = function(selectedTab) {
 			return selectedTab === 3;
 		};
+		
 	});
 
 })();
