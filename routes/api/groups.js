@@ -5,13 +5,13 @@ var express = require('express');
 var router = express.Router();
 
 var isAuthenticated = function (req, res, next) {
-    // if user is authenticated in the session, call the next() to call the next request handler 
-    // Passport adds this method to request object. A middleware is allowed to add properties to
-    // request and response objects
-    if (req.isAuthenticated())
-        return next();
-    // if the user is not authenticated then redirect him to the login page
-    res.redirect('/');
+	// if user is authenticated in the session, call the next() to call the next request handler 
+	// Passport adds this method to request object. A middleware is allowed to add properties to
+	// request and response objects
+	if (req.isAuthenticated())
+		return next();
+	// if the user is not authenticated then redirect him to the login page
+	res.redirect('/');
 }
 var User = require('../../schemas/user');
 var Group = require('../../schemas/group');
@@ -41,19 +41,36 @@ router.get('/:group/events/:event', isAuthenticated, function(req, res)
 // add new event
 router.post('/:group/events', isAuthenticated, function(req, res)
 {
-    return Group.update( { name: req.params.group }, { $push: { events: { name: req.body.eventname, photos: req.body.photos } } }, function(err, numAffected, rawResponse) {
-        if (err) {
-        	return res.render("error", { message: "error in routes/api/groups.js", error: err } );
-        } else {
+
+	return Group.findOne({ name: req.params.group }, function(err, result) {
+		if (!err) {
+			events = result.events;
+			for (var i = 0; i < events.length; i++) {
+				if (events[i].name === req.body.eventname) {
+						return res.sendStatus(409);
+				}
+			}
+			var eventname = req.body.eventname;
+			var photos = req.body.photos;
+			result.events.push({ "name" : eventname, "photos" : photos });
+			return result.save(function(err) {
+				if (err) {
+					return res.render("error", { message: "error in routes/api/groups.js", error: err } );
+				} else {
 					return res.sendStatus(200);
 				}
-    });
+			});
+		} else {
+			return res.sendStatus(409);
+		}
+	});
+
 });
 
 // delete event
 router.delete('/:group/events/:event', isAuthenticated, function(req, res)
 {
-	res.send('this is how you delete an event.  group: ' + req.params.group + ', event: ' + req.params.event);
+	res.send('this is how you delete an event. group: ' + req.params.group + ', event: ' + req.params.event);
 });
 
 // get thumbs
@@ -290,13 +307,13 @@ router.get('/:group/events/:event/photos', isAuthenticated, function(req, res)
 // delete photo from an event
 router.delete('/:group/events/:event/photos/:photo', isAuthenticated, function(req, res)
 {
-	res.send('this is how you delete a photo from an event.  group: ' + req.params.group + ', event: ' + req.params.event + ', photo: ' + req.params.photo);
+	res.send('this is how you delete a photo from an event. group: ' + req.params.group + ', event: ' + req.params.event + ', photo: ' + req.params.photo);
 });
 
 // delete all photos from an event
 router.delete('/:group/events/:event/photos', isAuthenticated, function(req, res)
 {
-	res.send('this is how you delete all photos from an event.  group: ' + req.params.group + ', event: ' + req.params.event);
+	res.send('this is how you delete all photos from an event. group: ' + req.params.group + ', event: ' + req.params.event);
 });
 
 // view list of all group's events
@@ -318,7 +335,7 @@ router.get('/:group/events', isAuthenticated, function(req, res)
 // add a user to the group
 router.post('/:group/users/:user', isAuthenticated, function(req, res)
 {
-  return User.findOne( { username: req.params.user }, function(err, u) {
+	return User.findOne( { username: req.params.user }, function(err, u) {
 		if (err) {
 			return res.sendStatus(500);
 		} else if ( u.groups.indexOf(req.params.group) != -1) {
@@ -343,7 +360,7 @@ router.post('/:group/users/:user', isAuthenticated, function(req, res)
 	});
 	
 	//User.update( { username: req.params.user }, { $push: { groups: req.params.group } }, function(err, numAffected, rawResponse) {
-  //      if (!err) {
+	//	if (!err) {
 	//					Group.update( { name: req.params.group }, { $push: { users: req.params.user } }, {}, function(err, numAffected, rawResponse) {
 	//							if (err) {
 	//								//res.render("error", { message: "error in routes/api/groups.js", error: err } );
@@ -352,11 +369,11 @@ router.post('/:group/users/:user', isAuthenticated, function(req, res)
 	//								res.sendStatus(200);
 	//							}
 	//					});
-  //      } else {
-  //      	//res.render("error", { message: "error in routes/api/groups.js", error: err } );
+	//	} else {
+	//		//res.render("error", { message: "error in routes/api/groups.js", error: err } );
 	//				res.sendStatus(500);
 	//			}
-  //  });
+	//	});
 });
 
 // delete user from the group
@@ -398,7 +415,7 @@ router.get('/:group', isAuthenticated, function(req, res)
 // delete group
 router.delete('/:group', isAuthenticated, function(req, res)
 {
-	res.send('this is how you delete a group.  group: ' + req.params.group);
+	res.send('this is how you delete a group. group: ' + req.params.group);
 });
 
 // see list of all groups
