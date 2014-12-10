@@ -1,11 +1,11 @@
 extends layout
 
 block head
-	script(type='text/javascript', src='javascripts/thumbnailControllers.js')
+	script(type='text/javascript', src='javascripts/downloadControllers.js')
 
 block content
 	div(ng-controller="ListController as listController")
-		p.note(ng-show="listController.hasNoGroups()") (You are not a member of any groups. Start sharing photos by joining other groups or by creating your own group using the <a href="/manage-groups"/>Admin page</a>)
+		p.note(ng-show="listController.hasNoGroups()") (You are not a member of any groups. Start sharing photos by joining other groups or by creating your own group using the <a href="/admin"/>Admin page</a>)
 		div.left(ng-show="listController.hasGroups()")
 			h1 Get Photos
 			h2 Select Group 

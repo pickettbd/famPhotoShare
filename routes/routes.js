@@ -37,10 +37,10 @@ module.exports = function(passport){
 		});
     });
 
-    /* GET manage-groups page. */
-    router.get('/manage-groups', isAuthenticated, function(req, res) {
-        res.render('manage-groups', {
-			title: 'Manage Groups',
+    /* GET admin page. */
+    router.get('/admin', isAuthenticated, function(req, res) {
+        res.render('admin', {
+			title: 'Group Administration',
 			navbar: 'true',
 			navtab1: 'false',
 			navtab2: 'false',
