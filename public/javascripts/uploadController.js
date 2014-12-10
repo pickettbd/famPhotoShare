@@ -43,7 +43,6 @@
 			var eventName = eventNameDDL.options[eventNameDDL.selectedIndex].value
 			document.uploadForm.action = "/api/groups/" + groupName + "/events/" + eventName + "/photos";
 			document.uploadForm.submit();
-			window.open('/upload-landing');
 		}
 
 	});
