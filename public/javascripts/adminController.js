@@ -82,8 +82,8 @@
 
 		this.inviteUser = function() {
 			email = document.getElementById("emailAddress").value;
-			if (!userName.match(/^[-0-9a-z.+_]+@[-0-9a-z.+_]+\.[a-z]$/i)) {
-				alert('email is invalid');
+			if (!email.match(/^[0-9a-z._]+@[0-9a-z._]+\.[a-z]+$/i)) {
+				alert('email is invalid!');
 				return;
 			}
 			body = { emailaddress : email };
