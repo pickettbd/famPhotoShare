@@ -119,6 +119,10 @@
 
 
 		this.download = function() {
+			if ($scope.selectedPhotos.length == 0) {
+				alert('Please select some photos');
+				return;
+			}
 			var photoList = encodeURIComponent(JSON.stringify($scope.selectedPhotos));
 			var url = "/api/groups/" + $scope.groupname + "/events/" + $scope.eventname + "/photos?photoList=" + photoList;
 			window.open(url, '_self');
