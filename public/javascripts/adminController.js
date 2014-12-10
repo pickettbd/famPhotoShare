@@ -5,9 +5,9 @@
 		$scope.groups = [];
 
 		$scope.populateGroups = function() {
-			$http.get('http://104.236.25.185/api/users/whoami').then(function(usernameRes) {
+			$http.get('/api/users/whoami').then(function(usernameRes) {
 				var username = usernameRes.data;
-				$http.get('http://104.236.25.185/api/users/' + username + '/groups').then(function(groupsRes) {
+				$http.get('/api/users/' + username + '/groups').then(function(groupsRes) {
 					$scope.groups = groupsRes.data;
 					if($scope.groups.length > 0) {
 						$scope.hasGroups = 1;
@@ -30,7 +30,7 @@
 				return;
 			}
 			group = { newgroupname : groupName };
-			$http.post('http://104.236.25.185/api/groups', group).then(function(statusCode) {
+			$http.post('/api/groups', group).then(function(statusCode) {
 				alert(groupName + ' was successfully created');
 				document.getElementById("newGroupName").value = '';
 				$scope.populateGroups();
@@ -48,7 +48,7 @@
 				return;
 			}
 			newEvent = { eventname : eventName, photos : [] };
-			$http.post('http://104.236.25.185/api/groups/' + groupName + '/events', newEvent).then(function(statusCode) {
+			$http.post('/api/groups/' + groupName + '/events', newEvent).then(function(statusCode) {
 				alert(eventName + ' was successfully created');
 				document.getElementById("newEventName").value = '';
 			}, function(err) {
@@ -65,7 +65,7 @@
 				alert('user name is invalid');
 				return;
 			}
-			$http.post('http://104.236.25.185/api/groups/' + groupName + '/users/' + userName).then(function(res) {
+			$http.post('/api/groups/' + groupName + '/users/' + userName).then(function(res) {
 				if (res.status == 200) {
 					groupNameDropDown = document.getElementById("addUserGroupName");
 					groupName = groupNameDropDown.options[groupNameDropDown.selectedIndex].value;
@@ -82,14 +82,12 @@
 
 		this.inviteUser = function() {
 			email = document.getElementById("emailAddress").value;
-			/*
-			if (!userName.match(//i)) {
+			if (!userName.match(/^[-0-9a-z.+_]+@[-0-9a-z.+_]+\.[a-z]$/i)) {
 				alert('email is invalid');
 				return;
 			}
-			*/
 			body = { emailaddress : email };
-			$http.post('http://104.236.25.185/api/users/invite', body).then(function(res) {
+			$http.post('/api/users/invite', body).then(function(res) {
 				if (res.status == 200) {
 					alert('your invitation was successfully sent');
 					document.getElementById("emailAddress").value = '';

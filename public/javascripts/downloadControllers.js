@@ -9,9 +9,9 @@
 		$scope.groupname = '';
 		$scope.eventname = '';
 
-		$http.get('http://104.236.25.185/api/users/whoami').then(function(usernameRes) {
+		$http.get('/api/users/whoami').then(function(usernameRes) {
  			var username = usernameRes.data;
-			$http.get('http://104.236.25.185/api/users/' + username + '/groups').then(function(groupsRes) {
+			$http.get('/api/users/' + username + '/groups').then(function(groupsRes) {
 				$scope.groups = groupsRes.data;
 				$scope.events = [];
 				$scope.thumbs = [];
@@ -30,7 +30,7 @@
 
 		this.getEvents = function(groupIn) {
 			$scope.groupname = groupIn;
-			$http.get('http://104.236.25.185/api/groups/' + $scope.groupname + '/events').then(function(eventsRes) {
+			$http.get('/api/groups/' + $scope.groupname + '/events').then(function(eventsRes) {
 				$scope.events = eventsRes.data;
 				$scope.thumbs = [];
 				if($scope.events.length > 0) {
@@ -48,7 +48,7 @@
 
 		this.getThumbs = function(eventnameIn) {
 			$scope.eventname = eventnameIn;
-			$http.get('http://104.236.25.185/api/groups/' + $scope.groupname + '/events/' + $scope.eventname + '/thumbs').then(function(thumbsRes) {
+			$http.get('/api/groups/' + $scope.groupname + '/events/' + $scope.eventname + '/thumbs').then(function(thumbsRes) {
 				$scope.thumbs = thumbsRes.data;
 				if($scope.thumbs.length > 0) {
 					$scope.hasThumbs = 1;
@@ -98,8 +98,8 @@
 
 		this.download = function() {
 			var photoList = encodeURIComponent(JSON.stringify($scope.selectedPhotos));
-			$http.get("http://104.236.25.185/api/groups/" + $scope.groupname + "/events/" + $scope.eventname + "/photos?photoList=" + photoList).then(function(photos) {
-				alert("http://104.236.25.185/api/groups/" + $scope.groupname + "/events/" + $scope.eventname + "/photos?photoList=" + photoList);
+			$http.get("/api/groups/" + $scope.groupname + "/events/" + $scope.eventname + "/photos?photoList=" + photoList).then(function(photos) {
+				alert("/api/groups/" + $scope.groupname + "/events/" + $scope.eventname + "/photos?photoList=" + photoList);
 			}, function(err) {
 				console.error('ERR', err);
 			});

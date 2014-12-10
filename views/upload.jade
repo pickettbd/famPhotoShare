@@ -1,21 +1,21 @@
 extends layout	
 
 block head
-	
+	script(type='text/javascript', src='javascripts/uploadController.js')
 
 block content
-	h1 Add Photos
-	p Select Group 
-		select(id="grp", name="grp")
-			option(value='Hogwarts') Miller Family
-			option(value='Duce-family') Smith Family
-			option(value='+ create new group') + create new group
-	p Select Event 
-		select(id="evt", name="evt")
-			option(value='TriWizardTournament') Summer Vacation
-			option(value='+ create new event') + create new event
-	form(method="post" name="form1" action="/" enctype="multipart/form-data")
-		p
-			input(type='file' name='uploadphotos' required multiple)
-		p
-			button(type='button' onclick='upload_form()').button Add Photos
+	div(ng-controller="UploadController as uploadController")
+		h1 Add Photos
+		p Select Group 
+			select(id="grp" ng-model="input.grp")
+				option(value='' disabled selected) Select Group
+				option(ng-repeat="group in groups" value='{{group}}') {{group}}
+		p Select Event 
+			select(id="evt")
+				option(value='' disabled selected) Select Event
+				option(ng-repeat="event in events" value='{{event}}') {{event}}
+		form(method="post" name="uploadForm" action="/" enctype="multipart/form-data")
+			p
+				input(type='file' name='uploadphotos' required multiple)
+			p
+				button(type='button' ng-click='uploadController.upload()').button Add Photos
