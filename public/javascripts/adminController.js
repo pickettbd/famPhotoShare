@@ -48,10 +48,14 @@
 				return;
 			}
 			newEvent = { eventname : eventName, photos : [] };
-			$http.post('/api/groups/' + groupName + '/events', newEvent).then(function(statusCode) {
+			$http.post('/api/groups/' + groupName + '/events', newEvent).then(function(res) {
 				alert(eventName + ' was successfully created');
 				document.getElementById("newEventName").value = '';
 			}, function(err) {
+				if (err.status == 409) {
+					alert(eventName + " already exists");
+					return;
+				}
 				alert('something went wrong');
 				console.error('ERR', err);
 			});
@@ -127,6 +131,5 @@
 		$scope.populateGroups();
 
 	});
-
 
 })();
