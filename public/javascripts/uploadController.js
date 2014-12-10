@@ -37,15 +37,14 @@
 		});
 
 		this.upload = function() {
-			alert('uploading');
 			var groupNameDDL = document.getElementById('grp');
 			var groupName = groupNameDDL.options[groupNameDDL.selectedIndex].value
 			var eventNameDDL = document.getElementById('evt');
 			var eventName = eventNameDDL.options[eventNameDDL.selectedIndex].value
 			document.uploadForm.action = "/api/groups/" + groupName + "/events/" + eventName + "/photos";
 			document.uploadForm.submit();
+			window.open('/upload-landing');
 		}
-
 
 	});
 
