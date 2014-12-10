@@ -96,15 +96,6 @@
 
 		$scope.selectedPhotos = [];
 
-		this.download = function() {
-			var photoList = encodeURIComponent(JSON.stringify($scope.selectedPhotos));
-			$http.get("/api/groups/" + $scope.groupname + "/events/" + $scope.eventname + "/photos?photoList=" + photoList).then(function(photos) {
-				alert("/api/groups/" + $scope.groupname + "/events/" + $scope.eventname + "/photos?photoList=" + photoList);
-			}, function(err) {
-				console.error('ERR', err);
-			});
-		};
-
 		this.selectPhoto = function(selectPhoto) {
 			var index = $scope.selectedPhotos.indexOf(selectPhoto)
 			if(index === -1) {
@@ -124,6 +115,13 @@
 
 		this.selectAll = function() {
 			$scope.selectedPhotos = angular.copy($scope.thumbs);
+		};
+
+
+		this.download = function() {
+			var photoList = encodeURIComponent(JSON.stringify($scope.selectedPhotos));
+			var url = "/api/groups/" + $scope.groupname + "/events/" + $scope.eventname + "/photos?photoList=" + photoList;
+			window.open(url, '_self');
 		};
 
 	});
