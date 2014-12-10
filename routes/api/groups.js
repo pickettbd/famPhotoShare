@@ -139,11 +139,27 @@ router.post('/:group/events/:event/photos', isAuthenticated, function(req, res)
 				}
 				var newPhotoNames = [ ];
 
-				req.files.uploadphotos.forEach(function(uploadphoto) {
+				console.log("req.files");				
+				console.log(req.files);
+
+				var uploadphotos = [];
+
+				if (req.files.uploadphotos.length) {
+					uploadphotos = req.files.uploadphotos;
+				} else {
+					uploadphotos.push(req.files.uploadphotos);
+				}
+				
+				console.log("uploadphotos");				
+				console.log(uploadphotos);
+
+				//req.files.uploadphotos.forEach(function(uploadphoto) {
+				uploadphotos.forEach(function(uploadphoto) {
 					
 					newPhotoNames.push(uploadphoto.name);
 					
-					var oldPhotoPath = path.resolve(__dirname, "../../data/photos/" + uploadphoto.name);
+					//var oldPhotoPath = path.resolve(__dirname, "../../data/photos/" + uploadphoto.name);
+					var oldPhotoPath = uploadphoto.path;
 					var newPhotoPath = path.resolve(__dirname, "../../data/photos/" + req.params.group + "/" + req.params.event + "/" + uploadphoto.name);
 					var newThumbPath = path.resolve(__dirname, "../../data/photos/" + req.params.group + "/" + req.params.event + "/thumbs/" + uploadphoto.name);
 
@@ -156,11 +172,13 @@ router.post('/:group/events/:event/photos', isAuthenticated, function(req, res)
 									console.error("error making thumb");
 									console.error("stdout: " + stdout);
 									console.error("stderr: " + stderr);
-									return res.render("error", { message: "error in routes/api/groups.js", error: err } );
+									//return res.render("error", { message: "error in routes/api/groups.js", error: err } );
+									return res.sendStatus(500);
 								}
 							});
 						} else {
-							return res.render("error", { message: "just renamed the photo UNsucessfully", error: err } );
+							//return res.render("error", { message: "just renamed the photo UNsucessfully", error: err } );
+							return res.sendStatus(500);
 						}
 					});
 				});
@@ -176,30 +194,38 @@ router.post('/:group/events/:event/photos', isAuthenticated, function(req, res)
 									}
 									return result.save(function(err) {
 										if (!err) {
-											res.status(202);
+											return res.sendStatus(202);
 										} else {
-											return res.render("error", { message: "UNsuccesfully updated group with the new photos as part of the appropriate event", error: err } );
+											//return res.render("error", { message: "UNsuccesfully updated group with the new photos as part of the appropriate event", error: err } );
+											return res.sendStatus(500);
 										}
 									});
 								}
 							}
-							return res.render("404");
+							//return res.render("404");
+							return res.sendStatus(500);
 						} else {
-							return res.render("error", { message: "found group UNsuccessfully", error: err } );
+							//return res.render("error", { message: "found group UNsuccessfully", error: err } );
+							return res.sendStatus(500);
 						}
 					});
 				} else {
-					return res.render("error", { message: "zero files were uploaded", error: err } );
+					//return res.render("error", { message: "zero files were uploaded", error: err } );
+					return res.sendStatus(500);
 				}
 				
-				return res.render("error", { message: "we shouldn't get here, we should have responded inside the nested madness 4", error: err } );
+				//return res.render("error", { message: "we shouldn't get here, we should have responded inside the nested madness 4", error: err } );
+				return res.sendStatus(500);
 
 			});
-			return res.render("error", { message: "we shouldn't get here, we should have responded inside the nested madness 3", error: err } );
+			//return res.render("error", { message: "we shouldn't get here, we should have responded inside the nested madness 3", error: err } );
+			return res.sendStatus(500);
 		});
-		return res.render("error", { message: "we shouldn't get here, we should have responded inside the nested madness 2", error: err } );
+		//return res.render("error", { message: "we shouldn't get here, we should have responded inside the nested madness 2", error: err } );
+		return res.sendStatus(500);
 	});
-	return res.render("error", { message: "we shouldn't get here, we should have responded inside the nested madness 1", error: err } );
+	//return res.render("error", { message: "we shouldn't get here, we should have responded inside the nested madness 1", error: err } );
+	return res.sendStatus(500);
 });
 
 // download photo from an event
