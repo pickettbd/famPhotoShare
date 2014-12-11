@@ -200,7 +200,7 @@ router.get('/', isAuthenticated, function(req, res)
 
 /* Handle User Registration POST */
 router.post('/', passport.authenticate('signup', {
-    successRedirect: '/welcome',
+    successRedirect: '/admin',
     failureRedirect: '/sign-up',
     failureFlash : true 
 }));

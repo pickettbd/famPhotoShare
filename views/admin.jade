@@ -7,28 +7,32 @@ block content
 	div(ng-controller="AdminController as adminController")
 		h1 Group Administration
 
+		p(ng-hide="adminController.hasGroups()") You are not a member of any groups. Start sharing photos by joining other groups or by creating your own group below.
+
 		h2 Create New Group:
 		input(type="text" ng-model="input.newGroupName" id="newGroupName" placeholder="group name")
 		p(ng-hide="adminController.checkGroupName()").warning Group names can only have letters, numbers and underscores. (no spaces or symbols of any kind)
 		button(ng-click="adminController.createGroup()").button Create Group 
 		
-		hr
+		div(ng-show="adminController.hasGroups()")
 
-		h2 Add Event to Group:
-		select(id="addEventGroupName")
-			option(ng-repeat="group in groups" value="{{group}}") {{group}}
-		input(type="text" ng-model="input.newEventName" id="newEventName" placeholder="event name")
-		p(ng-hide="adminController.checkEventName()").warning Group names can only have letters, numbers and underscores. (no spaces or symbols of any kind)
-		button(ng-click="adminController.addEventToGroup()").button Add Event
+			hr
 
-		hr
+			h2 Add Event to Group:
+			select(id="addEventGroupName")
+				option(ng-repeat="group in groups" value="{{group}}") {{group}}
+			input(type="text" ng-model="input.newEventName" id="newEventName" placeholder="event name")
+			p(ng-hide="adminController.checkEventName()").warning Group names can only have letters, numbers and underscores. (no spaces or symbols of any kind)
+			button(ng-click="adminController.addEventToGroup()").button Add Event
 
-		h2 Add User to Group:
-		select(id="addUserGroupName")
-			option(ng-repeat="group in groups" value="{{group}}") {{group}}
-		input(type="text" ng-model="input.newUserName" id="newUserName" placeholder="user name")
-		p(ng-hide="adminController.checkUserName()").warning Group names can only have letters, numbers and underscores. (no spaces or symbols of any kind)
-		button(ng-click="adminController.addUserToGroup()").button Add User
+			hr
+
+			h2 Add User to Group:
+			select(id="addUserGroupName")
+				option(ng-repeat="group in groups" value="{{group}}") {{group}}
+			input(type="text" ng-model="input.newUserName" id="newUserName" placeholder="user name")
+			p(ng-hide="adminController.checkUserName()").warning Group names can only have letters, numbers and underscores. (no spaces or symbols of any kind)
+			button(ng-click="adminController.addUserToGroup()").button Add User
 
 		hr
 

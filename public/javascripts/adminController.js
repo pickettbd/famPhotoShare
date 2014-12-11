@@ -2,6 +2,7 @@
 
 	angular.module('app').controller('AdminController', function($http, $scope) {
 
+		$scope.hasGroups = false;
 		$scope.groups = [];
 
 		$scope.populateGroups = function() {
@@ -10,10 +11,7 @@
 				$http.get('/api/users/' + username + '/groups').then(function(groupsRes) {
 					$scope.groups = groupsRes.data;
 					if($scope.groups.length > 0) {
-						$scope.hasGroups = 1;
-					}
-					else {
-						$scope.hasGroups = 0;
+						$scope.hasGroups = true;
 					}
 				}, function(err) {
 						console.error('ERR', err);
@@ -126,6 +124,10 @@
 				return true;
 			}
 			return userName.match(/^[a-z0-9][a-z0-9_]+$/i)
+		};
+
+		this.hasGroups = function() {
+			return $scope.hasGroups;
 		};
 
 		$scope.populateGroups();
