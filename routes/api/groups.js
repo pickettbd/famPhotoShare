@@ -192,7 +192,8 @@ router.post('/:group/events/:event/photos', isAuthenticated, function(req, res)
 									}
 									return result.save(function(err) {
 										if (!err) {
-											return res.sendStatus(202);
+											//return res.sendStatus(202);
+											return res.location("back").redirect(202, "back");
 										} else {
 											//return res.render("error", { message: "UNsuccesfully updated group with the new photos as part of the appropriate event", error: err } );
 											return res.sendStatus(500);
