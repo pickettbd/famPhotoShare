@@ -382,8 +382,8 @@ router.post('/:group/users/:user/invite', isAuthenticated, function(req, res) {
 							
 							var locals = {
 								invitername: invitingUser.name,
-								groupname: req.params.group;
-								email: invitedUser.email;
+								groupname: req.params.group,
+								email: invitedUser.email,
 								title: "Join Group Invitation email"
 							};
 

@@ -98,6 +98,66 @@ router.get('/:user', isAuthenticated, function(req, res)
     });
 });
 
+// invite user to join group
+router.post('/:user/groups/:group/invite', isAuthenticated, function(req, res)
+	return emailTemplates(emailTemplatesDir, function(err, template) {
+		if (!err) {
+			return User.findOne( { _id: req.session.passport.user } ).exec( function(err, invitingUser) {
+				if (!err) {
+					return User.findOne( { username: req.params.user }).exec( function(err, invitedUser) {
+						if (!err) {
+							var mailTransporter = req.mailTransporter;
+							
+							var locals = {
+								invitername: invitingUser.name,
+								groupname: req.params.group,
+								email: invitedUser.email,
+								title: "Join Group Invitation email"
+							};
+
+							return template("groupInvitation", locals, function(err, html, text) {
+								if (!err) {
+									return mailTransporter.sendMail(
+										{
+											from: "groupinvite@104.236.25.185",
+											to: locals.email,
+											subject: "Join a group!",
+											html: html,
+											generateTextFromHTML: true
+											//text: text
+										}, function(err, responseStatus) {
+											if (!err) {
+												console.log(html);
+												return res.sendStatus(200);
+											} else {
+												console.log(err);
+												console.log(html);
+												return res.sendStatus(500);
+											}
+										}
+									);
+								} else {
+									console.log(err);
+									return res.sendStatus(500);
+								}
+							});
+						} else {
+							console.log(err);
+							return res.sendStatus(500);
+						}
+					});
+				} else {
+					console.log(err);
+					return res.sendStatus(500);
+				}
+			});
+		} else {
+			console.log(err);
+			return res.sendStatus(500);
+		}
+	});
+});
+
 // add user's group
 router.post('/:user/groups/:group', isAuthenticated, function(req, res)
 {
