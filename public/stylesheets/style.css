@@ -82,27 +82,6 @@ input {
 	text-align: center;
 }
 
-.list {
-	display: inline-block;
-}
-
-.list-button {
-	float: left;
-	display: block;
-	cursor: pointer;
-
-	background-color: #FFFFFF;	
-	padding: .25em 1em;
-	border-radius: .25em;
-	width: 125px;
-
-	font: 14px 'Lucida Grande', Helvetica, Arial, sans-serif;
-	color: #007dcc;
-
-	text-align: center;
-}
-
-.list-button:hover,
 .button:hover {
 	background-color: #DDDDDD; 
 }

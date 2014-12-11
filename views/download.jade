@@ -23,10 +23,19 @@ block content
 				h1.title(ng-hide="downloadController.dontKnowIfThereAreThumbs()") {{eventname}}
 				p.note(ng-show="downloadController.hasNoThumbs()") (The {{eventname}} event does not have any photos)
 		div(ng-show="downloadController.hasThumbs()")
-			ul.list
-				li.list-button(ng-click="downloadController.selectAll()") Select All
-				li.list-button(ng-click="downloadController.deselectAll()") Deselect All
+			button.button(ng-click="downloadController.selectAll()") Select All
+			button.button(ng-click="downloadController.deselectAll()") Deselect All
 			div.section.group
-				div.col.span_1_of_4(ng-repeat="thumb in thumbs", ng-class="{ active: downloadController.isSelected(thumb) }")
-					img.fit(ng-src="/api/groups/{{groupname}}/events/{{eventname}}/thumbs/{{thumb}}", ng-click="downloadController.selectPhoto(thumb)")
+				div.col.span_1_of_4
+					div.row(ng-repeat="thumb in thumbs0", ng-class="{ active: downloadController.isSelected(thumb) }")
+						img.fit(ng-src="/api/groups/{{groupname}}/events/{{eventname}}/thumbs/{{thumb}}" ng-click="downloadController.selectPhoto(thumb)")
+				div.col.span_1_of_4
+					div.row(ng-repeat="thumb in thumbs1", ng-class="{ active: downloadController.isSelected(thumb) }")
+						img.fit(ng-src="/api/groups/{{groupname}}/events/{{eventname}}/thumbs/{{thumb}}" ng-click="downloadController.selectPhoto(thumb)")
+				div.col.span_1_of_4
+					div.row(ng-repeat="thumb in thumbs2", ng-class="{ active: downloadController.isSelected(thumb) }")
+						img.fit(ng-src="/api/groups/{{groupname}}/events/{{eventname}}/thumbs/{{thumb}}" ng-click="downloadController.selectPhoto(thumb)")
+				div.col.span_1_of_4
+					div.row(ng-repeat="thumb in thumbs3", ng-class="{ active: downloadController.isSelected(thumb) }")
+						img.fit(ng-src="/api/groups/{{groupname}}/events/{{eventname}}/thumbs/{{thumb}}" ng-click="downloadController.selectPhoto(thumb)")
 			button.button.topspace(ng-click="downloadController.download()") Download

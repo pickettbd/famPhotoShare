@@ -94,7 +94,7 @@ router.get('/:group/events/:event/thumbs', isAuthenticated, function(req, res)
 								gmErr = true;
 							}
 						});
-					}
+					});
 					
 					var sleep = function(millis) {
 						var startDate = new Date();
@@ -103,7 +103,7 @@ router.get('/:group/events/:event/thumbs', isAuthenticated, function(req, res)
 							currentDate = new Date();
 						}
 						while (currentDate - startDate < millis);
-					});
+					};
 
 					while (thumbs.length != events[i].photos.length) {
 						sleep(100);

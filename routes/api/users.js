@@ -99,7 +99,7 @@ router.get('/:user', isAuthenticated, function(req, res)
 });
 
 // invite user to join group
-router.post('/:user/groups/:group/invite', isAuthenticated, function(req, res)
+router.post('/:user/groups/:group/invite', isAuthenticated, function(req, res) {
 	return emailTemplates(emailTemplatesDir, function(err, template) {
 		if (!err) {
 			return User.findOne( { _id: req.session.passport.user } ).exec( function(err, invitingUser) {
