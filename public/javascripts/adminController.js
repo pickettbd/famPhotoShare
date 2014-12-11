@@ -68,15 +68,15 @@
 				return;
 			}
 			$http.post('/api/groups/' + groupName + '/users/' + userName).then(function(res) {
-				if (res.status == 200) {
-					groupNameDropDown = document.getElementById("addUserGroupName");
-					groupName = groupNameDropDown.options[groupNameDropDown.selectedIndex].value;
-					alert(userName + ' was successfully added to ' + groupName);
-					document.getElementById("newUserName").value = '';
-				} else {
-					alert('user name does not exist on Family Photo Share');
-				}
+				groupNameDropDown = document.getElementById("addUserGroupName");
+				groupName = groupNameDropDown.options[groupNameDropDown.selectedIndex].value;
+				alert(userName + ' was successfully added to ' + groupName);
+				document.getElementById("newUserName").value = '';
 			}, function(err) {
+				if (err.status == 409) {
+					alert(userName + " does not exist or is already a member of the group");
+					return;
+				}
 				alert('something went wrong');
 				console.error('ERR', err);
 			});

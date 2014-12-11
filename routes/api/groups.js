@@ -41,7 +41,6 @@ router.get('/:group/events/:event', isAuthenticated, function(req, res)
 // add new event
 router.post('/:group/events', isAuthenticated, function(req, res)
 {
-
 	return Group.findOne({ name: req.params.group }, function(err, result) {
 		if (!err) {
 			events = result.events;
@@ -64,7 +63,6 @@ router.post('/:group/events', isAuthenticated, function(req, res)
 			return res.sendStatus(409);
 		}
 	});
-
 });
 
 // delete event
@@ -361,6 +359,37 @@ router.get('/:group/events', isAuthenticated, function(req, res)
 // add a user to the group
 router.post('/:group/users/:user', isAuthenticated, function(req, res)
 {
+	return User.findOne({ username: req.params.user }, function(err, result) {
+		if (!err) {
+			if (result == null) {
+				return res.sendStatus(409);
+			}
+			groups = result.groups;
+			for (var i = 0; i < groups.length; i++) {
+				if (groups[i] === req.params.group) {
+						return res.sendStatus(409);
+				}
+			}
+			result.groups.push(req.params.group);
+			result.save(function(err) {
+				if (!err) {
+					return Group.update( { name: req.params.group }, { $push: { users: req.params.user } }, {}, function(err, numAffected, rawResponse) {
+							if (err) {
+								return res.sendStatus(500);
+							} else {
+								return res.sendStatus(200);
+							}
+					});
+				} else {
+					return res.sendStatus(500);
+				}
+			});
+		} else {
+			return res.sendStatus(409);
+		}
+	});
+
+	/*
 	return User.findOne( { username: req.params.user }, function(err, u) {
 		if (err) {
 			return res.sendStatus(500);
@@ -383,7 +412,8 @@ router.post('/:group/users/:user', isAuthenticated, function(req, res)
 				}
 			});
 		}
-	});
+		*/
+});
 	
 	//User.update( { username: req.params.user }, { $push: { groups: req.params.group } }, function(err, numAffected, rawResponse) {
 	//	if (!err) {
@@ -400,7 +430,6 @@ router.post('/:group/users/:user', isAuthenticated, function(req, res)
 	//				res.sendStatus(500);
 	//			}
 	//	});
-});
 
 // delete user from the group
 router.delete('/:group/users/:user', isAuthenticated, function(req, res)
