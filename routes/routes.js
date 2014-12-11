@@ -14,11 +14,7 @@ var isAuthenticated = function (req, res, next) {
 module.exports = function(passport){
 
     /* Handle Login POST */
-    router.post('/login', passport.authenticate('login', {
-        successRedirect: '/welcome',
-        failureRedirect: '/',
-        failureFlash : true 
-    }));
+    router.post('/login', passport.authenticate('login'));
 
     /* GET logout*/
     router.get('/logout', function(req, res) {
