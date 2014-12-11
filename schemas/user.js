@@ -8,7 +8,8 @@ var userSchema = new Schema({
     username: String,
     email: String,
     password: String,
-    groups: [ String ]
+    groups: [ String ],
+    invites: [ String ]
 });
 
 module.exports = mongoose.model('User', userSchema);

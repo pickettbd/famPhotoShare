@@ -76,25 +76,49 @@ router.delete('/:group/events/:event', isAuthenticated, function(req, res)
 // get thumbs
 router.get('/:group/events/:event/thumbs', isAuthenticated, function(req, res)
 {
-	Group.findOne({ name: req.params.group }, function(err, result) {
+	return Group.findOne({ name: req.params.group }, function(err, result) {
 		if (!err) {
 			events = result.events
-			for (i = 0; i < events.length; i++) {
+			for (var i = 0; i < events.length; i++) {
 				if (events[i].name === req.params.event) {
-					return res.json(events[i].photos);
-					/*
-					photos = events[i].photos;
-					thumbs = [];
-					for (j = 0; j < photos.length; j++) {
-						thumbs.push("api/groups/" + req.params.group + "/events/" + req.params.event + "/thumbs/" + photos[j]);
+					var thumbs = [];
+					var gmErr = false;
+					events[i].photos.forEach(function(photoName) {
+						gm(path.resolve(__dirname, "../../data/photos", req.params.group, req.params.event, "/thumbs/", photoName)).size(function(err, size) {
+							if (!err) {
+								thumbs.push( { name: photoName, height: size.height } );
+							} else {
+								console.log("gm error while getting size");
+								console.log(photoName);
+								console.log(err);
+								gmErr = true;
+							}
+						});
 					}
-					return res.json(thumbs);
-					*/
+					
+					var sleep = function(millis) {
+						var startDate = new Date();
+						var currentDate = null;
+						do {
+							currentDate = new Date();
+						}
+						while (currentDate - startDate < millis);
+					});
+
+					while (thumbs.length != events[i].photos.length) {
+						sleep(100);
+					}
+
+					if (!gmErr) {
+						return res.json(thumbs);
+					} else {
+						return res.sendStatus(500);
+					}
 				}
 			}
-			res.render("404");
+			return res.sendStatus(500);
 		} else {
-			res.render("error", { message: "error in routes/api/groups.js", error: err } );
+			return res.sendStatus(500);
 		}
 	});
 });
@@ -378,36 +402,44 @@ router.post('/:group/users/:user/invite', isAuthenticated, function(req, res) {
 				if (!err) {
 					return User.findOne( { username: req.params.user }).exec( function(err, invitedUser) {
 						if (!err) {
-							var mailTransporter = req.mailTransporter;
-							
-							var locals = {
-								invitername: invitingUser.name,
-								groupname: req.params.group,
-								email: invitedUser.email,
-								title: "Join Group Invitation email"
-							};
-
-							return template("groupInvitation", locals, function(err, html, text) {
+							invitedUser.invites.push(req.params.group);
+							return invitedUser.save(function(err) {
 								if (!err) {
-									return mailTransporter.sendMail(
-										{
-											from: "groupinvite@104.236.25.185",
-											to: locals.email,
-											subject: "Join a group!",
-											html: html,
-											generateTextFromHTML: true
-											//text: text
-										}, function(err, responseStatus) {
-											if (!err) {
-												console.log(html);
-												return res.sendStatus(200);
-											} else {
-												console.log(err);
-												console.log(html);
-												return res.sendStatus(500);
-											}
+									var mailTransporter = req.mailTransporter;
+									
+									var locals = {
+										invitername: invitingUser.name,
+										groupname: req.params.group,
+										email: invitedUser.email,
+										title: "Join Group Invitation email"
+									};
+
+									return template("groupInvitation", locals, function(err, html, text) {
+										if (!err) {
+											return mailTransporter.sendMail(
+												{
+													from: "groupinvite@104.236.25.185",
+													to: locals.email,
+													subject: "Join a group!",
+													html: html,
+													generateTextFromHTML: true
+													//text: text
+												}, function(err, responseStatus) {
+													if (!err) {
+														console.log(html);
+														return res.sendStatus(200);
+													} else {
+														console.log(err);
+														console.log(html);
+														return res.sendStatus(500);
+													}
+												}
+											);
+										} else {
+											console.log(err);
+											return res.sendStatus(500);
 										}
-									);
+									});
 								} else {
 									console.log(err);
 									return res.sendStatus(500);

@@ -106,36 +106,44 @@ router.post('/:user/groups/:group/invite', isAuthenticated, function(req, res)
 				if (!err) {
 					return User.findOne( { username: req.params.user }).exec( function(err, invitedUser) {
 						if (!err) {
-							var mailTransporter = req.mailTransporter;
-							
-							var locals = {
-								invitername: invitingUser.name,
-								groupname: req.params.group,
-								email: invitedUser.email,
-								title: "Join Group Invitation email"
-							};
-
-							return template("groupInvitation", locals, function(err, html, text) {
+							invitedUser.invites.push(req.params.group);
+							return invitedUser.save(function(err) {
 								if (!err) {
-									return mailTransporter.sendMail(
-										{
-											from: "groupinvite@104.236.25.185",
-											to: locals.email,
-											subject: "Join a group!",
-											html: html,
-											generateTextFromHTML: true
-											//text: text
-										}, function(err, responseStatus) {
-											if (!err) {
-												console.log(html);
-												return res.sendStatus(200);
-											} else {
-												console.log(err);
-												console.log(html);
-												return res.sendStatus(500);
-											}
+									var mailTransporter = req.mailTransporter;
+									
+									var locals = {
+										invitername: invitingUser.name,
+										groupname: req.params.group,
+										email: invitedUser.email,
+										title: "Join Group Invitation email"
+									};
+
+									return template("groupInvitation", locals, function(err, html, text) {
+										if (!err) {
+											return mailTransporter.sendMail(
+												{
+													from: "groupinvite@104.236.25.185",
+													to: locals.email,
+													subject: "Join a group!",
+													html: html,
+													generateTextFromHTML: true
+													//text: text
+												}, function(err, responseStatus) {
+													if (!err) {
+														console.log(html);
+														return res.sendStatus(200);
+													} else {
+														console.log(err);
+														console.log(html);
+														return res.sendStatus(500);
+													}
+												}
+											);
+										} else {
+											console.log(err);
+											return res.sendStatus(500);
 										}
-									);
+									});
 								} else {
 									console.log(err);
 									return res.sendStatus(500);
