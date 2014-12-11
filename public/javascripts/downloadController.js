@@ -1,6 +1,6 @@
 (function() {
 
-	angular.module('app').controller('ListController', function($scope, $http) {
+	angular.module('app').controller('DownloadController', function($scope, $http) {
 
 		$scope.hasGroups = 2;
 		$scope.hasEvents = 2;
@@ -89,10 +89,6 @@
 		this.dontKnowIfThereAreThumbs = function() {
 			return $scope.hasThumbs === 2;
 		};
-
-	});
-
-	angular.module('app').controller('ThumbController', function($http, $scope){
 
 		$scope.selectedPhotos = [];
 
