@@ -195,7 +195,18 @@ router.post('/:group/events/:event/photos', isAuthenticated, function(req, res)
 									return result.save(function(err) {
 										if (!err) {
 											//return res.sendStatus(202);
-											return res.location("back").redirect(202, "back");
+											//return res.location("back").redirect(202, "back");
+											//return res.status(202).location("http://localhost/upload-landing").render("upload-landing", {
+											//return res.status(202).render("upload-landing", {
+											//res.location("upload-landing");
+											//return res.render("upload-landing", {
+											//	title: 'Upload Landing',
+											//	navbar: 'true',
+											//	navtab1: 'false',
+											//	navtab2: 'false',
+											//	navtab3: 'false' }
+											//);
+											return res.location("/upload-landing").redirect("/upload-landing");
 										} else {
 											//return res.render("error", { message: "UNsuccesfully updated group with the new photos as part of the appropriate event", error: err } );
 											return res.sendStatus(500);
