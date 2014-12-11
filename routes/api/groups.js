@@ -3,6 +3,8 @@ var fs = require('fs'); // file system
 var path = require('path'); // resolve paths
 var express = require('express');
 var router = express.Router();
+var emailTemplates = require('email-templates');
+var emailTemplatesDir = path.resolve(__dirname, "../..", "email_templates");
 
 var isAuthenticated = function (req, res, next) {
 	// if user is authenticated in the session, call the next() to call the next request handler 
@@ -365,6 +367,66 @@ router.get('/:group/events', isAuthenticated, function(req, res)
 		} else {
 			res.render("error", { message: "error in routes/api/groups.js", error: err } );
 		};
+	});
+});
+
+// invite a user to join the group
+router.post('/:group/users/:user/invite', isAuthenticated, function(req, res) {
+	return emailTemplates(emailTemplatesDir, function(err, template) {
+		if (!err) {
+			return User.findOne( { _id: req.session.passport.user } ).exec( function(err, invitingUser) {
+				if (!err) {
+					return User.findOne( { username: req.params.user }).exec( function(err, invitedUser) {
+						if (!err) {
+							var mailTransporter = req.mailTransporter;
+							
+							var locals = {
+								invitername: invitingUser.name,
+								groupname: req.params.group;
+								email: invitedUser.email;
+								title: "Join Group Invitation email"
+							};
+
+							return template("groupInvitation", locals, function(err, html, text) {
+								if (!err) {
+									return mailTransporter.sendMail(
+										{
+											from: "groupinvite@104.236.25.185",
+											to: locals.email,
+											subject: "Join a group!",
+											html: html,
+											generateTextFromHTML: true
+											//text: text
+										}, function(err, responseStatus) {
+											if (!err) {
+												console.log(html);
+												return res.sendStatus(200);
+											} else {
+												console.log(err);
+												console.log(html);
+												return res.sendStatus(500);
+											}
+										}
+									);
+								} else {
+									console.log(err);
+									return res.sendStatus(500);
+								}
+							});
+						} else {
+							console.log(err);
+							return res.sendStatus(500);
+						}
+					});
+				} else {
+					console.log(err);
+					return res.sendStatus(500);
+				}
+			});
+		} else {
+			console.log(err);
+			return res.sendStatus(500);
+		}
 	});
 });
 

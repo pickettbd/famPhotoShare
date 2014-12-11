@@ -16,12 +16,6 @@ block content
       th Implemented
     tr
       td
-        code /auth
-      td GET
-      td Check if a user is authenticated.
-      td Yes
-    tr
-      td
         code /groups
       td GET
       td List all groups.  Note that all group names are unique.
@@ -68,6 +62,12 @@ block content
       td DELETE
       td Disassociate a user from the group.
       td No
+    tr
+      td
+        code /groups/&ltgroup-name&gt/users/&ltuser-name&gt/invite
+      td POST
+      td Invite a user to join the group.
+      td Yes
     tr
       td
         code /groups/&ltgroup-name&gt/events
@@ -171,3 +171,9 @@ block content
       td DELETE
       td Disassociate a user from a group
       td No
+    tr
+      td
+        code /users/&ltuser-name&gt/groups/&ltgroup-name&gt/invite
+      td POST
+      td Invite a user to join a group
+      td Yes
