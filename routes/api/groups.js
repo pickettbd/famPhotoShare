@@ -84,7 +84,7 @@ router.get('/:group/events/:event/thumbs', isAuthenticated, function(req, res)
 				if (events[i].name === req.params.event) {
 					var thumbs = [];
 
-					return async.each(events[i].photos, function(photoName, callback) {
+					return async.eachSeries(events[i].photos, function(photoName, callback) {
 						gm(path.resolve(__dirname, "../../data/photos/" + req.params.group + "/" + req.params.event + "/thumbs/" + photoName)).size(function(err, size) {
 							if (!err) {
 								thumbs.push( { name: photoName, height: size.height } );
@@ -186,7 +186,7 @@ router.post('/:group/events/:event/photos', isAuthenticated, function(req, res)
 				console.log("uploadphotos");				
 				console.log(uploadphotos);
 
-				return async.each(uploadphotos, function(uploadphoto, callback) {
+				return async.eachSeries(uploadphotos, function(uploadphoto, callback) {
 					newPhotoNames.push(uploadphoto.name);
 					
 					//var oldPhotoPath = path.resolve(__dirname, "../../data/photos/" + uploadphoto.name);
