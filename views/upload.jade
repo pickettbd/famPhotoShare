@@ -5,6 +5,8 @@ block head
 
 block content
 	div(ng-controller="UploadController as uploadController")
+		p.note(ng-hide="uploadController.hasGroups()") (You are not a member of any groups. Start sharing photos by joining other groups or by creating your own group using the <a href="/admin"/>Group Administration page</a>)
+		div(ng-show="uploadController.hasGroups()")
 			h1 Add Photos
 			p Select Group 
 				select(id="grp" ng-model="input.grp")
