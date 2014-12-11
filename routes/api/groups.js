@@ -1,4 +1,5 @@
 var gm = require('gm'); // graphicsmagick
+var async = require('async');
 var fs = require('fs'); // file system
 var path = require('path'); // resolve paths
 var express = require('express');
@@ -82,38 +83,46 @@ router.get('/:group/events/:event/thumbs', isAuthenticated, function(req, res)
 			for (var i = 0; i < events.length; i++) {
 				if (events[i].name === req.params.event) {
 					var thumbs = [];
-					var gmErr = false;
-					events[i].photos.forEach(function(photoName) {
-						gm(path.resolve(__dirname, "../../data/photos", req.params.group, req.params.event, "/thumbs/", photoName)).size(function(err, size) {
+
+					return async.each(events[i].photos, function(photoName, callback) {
+						gm(path.resolve(__dirname, "../../data/photos/" + req.params.group + "/" + req.params.event + "/thumbs/" + photoName)).size(function(err, size) {
 							if (!err) {
 								thumbs.push( { name: photoName, height: size.height } );
+								callback(null);
 							} else {
 								console.log("gm error while getting size");
 								console.log(photoName);
 								console.log(err);
-								gmErr = true;
+								callback(err);
 							}
 						});
-					});
-					
-					var sleep = function(millis) {
-						var startDate = new Date();
-						var currentDate = null;
-						do {
-							currentDate = new Date();
+					}, function(err) {
+						if (!err) {
+							return res.json(thumbs);
+						} else {
+							return res.sendStatus(500);
 						}
-						while (currentDate - startDate < millis);
-					};
+					});
 
-					while (thumbs.length != events[i].photos.length) {
-						sleep(100);
-					}
+					//events[i].photos.forEach(function(photoName) {
+					//	gm(path.resolve(__dirname, "../../data/photos", req.params.group, req.params.event, "/thumbs/", photoName)).size(function(err, size) {
+					//		if (!err) {
+					//			thumbs.push( { name: photoName, height: size.height } );
+					//		} else {
+					//			console.log("gm error while getting size");
+					//			console.log(photoName);
+					//			console.log(err);
+					//			gmErr = true;
+					//		}
+					//	});
+					//});
+					//
 
-					if (!gmErr) {
-						return res.json(thumbs);
-					} else {
-						return res.sendStatus(500);
-					}
+					//if (!gmErr) {
+					//	return res.json(thumbs);
+					//} else {
+					//	return res.sendStatus(500);
+					//}
 				}
 			}
 			return res.sendStatus(500);
