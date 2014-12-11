@@ -54,7 +54,7 @@ block content
       td
         code /groups/&ltgroup-name&gt/users/&ltuser-name&gt
       td POST
-      td Associate a user with the group.
+      td Associate a user with a group (and accept invitation if relevant)
       td Yes
     tr
       td
@@ -163,7 +163,7 @@ block content
       td
         code /users/&ltuser-name&gt/groups/&ltgroup-name&gt
       td POST
-      td Associate a user with a group
+      td Associate a user with a group (and accept invitation if relevant)
       td Yes
     tr
       td
@@ -171,6 +171,12 @@ block content
       td DELETE
       td Disassociate a user from a group
       td No
+    tr
+      td
+        code /users/&ltuser-name&gt/groups/&ltgroup-name&gt/deny
+      td POST
+      td Deny invitation to join group
+      td Yes
     tr
       td
         code /users/&ltuser-name&gt/groups/&ltgroup-name&gt/invite

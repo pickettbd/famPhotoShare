@@ -477,6 +477,7 @@ router.post('/:group/users/:user/invite', isAuthenticated, function(req, res) {
 									
 									var locals = {
 										invitername: invitingUser.name,
+										invitedname: invitedUser.name,
 										groupname: req.params.group,
 										email: invitedUser.email,
 										title: "Join Group Invitation email"
@@ -541,10 +542,14 @@ router.post('/:group/users/:user', isAuthenticated, function(req, res)
 			groups = result.groups;
 			for (var i = 0; i < groups.length; i++) {
 				if (groups[i] === req.params.group) {
-						return res.sendStatus(409);
+					return res.sendStatus(409);
 				}
 			}
 			result.groups.push(req.params.group);
+			var index = result.invites.indexOf(req.params.group);
+			if (index >= 0 && index < result.invites.length) {
+				result.invites.splice(index, 1);
+			}
 			result.save(function(err) {
 				if (!err) {
 					return Group.update( { name: req.params.group }, { $push: { users: req.params.user } }, {}, function(err, numAffected, rawResponse) {

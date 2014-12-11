@@ -98,6 +98,27 @@ router.get('/:user', isAuthenticated, function(req, res)
     });
 });
 
+// deny invitation to join group
+router.post('/:user/groups/:group/deny', isAuthenticated, function(req, res) {
+	return User.findOne({ username: req.params.user }, function(err, result) {
+		if (!err) {
+			var index = result.invites.indexOf(req.params.group);
+			if (index >= 0 && index < result.invites.length) {
+				result.invites.splice(index, 1);
+			}
+			return result.save(function(err) {
+				if (!err) {
+					return res.sendStatus(200);
+				} else {
+					return res.sendStatus(500);
+				}
+			});
+		} else {
+			return res.sendStatus(500);
+		}
+	});
+});
+
 // invite user to join group
 router.post('/:user/groups/:group/invite', isAuthenticated, function(req, res) {
 	return emailTemplates(emailTemplatesDir, function(err, template) {
@@ -113,6 +134,7 @@ router.post('/:user/groups/:group/invite', isAuthenticated, function(req, res) {
 									
 									var locals = {
 										invitername: invitingUser.name,
+										invitedname: invitedUser.name,
 										groupname: req.params.group,
 										email: invitedUser.email,
 										title: "Join Group Invitation email"
@@ -181,6 +203,10 @@ router.post('/:user/groups/:group', isAuthenticated, function(req, res)
 				}
 			}
 			result.groups.push(req.params.group);
+			var index = result.invites.indexOf(req.params.group);
+			if (index >= 0 && index < result.invites.length) {
+				result.invites.splice(index, 1);
+			}
 			result.save(function(err) {
 				if (!err) {
 					return Group.update( { name: req.params.group }, { $push: { users: req.params.user } }, {}, function(err, numAffected, rawResponse) {
