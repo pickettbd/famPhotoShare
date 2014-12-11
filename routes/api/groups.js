@@ -84,7 +84,7 @@ router.get('/:group/events/:event/thumbs', isAuthenticated, function(req, res)
 				if (events[i].name === req.params.event) {
 					var thumbs = [];
 
-					return async.eachSeries(events[i].photos, function(photoName, callback) {
+					return async.each(events[i].photos, function(photoName, callback) {
 						gm(path.resolve(__dirname, "../../data/photos/" + req.params.group + "/" + req.params.event + "/thumbs/" + photoName)).size(function(err, size) {
 							if (!err) {
 								thumbs.push( { name: photoName, height: size.height } );

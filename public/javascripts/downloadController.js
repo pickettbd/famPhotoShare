@@ -67,6 +67,10 @@
 				}
 
 				$scope.thumbs = [];
+				$scope.thumbs0 = [];
+				$scope.thumbs1 = [];
+				$scope.thumbs2 = [];
+				$scope.thumbs3 = [];
 
 				var height0 = 0;
 				var height1 = 0;
