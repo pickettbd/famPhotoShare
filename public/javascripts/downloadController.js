@@ -55,7 +55,6 @@
 		};
 
 		this.getThumbs = function(eventnameIn) {
-			alert('called getThumbs');
 			$scope.eventname = eventnameIn;
 			$http.get('/api/groups/' + $scope.groupname + '/events/' + $scope.eventname + '/thumbs').then(function(thumbsRes) {
 				var thumbObjects = thumbsRes.data;
