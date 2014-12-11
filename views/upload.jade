@@ -5,15 +5,15 @@ block head
 
 block content
 	div(ng-controller="UploadController as uploadController")
-		h1 Add Photos
-		p Select Group 
-			select(id="grp" ng-model="input.grp")
-				option(value='' disabled selected) Select Group
-				option(ng-repeat="group in groups" value='{{group}}') {{group}}
-		p Select Event 
-			select(id="evt")
-				option(value='' disabled selected) Select Event
-				option(ng-repeat="event in events" value='{{event}}') {{event}}
-		form(method="post" name="uploadForm" action="/" enctype="multipart/form-data")
-				input(type='file' name='uploadphotos' required multiple)
-				button(type='button' ng-click='uploadController.upload()').button Add Photos
+			h1 Add Photos
+			p Select Group 
+				select(id="grp" ng-model="input.grp")
+					option(value='' disabled selected) Select Group
+					option(ng-repeat="group in groups" value='{{group}}') {{group}}
+			p Select Event 
+				select(id="evt")
+					option(value='' disabled selected) Select Event
+					option(ng-repeat="event in events" value='{{event}}') {{event}}
+			form(method="post" name="uploadForm" action="/" enctype="multipart/form-data")
+					input(type='file' name='uploadphotos' required multiple)
+					button(type='button' ng-click='uploadController.upload()').button Add Photos
