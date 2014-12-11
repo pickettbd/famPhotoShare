@@ -60,7 +60,7 @@ router.post('/:group/events', isAuthenticated, function(req, res)
 				}
 			});
 		} else {
-			return res.sendStatus(409);
+			return res.sendStatus(500);
 		}
 	});
 });
@@ -386,52 +386,11 @@ router.post('/:group/users/:user', isAuthenticated, function(req, res)
 				}
 			});
 		} else {
-			return res.sendStatus(409);
+			return res.sendStatus(500);
 		}
 	});
-
-	/*
-	return User.findOne( { username: req.params.user }, function(err, u) {
-		if (err) {
-			return res.sendStatus(500);
-		} else if ( u.groups.indexOf(req.params.group) != -1) {
-			return res.sendStatus(200);
-		} else {
-			u.groups.push(req.params.group);
-			u.save(function(err) {
-				if (!err) {
-					return Group.update( { name: req.params.group }, { $push: { users: req.params.user } }, {}, function(err, numAffected, rawResponse) {
-							if (err) {
-								//res.render("error", { message: "error in routes/api/groups.js", error: err } );
-								return res.sendStatus(500);
-							} else {
-								return res.sendStatus(200);
-							}
-					});
-				} else {
-					return res.sendStatus(500);
-				}
-			});
-		}
-		*/
 });
 	
-	//User.update( { username: req.params.user }, { $push: { groups: req.params.group } }, function(err, numAffected, rawResponse) {
-	//	if (!err) {
-	//					Group.update( { name: req.params.group }, { $push: { users: req.params.user } }, {}, function(err, numAffected, rawResponse) {
-	//							if (err) {
-	//								//res.render("error", { message: "error in routes/api/groups.js", error: err } );
-	//								res.sendStatus(500);
-	//							} else {
-	//								res.sendStatus(200);
-	//							}
-	//					});
-	//	} else {
-	//		//res.render("error", { message: "error in routes/api/groups.js", error: err } );
-	//				res.sendStatus(500);
-	//			}
-	//	});
-
 // delete user from the group
 router.delete('/:group/users/:user', isAuthenticated, function(req, res)
 {
@@ -493,32 +452,41 @@ router.get('/', isAuthenticated, function(req, res)
 // create new group
 router.post('/', isAuthenticated, function(req, res)
 {
-	var group = new Group();
+	return Group.findOne({ name: req.body.newgroupname }, function(err, result) {
+		if (!err) {
+			if (result != null) {
+				return res.sendStatus(409);
+			}
 
-	group.name = req.body.newgroupname;
-	group.users = [ ];
-	group.events = [ ];
+			var group = new Group();
 
-	group.save(function(err) {
-		if (err) {
-			res.render("error", { message: "error in creating new group (creating group)", error: err } );
-		} else {
-			User.findByIdAndUpdate(req.session.passport.user, { $push: { groups: req.body.newgroupname} }, { select: "username" }, function(err, u) {
-				if (!err) {
-					Group.update( { name: req.body.newgroupname }, { $push: { users: u.username } }, {}, function(err, numAffected, rawResponse) {
-						if (!err) {
-							res.sendStatus(200);
-						} else {
-							res.render("error", { message: "error in creating new group (updating group)", error: err } );
-						};
-					});
+			group.name = req.body.newgroupname;
+			group.users = [ ];
+			group.events = [ ];
+
+			group.save(function(err) {
+				if (err) {
+					res.render("error", { message: "error in creating new group (creating group)", error: err } );
 				} else {
-					res.render("error", { message: "error in creating new group (updating user)", error: err } );
+					User.findByIdAndUpdate(req.session.passport.user, { $push: { groups: req.body.newgroupname} }, { select: "username" }, function(err, u) {
+						if (!err) {
+							Group.update( { name: req.body.newgroupname }, { $push: { users: u.username } }, {}, function(err, numAffected, rawResponse) {
+								if (!err) {
+									res.sendStatus(200);
+								} else {
+									res.render("error", { message: "error in creating new group (updating group)", error: err } );
+								};
+							});
+						} else {
+							res.render("error", { message: "error in creating new group (updating user)", error: err } );
+						}
+					});
 				}
 			});
+		} else {
+			return res.sendStatus(500);
 		}
 	});
-
 
 });
 

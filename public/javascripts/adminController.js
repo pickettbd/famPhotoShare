@@ -28,11 +28,15 @@
 				return;
 			}
 			group = { newgroupname : groupName };
-			$http.post('/api/groups', group).then(function(statusCode) {
+			$http.post('/api/groups', group).then(function(res) {
 				alert(groupName + ' was successfully created');
 				document.getElementById("newGroupName").value = '';
 				$scope.populateGroups();
 			}, function(err) {
+				if (err.status == 409) {
+					alert(groupName + " already exists");
+					return;
+				}
 				alert('something went wrong');
 				console.error('ERR', err);
 			});
