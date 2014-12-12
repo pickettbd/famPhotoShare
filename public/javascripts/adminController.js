@@ -62,8 +62,7 @@
 				console.error('ERR', err);
 			});
 		};
-
-		this.addUserToGroup = function() {
+		this.inviteUserToGroup = function() {
 			userName = document.getElementById("newUserName").value;
 			groupNameDropDown = document.getElementById("addUserGroupName");
 			groupName = groupNameDropDown.options[groupNameDropDown.selectedIndex].value;
@@ -71,18 +70,23 @@
 				alert('user name is invalid');
 				return;
 			}
-			$http.post('/api/groups/' + groupName + '/users/' + userName).then(function(res) {
-				groupNameDropDown = document.getElementById("addUserGroupName");
-				groupName = groupNameDropDown.options[groupNameDropDown.selectedIndex].value;
-				alert(userName + ' was successfully added to ' + groupName);
-				document.getElementById("newUserName").value = '';
+
+			$http.post('/api/groups/'+groupName+'/users/'+userName+'/invite').then(function(res) {
+				if (res.status == 200) {
+					alert('your invitation was successfully sent');
+					document.getElementById("newUserName").value = '';
+				} else {
+					alert('status not 200');
+				}
 			}, function(err) {
 				if (err.status == 409) {
-					alert(userName + " does not exist or is already a member of the group");
+					alert(userName + " does not exist, has already been invited, or is already a member of the group");
 					return;
 				}
-				alert('something went wrong');
-				console.error('ERR', err);
+				else{
+					alert('error status not 409');
+					console.error('ERR', err);
+				}
 			});
 		};
 
@@ -98,10 +102,10 @@
 					alert('your invitation was successfully sent');
 					document.getElementById("emailAddress").value = '';
 				} else {
-					alert('something went wrong');
+					alert('res.status not 200');
 				}
 			}, function(err) {
-				alert('something went wrong');
+				alert('post error: something went wrong');
 				console.error('ERR', err);
 			});
 		};

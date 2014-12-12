@@ -83,7 +83,7 @@ router.get('/:group/events/:event/thumbs', isAuthenticated, function(req, res)
 			for (var i = 0; i < events.length; i++) {
 				if (events[i].name === req.params.event) {
 					var thumbs = [];
-
+keep
 					return async.each(events[i].photos, function(photoName, callback) {
 						gm(path.resolve(__dirname, "../../data/photos/" + req.params.group + "/" + req.params.event + "/thumbs/" + photoName)).size(function(err, size) {
 							if (!err) {
@@ -94,7 +94,7 @@ router.get('/:group/events/:event/thumbs', isAuthenticated, function(req, res)
 								console.log(photoName);
 								console.log(err);
 								callback(err);
-							}
+							}keep
 						});
 					}, function(err) {
 						if (!err) {
@@ -470,6 +470,21 @@ router.post('/:group/users/:user/invite', isAuthenticated, function(req, res) {
 				if (!err) {
 					return User.findOne( { username: req.params.user }).exec( function(err, invitedUser) {
 						if (!err) {
+							if (result == null) { // user doesn't exist  
+								return res.sendStatus(409);
+							}
+							groups = result.groups; // used to check if user already belongs to group
+							for (var i = 0; i < groups.length; i++) {
+								if (groups[i] === req.params.group) {
+									return res.sendStatus(409);
+								}
+							} 
+							var invites = invitedUser.invites;
+							for (var i = 0; i < invites.length; i++) {
+								if (invites[i] === req.params.group) {
+									return res.sendStatus(409);
+								}
+							} 
 							invitedUser.invites.push(req.params.group);
 							return invitedUser.save(function(err) {
 								if (!err) {
@@ -514,12 +529,12 @@ router.post('/:group/users/:user/invite', isAuthenticated, function(req, res) {
 									return res.sendStatus(500);
 								}
 							});
-						} else {
+						} else { 
 							console.log(err);
 							return res.sendStatus(500);
 						}
 					});
-				} else {
+				} else { 
 					console.log(err);
 					return res.sendStatus(500);
 				}
