@@ -473,7 +473,7 @@ router.post('/:group/users/:user/invite', isAuthenticated, function(req, res) {
 							if (result == null) { // user doesn't exist  
 								return res.sendStatus(409);
 							}
-							for (var i = 0; i < invitedUser.groups; i++) { // used to check if user already belongs to group
+							for (var i = 0; i < invitedUser.groups.length; i++) { // used to check if user already belongs to group
 								if (invitedUser.groups[i] === req.params.group) {
 									return res.sendStatus(409);
 								}
