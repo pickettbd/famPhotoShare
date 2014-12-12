@@ -127,6 +127,19 @@ router.post('/:user/groups/:group/invite', isAuthenticated, function(req, res) {
 				if (!err) {
 					return User.findOne( { username: req.params.user }).exec( function(err, invitedUser) {
 						if (!err) {
+							if (result == null) { // user doesn't exist  
+								return res.sendStatus(409);
+							}
+							for (var i = 0; i < invitedUser.groups.length; i++) { // used to check if user already belongs to group
+								if (invitedUser.groups[i] === req.params.group) {
+									return res.sendStatus(409);
+								}
+							}
+							for (var i = 0; i < invitedUser.invites.length; i++) {
+								if (invitedUser.invites[i] === req.params.group) {
+									return res.sendStatus(409);
+								}
+							}
 							invitedUser.invites.push(req.params.group);
 							return invitedUser.save(function(err) {
 								if (!err) {
@@ -157,32 +170,38 @@ router.post('/:user/groups/:group/invite', isAuthenticated, function(req, res) {
 													} else {
 														console.log(err);
 														console.log(html);
+														console.log("spot 0");
 														return res.sendStatus(500);
 													}
 												}
 											);
 										} else {
 											console.log(err);
+											console.log("spot 1");
 											return res.sendStatus(500);
 										}
 									});
 								} else {
 									console.log(err);
+									console.log("spot 2");
 									return res.sendStatus(500);
 								}
 							});
 						} else {
 							console.log(err);
+							console.log("spot 3");
 							return res.sendStatus(500);
 						}
 					});
 				} else {
 					console.log(err);
+					console.log("spot 4");
 					return res.sendStatus(500);
 				}
 			});
 		} else {
 			console.log(err);
+			console.log("spot 5");
 			return res.sendStatus(500);
 		}
 	});
