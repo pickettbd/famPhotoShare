@@ -124,7 +124,6 @@
 				console.error('ERR', err);
 			});
 		};
-
 		this.inviteUserToGroup = function() {
 			$scope.clearControllerVariables();
 			userName = document.getElementById("newUserName").value;
@@ -134,6 +133,7 @@
 				alert('user name is invalid');
 				return;
 			}
+			
 			$http.post('/api/groups/' + groupName + '/users/' + userName + '/invite').then(function(res) {
 				groupNameDropDown = document.getElementById("addUserGroupName");
 				groupName = groupNameDropDown.options[groupNameDropDown.selectedIndex].value;
@@ -144,8 +144,10 @@
 					inviteUsertoGroup409Err = true;
 					return;
 				}
-				alert('something went wrong');
-				console.error('ERR', err);
+				else{
+					alert('error status not 409');
+					console.error('ERR', err);
+				}
 			});
 		};
 
@@ -162,10 +164,10 @@
 					alert('your invitation was successfully sent');
 					document.getElementById("emailAddress").value = '';
 				} else {
-					alert('something went wrong');
+					alert('res.status not 200');
 				}
 			}, function(err) {
-				alert('something went wrong');
+				alert('post error: something went wrong');
 				console.error('ERR', err);
 			});
 		};

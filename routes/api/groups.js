@@ -83,7 +83,7 @@ router.get('/:group/events/:event/thumbs', isAuthenticated, function(req, res)
 			for (var i = 0; i < events.length; i++) {
 				if (events[i].name === req.params.event) {
 					var thumbs = [];
-
+keep
 					return async.each(events[i].photos, function(photoName, callback) {
 						gm(path.resolve(__dirname, "../../data/photos/" + req.params.group + "/" + req.params.event + "/thumbs/" + photoName)).size(function(err, size) {
 							if (!err) {
@@ -94,7 +94,7 @@ router.get('/:group/events/:event/thumbs', isAuthenticated, function(req, res)
 								console.log(photoName);
 								console.log(err);
 								callback(err);
-							}
+							}keep
 						});
 					}, function(err) {
 						if (!err) {
@@ -470,22 +470,19 @@ router.post('/:group/users/:user/invite', isAuthenticated, function(req, res) {
 				if (!err) {
 					return User.findOne( { username: req.params.user }).exec( function(err, invitedUser) {
 						if (!err) {
-							if (invitedUser == null) {
+							if (invitedUser == null) { // user doesn't exist  
 								return res.sendStatus(409);
 							}
-
-							for (var i = 0; i < invitedUser.groups; i++) {
+							for (var i = 0; i < invitedUser.groups.length; i++) { // used to check if user already belongs to group
 								if (invitedUser.groups[i] === req.params.group) {
 									return res.sendStatus(409);
 								}
 							}
-
-							for (var i = 0; i < invitedUser.invites; i++) {
+							for (var i = 0; i < invitedUser.invites.length; i++) {
 								if (invitedUser.invites[i] === req.params.group) {
 									return res.sendStatus(409);
 								}
 							}
-
 							invitedUser.invites.push(req.params.group);
 							return invitedUser.save(function(err) {
 								if (!err) {
@@ -530,12 +527,12 @@ router.post('/:group/users/:user/invite', isAuthenticated, function(req, res) {
 									return res.sendStatus(500);
 								}
 							});
-						} else {
+						} else { 
 							console.log(err);
 							return res.sendStatus(500);
 						}
 					});
-				} else {
+				} else { 
 					console.log(err);
 					return res.sendStatus(500);
 				}

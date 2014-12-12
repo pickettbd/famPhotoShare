@@ -3,10 +3,8 @@ html
 	head
 		title= title
 		base(href="http://104.236.25.185/", target="_blank")
-		link(rel="stylesheet", type="text/css", href="email_templates/groupInviation/style.css")
+		link(rel="stylesheet", type="text/css", href="email_templates/groupInvitation/style.css")
 	body
-		h3 Hello #{invitedname.first} #{invitedname.last}!
-		p.
-			<strong>#{invitername.first} #{invitername.last}</strong>
-			has invited you to join #{groupname}!  Please,
-			<a href="admin"> Accept/Reject Invitation </a> now!
+		h3 Hello #{invitedname.first} #{invitedname.last},
+		p <strong>#{invitername.first} #{invitername.last}</strong> has invited you to join #{groupname}!
+		a.myButton(href='admin') Accept or Reject

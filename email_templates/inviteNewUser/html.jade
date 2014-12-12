@@ -5,8 +5,9 @@ html
 		base(href="http://104.236.25.185/", target="_blank")
 		link(rel="stylesheet", type="text/css", href="email_templates/inviteNewUser/style.css")
 	body
-		h3 Hello!
-		p.
-			<strong>#{referrername.first} #{referrername.last}</strong>
-			has invited you to join famPhotoShare!  Please,
-			<a href="sign-up"> sign-up </a> now!
+		h3 Hello,
+		h3
+		  strong #{referrername.first} #{referrername.last}
+		  | has invited you to join famPhotoShare!
+		a.myButton(href='sign-up') Accept
+	
