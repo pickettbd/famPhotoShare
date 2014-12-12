@@ -99,7 +99,7 @@ router.get('/:user', isAuthenticated, function(req, res)
 });
 
 // deny invitation to join group
-router.post('/:user/groups/:group/deny', isAuthenticated, function(req, res) {
+router.delete('/:user/groups/:group/deny', isAuthenticated, function(req, res) {
 	return User.findOne({ username: req.params.user }, function(err, result) {
 		if (!err) {
 			var index = result.invites.indexOf(req.params.group);

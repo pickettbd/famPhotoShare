@@ -2,26 +2,82 @@
 
 	angular.module('app').controller('AdminController', function($http, $scope) {
 
-		$scope.hasGroups = false;
+		var whoami = '';
+
+		var createGroupSuccess = false;
+		var createGroupAlreadyExists = false;
+		var addEventSuccess = false;
+		var addEventAlreadyExists = false;
+		var inviteUsertoGroupSuccess = false;
+		var inviteUsertoGroup409Err = false;
+		var hasInvites = false;
+		var hasGroups = false;
+		$scope.invites = [];
 		$scope.groups = [];
 
-		$scope.populateGroups = function() {
+		$scope.clearControllerVariables = function() {
+			createGroupSuccess = false;
+			createGroupAlreadyExists = false;
+			addEventSuccess = false;
+			addEventAlreadyExists = false;
+			inviteUsertoGroupSuccess = false;
+			inviteUsertoGroup409Err = false;
+		};
+
+		$scope.initialize = function() {
 			$http.get('/api/users/whoami').then(function(usernameRes) {
-				var username = usernameRes.data;
-				$http.get('/api/users/' + username + '/groups').then(function(groupsRes) {
-					$scope.groups = groupsRes.data;
-					if($scope.groups.length > 0) {
-						$scope.hasGroups = true;
-					}
-				}, function(err) {
-						console.error('ERR', err);
-				});
+				whoami = usernameRes.data;
+				$scope.populateInvites();
+				$scope.populateGroups();
 			}, function(err) {
 					console.error('ERR', err);
 			});
 		};
 
+		$scope.populateInvites = function() {
+			$scope.clearControllerVariables();
+			$http.get('/api/users/' + whoami).then(function(userRes) {
+				$scope.invites = userRes.data.invites;
+				if ($scope.invites.length > 0) {
+					hasInvites = true;
+				} else {
+					hasInvites = false;
+				}
+			}, function(err) {
+				console.error('ERR', err);
+			});
+		};
+
+		$scope.populateGroups = function() {
+			$scope.clearControllerVariables();
+			$http.get('/api/users/' + whoami + '/groups').then(function(groupsRes) {
+				$scope.groups = groupsRes.data;
+				if ($scope.groups.length > 0) {
+					hasGroups = true;
+				}
+			}, function(err) {
+					console.error('ERR', err);
+			});
+		};
+
+		$scope.initialize();
+
+		this.acceptInvitation = function(groupName) {
+			$http.post('/api/groups/' + groupName + '/users/' + whoami).then(function(res) {
+				$scope.populateInvites();
+				$scope.populateGroups();
+			}, function(err) {
+				alert('something went wrong');
+				console.error('ERR', err);
+			});
+		};
+
+		this.declineInvitation = function(groupName) {
+			alert('not implemented at this time');
+		};
+
 		this.createGroup = function() {
+			$scope.clearControllerVariables();
 			groupName = document.getElementById("newGroupName").value;
 			if (!groupName.match(/^[a-z0-9][a-z0-9_]+$/i)) {
 				alert('group name is invalid');
@@ -29,12 +85,12 @@
 			}
 			group = { newgroupname : groupName };
 			$http.post('/api/groups', group).then(function(res) {
-				alert(groupName + ' was successfully created');
 				document.getElementById("newGroupName").value = '';
 				$scope.populateGroups();
+				createGroupSuccess = true;
 			}, function(err) {
 				if (err.status == 409) {
-					alert(groupName + " already exists");
+					createGroupAlreadyExists = true;
 					return;
 				}
 				alert('something went wrong');
@@ -43,6 +99,7 @@
 		};
 
 		this.addEventToGroup = function() {
+			$scope.clearControllerVariables();
 			eventName = document.getElementById("newEventName").value;
 			groupName = document.getElementById("addEventGroupName").value;
 			if (!eventName.match(/^[a-z0-9][a-z0-9_]+$/i)) {
@@ -51,11 +108,11 @@
 			}
 			newEvent = { eventname : eventName, photos : [] };
 			$http.post('/api/groups/' + groupName + '/events', newEvent).then(function(res) {
-				alert(eventName + ' was successfully created');
+				addEventSuccess = true;
 				document.getElementById("newEventName").value = '';
 			}, function(err) {
 				if (err.status == 409) {
-					alert(eventName + " already exists");
+					addEventAlreadyExists = true;
 					return;
 				}
 				alert('something went wrong');
@@ -63,6 +120,7 @@
 			});
 		};
 		this.inviteUserToGroup = function() {
+			$scope.clearControllerVariables();
 			userName = document.getElementById("newUserName").value;
 			groupNameDropDown = document.getElementById("addUserGroupName");
 			groupName = groupNameDropDown.options[groupNameDropDown.selectedIndex].value;
@@ -70,17 +128,15 @@
 				alert('user name is invalid');
 				return;
 			}
-
-			$http.post('/api/groups/'+groupName+'/users/'+userName+'/invite').then(function(res) {
-				if (res.status == 200) {
-					alert('your invitation was successfully sent');
-					document.getElementById("newUserName").value = '';
-				} else {
-					alert('status not 200');
-				}
+			
+			$http.post('/api/groups/' + groupName + '/users/' + userName + '/invite').then(function(res) {
+				groupNameDropDown = document.getElementById("addUserGroupName");
+				groupName = groupNameDropDown.options[groupNameDropDown.selectedIndex].value;
+				inviteUsertoGroupSuccess = true;
+				document.getElementById("newUserName").value = '';
 			}, function(err) {
 				if (err.status == 409) {
-					alert(userName + " does not exist, has already been invited, or is already a member of the group");
+					inviteUsertoGroup409Err = true;
 					return;
 				}
 				else{
@@ -91,6 +147,7 @@
 		};
 
 		this.inviteUser = function() {
+			$scope.clearControllerVariables();
 			email = document.getElementById("emailAddress").value;
 			if (!email.match(/^[0-9a-z._]+@[0-9a-z._]+\.[a-z]+$/i)) {
 				alert('email is invalid!');
@@ -135,10 +192,36 @@
 		};
 
 		this.hasGroups = function() {
-			return $scope.hasGroups;
+			return hasGroups;
 		};
 
-		$scope.populateGroups();
+		this.hasInvites = function() {
+			return hasInvites;
+		};
+
+		this.createGroupSuccess = function() {
+			return createGroupSuccess;
+		};
+
+		this.createGroupAlreadyExists = function() {
+			return createGroupAlreadyExists;
+		};
+
+		this.addEventSuccess = function() {
+			return addEventSuccess;
+		};
+
+		this.addEventAlreadyExists = function() {
+			return addEventAlreadyExists;
+		};
+
+		this.inviteUsertoGroupSuccess = function() {
+			return inviteUsertoGroupSuccess ;
+		};
+
+		this.inviteUsertoGroup409Err = function() {
+			return inviteUsertoGroup409Err;
+		};
 
 	});
 

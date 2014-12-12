@@ -37,12 +37,18 @@
 		});
 
 		this.upload = function() {
+			var photos = document.getElemetById('uploadphotos').files;
+			if (photos.length < 1) {
+				alert('photos is less than one');
+			} else {
+				alert('photos is greater than one');
+			}
+			alert(photos);
 			var groupNameDDL = document.getElementById('grp');
 			var groupName = groupNameDDL.options[groupNameDDL.selectedIndex].value
 			var eventNameDDL = document.getElementById('evt');
 			var eventName = eventNameDDL.options[eventNameDDL.selectedIndex].value
 			document.uploadForm.action = "/api/groups/" + groupName + "/events/" + eventName + "/photos";
-			document.uploadForm.submit();
 		}
 
 		this.hasGroups = function() {

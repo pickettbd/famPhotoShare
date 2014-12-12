@@ -96,8 +96,21 @@ a {
 	cursor: pointer;
 }
 
+.invitation {
+	display: block;
+	margin: 2em auto;
+	max-width: 400px;
+	background-color: #24CC1B;
+	padding: 1em 0em;
+	font: 24px 'Lucida Grande', Helvetica, Arial, sans-serif;
+}
+
 .fit {
 	max-width: 100%;
+}
+
+.success {
+	color: #338A2E;
 }
 
 .note {
