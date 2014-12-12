@@ -73,7 +73,7 @@
 		};
 
 		this.declineInvitation = function(groupName) {
-			$http.delete('/api/groups/' + groupName + '/users/' + whoami + '/deny').then(function(res) {
+			$http.delete('/api/users/' + whoami + '/groups/' + groupName + '/deny').then(function(res) {
 				$scope.populateInvites();
 			}, function(err) {
 				alert('something went wrong');
