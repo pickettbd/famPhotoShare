@@ -42,7 +42,8 @@
 			var groupName = groupNameDDL.options[groupNameDDL.selectedIndex].value
 			var eventNameDDL = document.getElementById('evt');
 			var eventName = eventNameDDL.options[eventNameDDL.selectedIndex].value
-			if (eventName == '') {
+			var input = document.getElementById('uploadphotos');
+			if (input.files.length < 1 || eventName == '') {
 				$scope.error = true;
 				return;
 			}
