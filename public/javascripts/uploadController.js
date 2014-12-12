@@ -4,6 +4,7 @@
 
 		$scope.hasGroups = false;
 		$scope.groups = [];
+		$scope.error = false;
 
 		this.getGroups = function() { 
 			$http.get('/api/users/whoami').then(function(usernameRes) {
@@ -41,6 +42,11 @@
 			var groupName = groupNameDDL.options[groupNameDDL.selectedIndex].value
 			var eventNameDDL = document.getElementById('evt');
 			var eventName = eventNameDDL.options[eventNameDDL.selectedIndex].value
+			if (eventName == '') {
+				$scope.error = true;
+				return;
+			}
+			$scope.error = false;
 			document.uploadForm.action = "/api/groups/" + groupName + "/events/" + eventName + "/photos";
 			document.uploadForm.submit();
 		}
@@ -48,6 +54,10 @@
 		this.hasGroups = function() {
 			return $scope.hasGroups;
 		};
+
+		this.error = function() {
+			return $scope.error;
+		}
 
 	});
 
