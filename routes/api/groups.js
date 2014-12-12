@@ -83,7 +83,6 @@ router.get('/:group/events/:event/thumbs', isAuthenticated, function(req, res)
 			for (var i = 0; i < events.length; i++) {
 				if (events[i].name === req.params.event) {
 					var thumbs = [];
-keep
 					return async.each(events[i].photos, function(photoName, callback) {
 						gm(path.resolve(__dirname, "../../data/photos/" + req.params.group + "/" + req.params.event + "/thumbs/" + photoName)).size(function(err, size) {
 							if (!err) {
@@ -94,7 +93,7 @@ keep
 								console.log(photoName);
 								console.log(err);
 								callback(err);
-							}keep
+							}
 						});
 					}, function(err) {
 						if (!err) {
