@@ -6,7 +6,5 @@ html
 		link(rel="stylesheet", type="text/css", href="email_templates/groupInvitation/style.css")
 	body
 		h3 Hello #{invitedname.first} #{invitedname.last},
-		h3
-		  strong #{invitername.first} #{invitername.last}
-		  | has invited you to join #{groupname}!
+		p <strong>#{invitername.first} #{invitername.last}</strong> has invited you to join #{groupname}!
 		a.myButton(href='admin') Accept or Reject
