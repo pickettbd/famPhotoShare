@@ -470,6 +470,22 @@ router.post('/:group/users/:user/invite', isAuthenticated, function(req, res) {
 				if (!err) {
 					return User.findOne( { username: req.params.user }).exec( function(err, invitedUser) {
 						if (!err) {
+							if (invitedUser == null) {
+								return res.sendStatus(409);
+							}
+
+							for (var i = 0; i < invitedUser.groups; i++) {
+								if (invitedUser.groups[i] === req.params.group) {
+									return res.sendStatus(409);
+								}
+							}
+
+							for (var i = 0; i < invitedUser.invites; i++) {
+								if (invitedUser.invites[i] === req.params.group) {
+									return res.sendStatus(409);
+								}
+							}
+
 							invitedUser.invites.push(req.params.group);
 							return invitedUser.save(function(err) {
 								if (!err) {

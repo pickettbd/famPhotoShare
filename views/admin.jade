@@ -9,32 +9,47 @@ block content
 
 		p(ng-hide="adminController.hasGroups()") You are not a member of any groups. Start sharing photos by joining other groups or by creating your own group below.
 
+		div(ng-show="adminController.hasInvites()")
+
+			h2 Group Invitations:
+			p(ng-repeat="invite in invites").invitation You have been invited to join {{invite}}
+				button.button(ng-click="adminController.acceptInvitation(invite)") Accept
+				button.button(ng-click="adminController.declineInvitation(invite)") Decline
+			
+			hr
+
 		h2 Create New Group:
 		input(type="text" ng-model="input.newGroupName" id="newGroupName" placeholder="group name")
-		p(ng-hide="adminController.checkGroupName()").warning Group names can only have letters, numbers and underscores. (no spaces or symbols of any kind)
 		button(ng-click="adminController.createGroup()").button Create Group 
+		p(ng-hide="adminController.checkGroupName()").warning Group names can only have letters, numbers and underscores. (no spaces or symbols of any kind)
+		p(ng-show="adminController.createGroupSuccess()").success Group Created!
+		p(ng-show="adminController.createGroupAlreadyExists()").warning Group not created. A group with that name already exists.
 		
-		div(ng-show="adminController.hasGroups()")
+		hr
 
-			hr
+		div(ng-show="adminController.hasGroups()")
 
 			h2 Add Event to Group:
 			select(id="addEventGroupName")
 				option(ng-repeat="group in groups" value="{{group}}") {{group}}
 			input(type="text" ng-model="input.newEventName" id="newEventName" placeholder="event name")
-			p(ng-hide="adminController.checkEventName()").warning Group names can only have letters, numbers and underscores. (no spaces or symbols of any kind)
 			button(ng-click="adminController.addEventToGroup()").button Add Event
+			p(ng-hide="adminController.checkEventName()").warning Group names can only have letters, numbers and underscores. (no spaces or symbols of any kind)
+			p(ng-show="adminController.addEventSuccess()").success Event Added!
+			p(ng-show="adminController.addEventAlreadyExists()").warning Event not created. An event with that name already exists.
 
 			hr
 
-			h2 Add User to Group:
+			h2 Invite User to Join Group:
 			select(id="addUserGroupName")
 				option(ng-repeat="group in groups" value="{{group}}") {{group}}
 			input(type="text" ng-model="input.newUserName" id="newUserName" placeholder="user name")
+			button(ng-click="adminController.inviteUserToGroup()").button Add User
 			p(ng-hide="adminController.checkUserName()").warning Group names can only have letters, numbers and underscores. (no spaces or symbols of any kind)
-			button(ng-click="adminController.addUserToGroup()").button Add User
+			p(ng-show="adminController.inviteUsertoGroupSuccess ()").success User Invited!
+			p(ng-show="adminController.inviteUsertoGroup409Err ()").warning User not invited. Either the user does not exist, is already a part of the group, or was already invited.
 
-		hr
+			hr
 
 		h2 Invite New Users:
 			input(type="email" id="emailAddress" placeholder="email address" required)

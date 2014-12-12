@@ -17,5 +17,5 @@ block content
 					option(value='' disabled selected) Select Event
 					option(ng-repeat="event in events" value='{{event}}') {{event}}
 			form(method="post" name="uploadForm" action="/" enctype="multipart/form-data")
-					input(type='file' name='uploadphotos' required multiple)
+					input(type='file' id="uploadphotos" name='uploadphotos' required multiple)
 					button(type='button' ng-click='uploadController.upload()').button Add Photos
