@@ -73,7 +73,12 @@
 		};
 
 		this.declineInvitation = function(groupName) {
-			alert('not implemented at this time');
+			$http.delete('/api/groups/' + groupName + '/users/' + whoami + '/deny').then(function(res) {
+				$scope.populateInvites();
+			}, function(err) {
+				alert('something went wrong');
+				console.error('ERR', err);
+			});
 		};
 
 		this.createGroup = function() {
