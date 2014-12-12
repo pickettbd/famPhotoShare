@@ -177,6 +177,10 @@ router.post('/:group/events/:event/photos', isAuthenticated, function(req, res)
 
 				var uploadphotos = [];
 
+				if (!req.files.uploadphotos) {
+					return res.sendStatus(400); // no photos sent!
+				}
+
 				if (req.files.uploadphotos.length) {
 					uploadphotos = req.files.uploadphotos;
 				} else {
