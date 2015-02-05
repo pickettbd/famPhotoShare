@@ -84,9 +84,19 @@ router.get('/:group/events/:event/thumbs', isAuthenticated, function(req, res)
 				if (events[i].name === req.params.event) {
 					var thumbs = [];
 					return async.each(events[i].photos, function(photoName, callback) {
+						gm(path.resolve(__dirname, "../../data/photos/" + req.params.group + "/" + req.params.event + "/thumbs/" + photoName)).orientation(function(err, orientation) {
+							if (!err) {
+								console.log({ name: photoName, orientation: orientation});
+							} else {
+								console.log("gm error while getting orientation");
+								console.log(photoName);
+								console.log(err);
+							}
+						});
 						gm(path.resolve(__dirname, "../../data/photos/" + req.params.group + "/" + req.params.event + "/thumbs/" + photoName)).size(function(err, size) {
 							if (!err) {
 								thumbs.push( { name: photoName, height: size.height } );
+								console.log({ name: photoName, height: size.height, size: size });
 								callback(null);
 							} else {
 								console.log("gm error while getting size");
@@ -102,26 +112,6 @@ router.get('/:group/events/:event/thumbs', isAuthenticated, function(req, res)
 							return res.sendStatus(500);
 						}
 					});
-
-					//events[i].photos.forEach(function(photoName) {
-					//	gm(path.resolve(__dirname, "../../data/photos", req.params.group, req.params.event, "/thumbs/", photoName)).size(function(err, size) {
-					//		if (!err) {
-					//			thumbs.push( { name: photoName, height: size.height } );
-					//		} else {
-					//			console.log("gm error while getting size");
-					//			console.log(photoName);
-					//			console.log(err);
-					//			gmErr = true;
-					//		}
-					//	});
-					//});
-					//
-
-					//if (!gmErr) {
-					//	return res.json(thumbs);
-					//} else {
-					//	return res.sendStatus(500);
-					//}
 				}
 			}
 			return res.sendStatus(500);
@@ -171,8 +161,8 @@ router.post('/:group/events/:event/photos', isAuthenticated, function(req, res)
 				}
 				var newPhotoNames = [ ];
 
-				console.log("req.files");				
-				console.log(req.files);
+				//console.log("req.files");				
+				//console.log(req.files);
 
 				var uploadphotos = [];
 
@@ -186,8 +176,8 @@ router.post('/:group/events/:event/photos', isAuthenticated, function(req, res)
 					uploadphotos.push(req.files.uploadphotos);
 				}
 				
-				console.log("uploadphotos");				
-				console.log(uploadphotos);
+				//console.log("uploadphotos");				
+				//console.log(uploadphotos);
 
 				return async.eachSeries(uploadphotos, function(uploadphoto, callback) {
 					newPhotoNames.push(uploadphoto.name);
@@ -200,17 +190,27 @@ router.post('/:group/events/:event/photos', isAuthenticated, function(req, res)
 					// move the file to the correct place
 					fs.rename(oldPhotoPath, newPhotoPath, function(err) {
 						if (!err) {
-							// create the thumbnail
-							gm(newPhotoPath).geometry(480,">").write(newThumbPath, function(err, stdout, stderr, command) {
-								if (err) {
-									console.error("error making thumb");
-									console.error("stdout: " + stdout);
-									console.error("stderr: " + stderr);
-									callback(err);
+							// auto orient
+							gm(newPhotoPath).autoOrient().write(newPhotoPath, function(err) {
+								if (!err) {
+									console.log("Successfully auto-oriented the uploaded image.");
+									// create the thumbnail
+									gm(newPhotoPath).geometry(480,">").write(newThumbPath, function(err, stdout, stderr, command) {
+										if (err) {
+											console.error("error making thumb");
+											console.error("stdout: " + stdout);
+											console.error("stderr: " + stderr);
+											callback(err);
+										} else {
+											callback(null);
+										}
+									});
 								} else {
-									callback(null);
+									console.log("ERROR: Could not auto-orient the uploaded image.");
+									console.log(err);
+									callback(err);
 								}
-							});
+							})
 						} else {
 							callback(err);
 						}
@@ -247,83 +247,6 @@ router.post('/:group/events/:event/photos', isAuthenticated, function(req, res)
 						return res.sendStatus(500);
 					}
 				});
-
-				////req.files.uploadphotos.forEach(function(uploadphoto) {
-				//uploadphotos.forEach(function(uploadphoto) {
-				//	
-				//	newPhotoNames.push(uploadphoto.name);
-				//	
-				//	//var oldPhotoPath = path.resolve(__dirname, "../../data/photos/" + uploadphoto.name);
-				//	var oldPhotoPath = uploadphoto.path;
-				//	var newPhotoPath = path.resolve(__dirname, "../../data/photos/" + req.params.group + "/" + req.params.event + "/" + uploadphoto.name);
-				//	var newThumbPath = path.resolve(__dirname, "../../data/photos/" + req.params.group + "/" + req.params.event + "/thumbs/" + uploadphoto.name);
-
-				//	// move the file to the correct place
-				//	fs.rename(oldPhotoPath, newPhotoPath, function(err) {
-				//		if (!err) {
-				//			// create the thumbnail
-				//			return gm(newPhotoPath).geometry(480,">").write(newThumbPath, function(err, stdout, stderr, command) {
-				//				if (err) {
-				//					console.error("error making thumb");
-				//					console.error("stdout: " + stdout);
-				//					console.error("stderr: " + stderr);
-				//					//return res.render("error", { message: "error in routes/api/groups.js", error: err } );
-				//					return res.sendStatus(500);
-				//				}
-				//			});
-				//		} else {
-				//			//return res.render("error", { message: "just renamed the photo UNsucessfully", error: err } );
-				//			return res.sendStatus(500);
-				//		}
-				//	});
-				//});
-
-				//if (newPhotoNames.length > 0) {
-				//	// add photos to database
-				//	return Group.findOne({ name: req.params.group }, function(err, result) {
-				//		if (!err) {
-				//			for (i = 0; i < result.events.length; i++) {
-				//				if (result.events[i].name === req.params.event) {
-				//					for (j = 0; j < newPhotoNames.length; j++) {
-				//						result.events[i].photos.push(newPhotoNames[j]);
-				//					}
-				//					return result.save(function(err) {
-				//						if (!err) {
-				//							//return res.sendStatus(202);
-				//							//return res.location("back").redirect(202, "back");
-				//							//return res.status(202).location("http://localhost/upload-landing").render("upload-landing", {
-				//							//return res.status(202).render("upload-landing", {
-				//							//res.location("upload-landing");
-				//							//return res.render("upload-landing", {
-				//							//	title: 'Upload Landing',
-				//							//	navbar: 'true',
-				//							//	navtab1: 'false',
-				//							//	navtab2: 'false',
-				//							//	navtab3: 'false' }
-				//							//);
-				//							return res.location("/upload-landing").redirect("/upload-landing");
-				//						} else {
-				//							//return res.render("error", { message: "UNsuccesfully updated group with the new photos as part of the appropriate event", error: err } );
-				//							return res.sendStatus(500);
-				//						}
-				//					});
-				//				}
-				//			}
-				//			//return res.render("404");
-				//			return res.sendStatus(500);
-				//		} else {
-				//			//return res.render("error", { message: "found group UNsuccessfully", error: err } );
-				//			return res.sendStatus(500);
-				//		}
-				//	});
-				//} else {
-				//	//return res.render("error", { message: "zero files were uploaded", error: err } );
-				//	return res.sendStatus(500);
-				//}
-				
-				//return res.render("error", { message: "we shouldn't get here, we should have responded inside the nested madness 4", error: err } );
-				//return res.sendStatus(500);
-
 			});
 			//return res.render("error", { message: "we shouldn't get here, we should have responded inside the nested madness 3", error: err } );
 			return res.sendStatus(500);
